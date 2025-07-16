@@ -24,6 +24,12 @@ const sidebarItems = [
     label: 'Manage HR',
     requiredPermissions: ['add_hr', 'view_hr'],
   },
+  {
+    icon: 'FaCar',
+    label:'Book Ride',
+    link: '/superadmin/bookRide',
+    requiredPermissions: ['book_ride','book_ride'],
+  }
   // {
   //   icon: 'FaUser',
   //   label: 'Superadmin',
@@ -62,6 +68,10 @@ const dropdownItem = [
     { icon: 'FaUserPlus', label: 'Create HR', link: '/superadmin/addHr', permission: 'add_hr' },
     { icon: 'FaTable', label: 'View HR', link: '/superadmin/viewHr', permission: 'view_hr' },
   ],
+  // [
+  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superadmin/bookRide', permission: 'book_ride' },
+  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superadmin/bookRide', permission: 'book_ride' },
+  // ],
   [], // Empty array for "User" to avoid undefined issues
 ];
 
@@ -74,10 +84,11 @@ export default function Sidebar() {
   }
   return (
     <aside className="w-64 h-screen bg-gray-100 shadow-lg overflow-y-auto">
-      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={user.user} />
+      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={user} />
     </aside>
   );
 }
+
 // import SidebarItem from './SidebarItem';
 // import { FaUser, FaBook, FaCar, FaUserPlus, FaTable } from 'react-icons/fa';
 

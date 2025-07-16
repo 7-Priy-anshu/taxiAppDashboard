@@ -2,15 +2,22 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate,useParams} from 'react-router-dom';
 import SearchBar from './SearchBar'
+import { useAuth } from "../context/AuthContext";
+import BackButton from "./BackButton";
+import globalTableStyles from "../styles/globalTableStyles";
 
 export default function ViewCar() {
+    const {user} = useAuth();
+    const {role,id} = useParams();
   const navigate = useNavigate ();
+  const VITE_API = import.meta.env.VITE_API;
+
   const deleteCar = async (id) =>{
      if (!window.confirm("Are you sure you want to delete this car?")) return;
      try{
-       await axios.delete(`http://183.18.18.71:4000/delete/car/${id}`)
+       await axios.delete(`${VITE_API}delete/car/${id}`)
        setViewCar(prev => prev.filter((car)=> car._id !== id));  
        navigate('/superadmin/viewCar');
      }catch(err){
@@ -54,7 +61,8 @@ export default function ViewCar() {
     setIsLoading(true);
     setError(null);
     axios
-      .get("http://183.18.18.71:4000/view/car")
+      // .get(`${VITE_API}view/car`)
+      .get(`${VITE_API}view/car/${user.id}`)
       .then((res) => {
         // console.log("Fetched cars:", res.data);
         // adjust if response format is: { data: [...] }
@@ -74,13 +82,26 @@ export default function ViewCar() {
       .includes(searchTerm.toLowerCase())
   );   
 
-  useEffect(() => {
-    getAllItems(); // Used for fetching the API 
-      // setViewCar(dummycars); 
-  }, []);
+  // useEffect(() => {
+  //   getAllItems(); // Used for fetching the API 
+  //     // setViewCar(dummycars); 
+  // }, []);
+    useEffect(() => {
+  if (user && user.id) {
+    getAllItems();
+  }
+}, [user]);
 
 return (
-  <div className="pt-4 m-6">
+ <div className="p-6 flex flex-col gap-2">
+      <div className="bg-white rounded-xl shadow border border-gray-200 p-4">
+        <div className=" max-w-4xl flex ">
+                    {/* View Cars */}
+            <Link to="/superadmin">
+                <BackButton text="Back"></BackButton>
+            </Link>
+        </div>
+      </div>
     <div className="container bg-gray-100 h-full">
       {isLoading ? (
         <div className="text-center">Loading...</div>
@@ -91,12 +112,13 @@ return (
           <SearchBar title="Car" addLink="/superadmin/addCar" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
           <DataTable
             columns={columns}
-            // data={Array.isArray(viewCar) ? viewCar : []} 
             data={filteredCars}
+            // data={Array.isArray(viewCar) ? viewCar : []} 
             fixedHeader
             pagination
             fixedHeaderScrollHeight="400px"
             noDataComponent="No cars found."
+            globalTableStyles={globalTableStyles}
           />
         </>
       )}

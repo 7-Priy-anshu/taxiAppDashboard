@@ -6,11 +6,28 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   // console.log("Stored:- ",storedUser)
+  //   if (storedUser) setUser(JSON.parse(storedUser));
+  // }, []);
+
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    // console.log("Stored:- ",storedUser)
-    if (storedUser) setUser(JSON.parse(storedUser));
-  }, []);
+  const storedUser = localStorage.getItem('user');
+
+  if (storedUser) {
+    try {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    } catch (e) {
+      console.error("Invalid user data in localStorage:", storedUser);
+      setUser(null);
+    }
+  } else {
+    setUser(null);
+  }
+}, []);
+
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

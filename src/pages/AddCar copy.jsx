@@ -23,12 +23,12 @@ export default function AddCar() {
   const [initialValues, setInitialValues] = useState({
     carName: '',
     carModel: '',
-    carNumber: '',
+    carNumber: ''
   });
   const [loading, setLoading] = useState(!!id);
 
   const VITE_API = import.meta.env.VITE_API;
-
+const initialValues = [initialValues,setinitialValues] = useState({carmodel, carname });
   useEffect(() => {
     if (id) {
       axios.get(`${VITE_API}add/car/${id}`)

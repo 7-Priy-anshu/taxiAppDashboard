@@ -1,5 +1,6 @@
 import { FaPlus } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import BackButton from "./BackButton";
 
 export default function SearchBar({searchTerm, setSearchTerm, title, addLink}){ 
   return (
@@ -16,6 +17,7 @@ export default function SearchBar({searchTerm, setSearchTerm, title, addLink}){
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded w-1/3"
         />
+
         <Link
           to={addLink}
        className="bg-blue-500 text-white px-2 py-2 rounded flex items-center gap-2 hover:bg-blue-600"

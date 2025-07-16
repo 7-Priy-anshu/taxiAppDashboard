@@ -4,6 +4,7 @@ import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
+import BackButton from "./BackButton";
 
 export default function ViewAdmin() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function ViewAdmin() {
     setIsLoading(true);
     setError(null);
     axios
-      .get("http://183.18.18.71:4000/view/admin")
+      .get(`${VITE_API}view/admin`)
       .then((res) => {
         console.log("View Admin:",res.data.adminData)
         setViewAdmin(res.data.adminData || []);
@@ -35,7 +36,7 @@ export default function ViewAdmin() {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://183.18.18.71:4000/delete/admin/${id}`);
+      await axios.delete(`${VITE_API}delete/admin/${id}`);
       setViewAdmin((prev) => prev.filter((admin) => admin._id !== id));
     } catch (err) {
       console.error("Error deleting admin", err);
@@ -86,7 +87,15 @@ export default function ViewAdmin() {
   ];
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-6 flex flex-col gap-2">
+            <div className="bg-white rounded-xl shadow border border-gray-200 p-4">
+              <div className=" max-w-4xl flex ">
+                          {/* Add Admin */}
+                  <Link to="/superadmin">
+                      <BackButton text="Back"></BackButton>
+                  </Link>
+              </div>
+            </div>
       <div className="container mx-auto bg-white rounded shadow-sm p-4">
         {isLoading ? (
           <div className="text-center">Loading...</div>
@@ -132,7 +141,7 @@ export default function ViewAdmin() {
 //   const deleteAdmin = async (id) =>{
 //      if (!window.confirm("Are you sure you want to delete this admin?")) return;
 //      try{
-//        await axios.delete(`http://183.18.18.71:4000/delete/admin/${id}`)
+//        await axios.delete(`${VITE_API}delete/admin/${id}`)
 //        setViewAdmin(prev => prev.filter((admin)=> admin._id !== id));  
 //        navigate('/superadmin/viewadmin');
 //      }catch(err){
@@ -178,7 +187,7 @@ export default function ViewAdmin() {
 //     setIsLoading(true);
 //     setError(null);
 //     axios
-//       .get("http://183.18.18.71:4000/view/admin")
+//       .get("${VITE_API}view/admin")
 //       .then((res) => {
 //         console.log("Fetched admins:", res.data);
 //         // adjust if response format is: { data: [...] }
@@ -244,7 +253,7 @@ export default function ViewAdmin() {
 //   const deleteAdmin = async (id) =>{
 //      if (!window.confirm("Are you sure you want to delete this admin?")) return;
 //      try{
-//        await axios.delete(`http://183.18.18.71:4000/delete/admin/${id}`)
+//        await axios.delete(`${VITE_API}delete/admin/${id}`)
 //        setViewAdmin(prev => prev.filter((admin)=> admin._id !== id));  
 //        navigate('/superadmin/viewAdmin');
 //      }catch(err){
@@ -289,7 +298,7 @@ export default function ViewAdmin() {
 //     setIsLoading(true);
 //     setError(null);
 //     axios
-//       .get("http://183.18.18.71:4000/view/admin")
+//       .get("${VITE_API}view/admin")
 //       .then((res) => {
 //         console.log("Fetched admins:", res.data);
 //         // adjust if response format is: { data: [...] }

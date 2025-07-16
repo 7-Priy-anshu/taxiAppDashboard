@@ -2,16 +2,24 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import SearchBar from './SearchBar'
+import { useAuth } from "../context/AuthContext";
+import BackButton from "./BackButton";
+import globalTableStyles from '../styles/globalTableStyles';
 
 
 export default function ViewCustomer() {
+  const {user} = useAuth();
+  const {role,id} = useParams();
+
+  // if (role !== user.role) return <div>Access denied</div>;
+
   const navigate = useNavigate ();
   const handleDelete = async (id) =>{
      if (!window.confirm("Are you sure you want to delete this driver?")) return;
      try{
-       await axios.delete(`http://183.18.18.71:4000/delete/customer/${id}`)
+       await axios.delete(`${VITE_API}delete/customer/${id}`)
        setViewCustomer(prev => prev.filter((customer)=> customer._id !== id));  
        navigate('/superadmin/viewCustomer');
      }catch(err){
@@ -52,11 +60,14 @@ export default function ViewCustomer() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const VITE_API = import.meta.env.VITE_API;
+
   const getAllCustomer = () => {
     setIsLoading(true);
     setError(null);
     axios
-      .get("http://183.18.18.71:4000/view/customer")
+      .get(`${VITE_API}view/customer/${user.id}`)
       .then((res) => {
         // console.log("Fetched Customers:", res.data);
         // adjust if response format is: { data: [...] }
@@ -76,13 +87,28 @@ export default function ViewCustomer() {
      .includes(searchTerm.toLowerCase())
   );
 
+  // useEffect(() => {
+  //   getAllCustomer(); // Used for fetching the API 
+  //     // setViewCustomer(dummyCustomers); 
+  // }, []);
+
   useEffect(() => {
-    getAllCustomer(); // Used for fetching the API 
-      // setViewCustomer(dummyCustomers); 
-  }, []);
+  if (user && user.id) {
+    getAllCustomer();
+  }
+}, [user]);
 
   return (
-    <div className="pt-4 m-6">
+    <div className="p-6 flex flex-col gap-2">
+
+      <div className="bg-white rounded-xl shadow border border-gray-200 p-4">
+        <div className=" max-w-4xl flex ">
+                    {/* View Customers */}
+            <Link to="/superadmin">
+                <BackButton text="Back"></BackButton>
+            </Link>
+        </div>
+      </div>
       <div className="container bg-gray-100 h-full">
         {isLoading ? (
           <div className="text-center">Loading...</div>
@@ -99,6 +125,7 @@ export default function ViewCustomer() {
             pagination
             fixedHeaderScrollHeight="400px"
             noDataComponent="No Customers found."
+            globalTableStyles={globalTableStyles}
           />
         </>
         )}

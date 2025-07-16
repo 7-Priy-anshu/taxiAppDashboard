@@ -7,11 +7,24 @@ export default function SidebarItem({ items, dropitem, user }) {
   console.log('User data:', user, typeof user);
   const [openDropdown, setOpenDropdown] = useState(null);
 
+  if (!user) {
+    return <div className="p-4 text-gray-500">Loading sidebar...</div>;
+  }
+
   const safeUser = {
-    role: user?.role?.toLowerCase() || '',
-    permissions: user?.permissions?.map((p) => p.toLowerCase()) || [],
+    role: user.role?.toLowerCase() || '',
+    permissions: Array.isArray(user.permissions)
+      ? user.permissions.map((p) => p.toLowerCase())
+      : [],
   };
-  console.log('Safe user:', safeUser);
+
+  console.log("safeUser", safeUser);
+
+  // const safeUser = {
+  //   role: user?.role?.toLowerCase() || '',
+  //   permissions: user?.permissions?.map((p) => p.toLowerCase()) || [],
+  // };
+  // console.log('Safe user:', safeUser);
 
   const toggleDropdown = (index) => {
     setOpenDropdown((prev) => (prev === index ? null : index));
