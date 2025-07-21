@@ -6,8 +6,7 @@ import axios from 'axios';
 import { FaUser, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import BackButton from './BackButton';
-
+import BackButton from '../../components/BackButton';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -40,36 +39,28 @@ export default function AddAdmin() {
       group: "Driver",
       items: [
         { _id: "view_driver", label: "View Driver" },
-        { _id: "add_driver", label: "Add Driver" },
-        // { _id: "edit_driver", label: "Edit Driver" },
-        // { _id: "delete_driver", label: "Delete Driver" },
+        { _id: "add_driver", label: "Add Driver" }
       ],
     },
     {
       group: "Customer",
       items: [
         { _id: 'view_customer', label: 'View Customers' },
-        { _id: 'add_customer', label: 'Add Customer' },
-        // { _id: 'edit_customer', label: 'Edit Customer' },
-        // { _id: 'delete_customer', label: 'Delete Customer' },
+        { _id: 'add_customer', label: 'Add Customer' }
       ],
     },
     {
       group: "Car",
       items: [
         { _id: 'view_car', label: 'View Cars' },
-        { _id: 'add_car', label: 'Add Car' },
-        // { _id: 'edit_car', label: 'Edit Car' },
-        // { _id: 'delete_car', label: 'Delete Car' },
+        { _id: 'add_car', label: 'Add Car' }
       ],
     },
     {
       group: "HR",
       items: [
         { _id: 'view_hr', label: 'View HR' },
-        { _id: 'add_hr', label: 'Create HR' },
-        // { _id: 'edit_hr', label: 'Edit HR' },
-        // { _id: 'delete_hr', label: 'Delete HR' },
+        { _id: 'add_hr', label: 'Create HR' }
       ],
     },
     {
@@ -246,6 +237,38 @@ export default function AddAdmin() {
                   type="text"
                   name="role"
                   placeholder="Enter Role"
+                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <FaUser className="text-gray-500" />
+                </div>
+                <ErrorMessage
+                  name="role"
+                  component="div"
+                  className="text-red-500 text-xs mt-1"
+                />
+              </div>
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="role"
+                  placeholder="Enter Role"
+                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <FaUser className="text-gray-500" />
+                </div>
+                <ErrorMessage
+                  name="role"
+                  component="div"
+                  className="text-red-500 text-xs mt-1"
+                />
+              </div>
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="password"
+                  placeholder="Enter the Password"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">

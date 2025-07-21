@@ -29,7 +29,7 @@ export default function Navbar({ onMenuClick }){
           src="../images/userIcon.png"
           alt="User"
           onClick={toggleDropdown}
-          className="rounded-full w-10 h-10 object-cover cursor-pointer"
+          className="rounded-full w-10 h-10 object-cover cursor-pointer logo"
         />
         {isDropdownVisible && <ProfileDropdown />}
       </div>

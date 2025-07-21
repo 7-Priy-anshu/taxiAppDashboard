@@ -12,7 +12,7 @@ export default function SidebarItem({ items, dropitem, user }) {
   }
 
   const safeUser = {
-    role: user.role?.toLowerCase() || '',
+    role: user.role || '',
     permissions: Array.isArray(user.permissions)
       ? user.permissions.map((p) => p.toLowerCase())
       : [],
@@ -104,6 +104,113 @@ export default function SidebarItem({ items, dropitem, user }) {
       })}
     </ul>);
 }
+
+// import { useState } from 'react';
+// import { Link } from 'react-router-dom';
+// import SideDropdown from './SideDropdown';
+// import { iconMap } from '../../shared/icons';
+
+// export default function SidebarItem({ items, dropitem, user }) {
+//   console.log('User data:', user, typeof user);
+//   const [openDropdown, setOpenDropdown] = useState(null);
+
+//   if (!user) {
+//     return <div className="p-4 text-gray-500">Loading sidebar...</div>;
+//   }
+
+//   const safeUser = {
+//     role: user.role?.toLowerCase() || '',
+//     permissions: Array.isArray(user.permissions)
+//       ? user.permissions.map((p) => p.toLowerCase())
+//       : [],
+//   };
+
+//   console.log("safeUser", safeUser);
+
+//   // const safeUser = {
+//   //   role: user?.role?.toLowerCase() || '',
+//   //   permissions: user?.permissions?.map((p) => p.toLowerCase()) || [],
+//   // };
+//   // console.log('Safe user:', safeUser);
+
+//   const toggleDropdown = (index) => {
+//     setOpenDropdown((prev) => (prev === index ? null : index));
+//   };
+
+//   const hasAccess = (item) => {
+//     if (item.requiredRoles && !item.requiredRoles.includes(safeUser.role)) return false;
+//     if (item.requiredPermissions && !item.requiredPermissions.some((p) => safeUser.permissions.includes(p))) return false;
+//     return true;
+//   };
+//   console.log('Accessible items:', items.filter((item) => hasAccess(item)));
+
+//   // const filterDropdown = (list, parentItem) =>
+//   //   list.filter((item) => {
+//   //     if (parentItem.requiredRoles && !parentItem.requiredRoles.includes(safeUser.role)) return false;
+//   //     if (item.requiredPermissions && !item.requiredPermissions.some((p) => safeUser.permissions.includes(p))) return false;
+//   //     return true;
+//   //   });
+
+//   const filterDropdown = (list, parentItem) =>
+//     list.filter((item) => {
+//       if (parentItem.requiredRoles && !parentItem.requiredRoles.includes(safeUser.role)) return false;
+//       if (item.permission && !safeUser.permissions.includes(item.permission.toLowerCase())) return false;
+//       return true;
+//     });
+
+
+//   if (items.every((item) => !hasAccess(item))) {
+//     return <div className="p-4 text-gray-500">No accessible menu items</div>;
+//   }
+
+//   return (
+//     <ul className="space-y-2 p-4">
+//       {items.map((item, index) => {
+//         if (!hasAccess(item)) return null;
+
+//         const IconComponent = iconMap[item.icon];
+//         const isDropdownOpen = openDropdown === index;
+//         const relevantDropdownItems = filterDropdown(dropitem[index] || [], item);
+
+//         return (
+//           <li key={index} className="group relative">
+//             {item.link ? (
+//               <Link to={item.link}>
+//                 <div
+//                   className="flex items-center w-full text-white px-4 py-2 text-left rounded-lg hover:bg-blue-200 text-grey-100 transition-colors"
+//                 >
+//                   {IconComponent && <IconComponent className="text-blue-500 mr-3 text-lg" />}
+//                   <span className="text-gray-700 font-medium flex-1">{item.label}</span>
+//                 </div>
+//               </Link>
+//             ) : (
+//               <>
+//                 <button
+//                   onClick={() => toggleDropdown(index)}
+//                   className="flex items-center w-full text-white px-4 py-2 text-left rounded-lg hover:bg-blue-200 text-grey-100 transition-colors"
+//                 >
+//                   {IconComponent && <IconComponent className="text-blue-500 mr-3 text-lg" />}
+//                   <span className="text-gray-700 font-medium flex-1">{item.label}</span>
+//                   {relevantDropdownItems.length > 0 &&
+//                     (isDropdownOpen ? (
+//                       <iconMap.FaChevronUp className="text-blue-500 text-sm" />
+//                     ) : (
+//                       <iconMap.FaChevronDown className="text-blue-500 text-sm" />
+//                     ))}
+//                 </button>
+
+//                 {/* ✅ Correct placement of dropdown rendering */}
+//                 {isDropdownOpen && relevantDropdownItems.length > 0 && (
+//                   <SideDropdown dropitems={relevantDropdownItems} iconMap={iconMap} />
+//                 )}
+//               </>
+//             )}
+
+//           </li>
+//         );
+//       })}
+//     </ul>);
+// }
 
 //_------------------------------------ OLDER CODES----------------------------------------------------------
 

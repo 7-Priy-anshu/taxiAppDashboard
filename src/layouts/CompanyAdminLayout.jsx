@@ -1,8 +1,8 @@
 import Button from '../components/Button';
 import AddButton from '../components/AddButton';
-import LineChart from '../components/LineChart';
-import BarChart from '../components/BarChart';
-import PieChart from '../components/PieChart';
+import LineChart from '../components/Charts/LineChart';
+import BarChart from '../components/Charts/BarChart';
+import PieChart from '../components/Charts/PieChart';
 import { FaPlus } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
@@ -68,50 +68,3 @@ export default function MainContent() {
     </div>
   );
 }
-
-// import Button from './Button';
-// import AddButton from './AddButton';
-// import LineChart from '../components/LineChart';
-// import BarChart from '../components/BarChart';
-// import PieChart from '../components/PieChart';
-// import { FaPlus } from "react-icons/fa";
-// import { Link } from 'react-router-dom';
-
-// export default function MainContent(){
-//   return (
-//     <div className="bg-white flex flex-col min-h-screen w-full overflow-x-hidden">
-//       {/* Add Admin */}
-//       {/* <div className="p-4 flex flex-end md:flex-row gap-4 w-full"> */}
-//       <div className="flex flex-col sm:flex-row justify-end gap-4 mt-4">
-//         <Link to="/superadmin/addAdmin">
-//           <AddButton text="Add Admin"><FaPlus /></AddButton>
-//         </Link>
-//       </div>
-//       {/* Top section: Buttons + PieChart */}
-//       <div className="p-4 flex flex-col md:flex-row gap-4 w-full">
-//         {/* Buttons Section - row on mobile, column on md+ */}
-//         <div className="flex flex-col md:flex-row flex-wrap gap-2 w-full md:w-auto">
-//           <Button text="All Drivers" />
-//           <Button text="All Customers" />
-//           <Button text="All Car" />
-//           <Button text="Book Ride" />
-//         </div>
-
-//         {/* Pie Chart */}
-//         <div className="flex-1 flex justify-center items-center min-w-[200px]">
-//           <PieChart />
-//         </div>
-//       </div>
-
-//       {/* Bottom section: Line and Bar charts */}
-//       <div className="p-4 flex flex-col md:flex-row gap-4 w-full">
-//         <div className="w-full md:w-1/2">
-//           <LineChart />
-//         </div>
-//         <div className="w-full md:w-1/2">
-//           <BarChart />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };

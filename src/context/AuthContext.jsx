@@ -1,4 +1,3 @@
-// src/context/AuthContext.js
 import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext();
@@ -6,28 +5,21 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   // console.log("Stored:- ",storedUser)
-  //   if (storedUser) setUser(JSON.parse(storedUser));
-  // }, []);
-
   useEffect(() => {
-  const storedUser = localStorage.getItem('user');
-
-  if (storedUser) {
-    try {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-    } catch (e) {
-      console.error("Invalid user data in localStorage:", storedUser);
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (e) {
+        console.error("Invalid user data in localStorage:", storedUser);
+        localStorage.removeItem('user');
+        setUser(null);
+      }
+    } else {
       setUser(null);
     }
-  } else {
-    setUser(null);
-  }
-}, []);
-
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -37,6 +29,71 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+//------------------------------------------Last Executing Code
+// import { createContext, useContext, useEffect, useState } from 'react';
+
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+
+// useEffect(() => {
+//   const storedUser = localStorage.getItem('user');
+//   if (storedUser && storedUser !== "undefined") {
+//     try {
+//       const parsedUser = JSON.parse(storedUser);
+//       setUser(parsedUser);
+//     } catch (e) {
+//       console.error("Invalid user data in localStorage:", storedUser);
+//       localStorage.removeItem('user');
+//       setUser(null);
+//     }
+//   } else {
+//     setUser(null);
+//   }
+// }, []);
+
+
+//   return (
+//     <AuthContext.Provider value={{ user, setUser }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => useContext(AuthContext);
+
+// import { createContext, useContext, useEffect, useState } from "react";
+
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);  
+
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem("user");  
+//     console.log(storedUser)
+//     if (storedUser && storedUser !== "undefined") {
+//       try {
+//         const parsedUser = JSON.parse(storedUser);  
+//         setUser(parsedUser);
+//       } catch (err) {
+//         console.error("Invalid user data in localStorage:", storedUser);  
+//         localStorage.removeItem("user");
+//         setUser(null);
+//       }
+//     }
+//   }, []);
+
+//   return (
+//     <AuthContext.Provider value={{ user, setUser }}>  
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => useContext(AuthContext);
 
 
 // // AuthContext.js
