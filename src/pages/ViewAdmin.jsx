@@ -3,8 +3,9 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import SearchBar from "./SearchBar";
-import BackButton from "./BackButton";
+import SearchBar from "../components/SearchBar";
+import BackButton from "../components/BackButton";
+
 
 export default function ViewAdmin() {
   const navigate = useNavigate();

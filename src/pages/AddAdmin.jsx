@@ -6,8 +6,7 @@ import axios from 'axios';
 import { FaUser, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import BackButton from '../BackButton';
-
+import BackButton from '../components/BackButton';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),

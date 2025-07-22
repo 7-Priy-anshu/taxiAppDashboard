@@ -32,7 +32,7 @@ useEffect(() => {
         <img
           src="../images/taxiLogo.png"
           alt="Logo"
-          className="rounded-full w-10 h-10 object-cover logo"
+          className="rounded-full w-10 h-10 object-cover "
         />
         <div className="text-2xl font-bold text-gray-700">Taxi App</div>
       </div>
@@ -43,7 +43,7 @@ useEffect(() => {
           src="../images/userIcon.png"
           alt="User"
           onClick={toggleDropdown}
-          className="rounded-full w-10 h-10 object-cover cursor-pointer logo"
+          className="rounded-full w-10 h-10 object-cover cursor-pointer "
         />
         {isDropdownVisible && <ProfileDropdown />}
       </div>

@@ -17,10 +17,15 @@ export default function CompanyAdminDashboard() {
             <FaPlus className="ml-2" />
           </AddButton>
         </Link>
+        <Link to="/company-admin/addHr">
+          <AddButton text="Add Hr">
+            <FaPlus className="ml-2" />
+          </AddButton>
+        </Link>
       </div>
 
       {/* Buttons + Pie Chart Section */}
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-row lg:flex-row gap-6">
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 w-full lg:w-1/2">
           <Link to="/company-admin/viewDriver">
@@ -43,11 +48,11 @@ export default function CompanyAdminDashboard() {
       </div>
 
       {/* Line and Bar Charts Section */}
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="w-full md:w-1/2">
+      <div className="flex flex-row md:flex-row">
+        <div className="w-64 md:w-1/2">
           <LineChart />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-64 md:w-1/2">
           <BarChart />
         </div>
       </div>

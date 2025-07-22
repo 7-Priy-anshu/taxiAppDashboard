@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
-import BackButton from './BackButton';
+import BackButton from "../components/BackButton"
 
 const CustomerSchema = Yup.object().shape({
   customerName: Yup.string().required('Customer name is required'),

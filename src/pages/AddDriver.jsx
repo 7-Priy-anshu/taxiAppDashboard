@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
+import BackButton from "../components/BackButton"
 
 
 const validationSchema = Yup.object({

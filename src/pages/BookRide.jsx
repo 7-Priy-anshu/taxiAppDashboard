@@ -366,7 +366,7 @@ import DataTable from "react-data-table-component";
 import { Dialog } from "@headlessui/react";
 import { io } from "socket.io-client";
 import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
+import BackButton from "../components/BackButton";
 import globalTableStyles from '../styles/globalTableStyles';
 
 

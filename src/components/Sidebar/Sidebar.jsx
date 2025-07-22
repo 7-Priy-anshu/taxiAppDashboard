@@ -27,7 +27,7 @@ const sidebarItems = [
   {
     icon: 'FaCar',
     label:'Book Ride',
-    link: '/superadmin/bookRide',
+    link: '/superAdmin/bookRide',
     requiredPermissions: ['book_ride','book_ride'],
   }
   // {
@@ -49,28 +49,28 @@ const sidebarItems = [
 
 const dropdownItem = [
   [
-    { icon: 'FaUserPlus', label: 'Add Driver', link: '/superadmin/addDriver', permission: 'add_driver' },
-    { icon: 'FaTable', label: 'View Drivers', link: '/superadmin/viewDriver', permission: 'view_driver' },
+    { icon: 'FaUserPlus', label: 'Add Driver', link: '/superAdmin/addDriver', permission: 'add_driver' },
+    { icon: 'FaTable', label: 'View Drivers', link: '/superAdmin/viewDriver', permission: 'view_driver' },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Add Customer', link: '/superadmin/addCustomer', permission: 'add_customer' },
-    { icon: 'FaTable', label: 'View Customer', link: '/superadmin/viewCustomer', permission: 'view_customer' },
+    { icon: 'FaUserPlus', label: 'Add Customer', link: '/superAdmin/addCustomer', permission: 'add_customer' },
+    { icon: 'FaTable', label: 'View Customer', link: '/superAdmin/viewCustomer', permission: 'view_customer' },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Add Car', link: '/superadmin/addCar', permission: 'add_car' },
-    { icon: 'FaTable', label: 'View Car', link: '/superadmin/viewCar', permission: 'view_car' },
+    { icon: 'FaUserPlus', label: 'Add Car', link: '/superAdmin/addCar', permission: 'add_car' },
+    { icon: 'FaTable', label: 'View Car', link: '/superAdmin/viewCar', permission: 'view_car' },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Create Admin', link: '/superadmin/addAdmin', permission: 'add_admin' },
-    { icon: 'FaTable', label: 'View Admin', link: '/superadmin/viewAdmin', permission: 'view_admin' },
+    { icon: 'FaUserPlus', label: 'Create Admin', link: '/superAdmin/addAdmin', permission: 'add_admin' },
+    { icon: 'FaTable', label: 'View Admin', link: '/superAdmin/viewAdmin', permission: 'view_admin' },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Create HR', link: '/superadmin/addHr', permission: 'add_hr' },
-    { icon: 'FaTable', label: 'View HR', link: '/superadmin/viewHr', permission: 'view_hr' },
+    { icon: 'FaUserPlus', label: 'Create HR', link: '/superAdmin/addHr', permission: 'add_hr' },
+    { icon: 'FaTable', label: 'View HR', link: '/superAdmin/viewHr', permission: 'view_hr' },
   ],
   // [
-  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superadmin/bookRide', permission: 'book_ride' },
-  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superadmin/bookRide', permission: 'book_ride' },
+  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superAdmin/bookRide', permission: 'book_ride' },
+  //   { icon: 'FaUserPlus', label: 'Book Rides', link: '/superAdmin/bookRide', permission: 'book_ride' },
   // ],
   [], // Empty array for "User" to avoid undefined issues
 ];

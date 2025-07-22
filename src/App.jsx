@@ -1,8 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import { useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
-// import './App.css'; // Added CSS import
-import './App.css'
+import { useAuth } from "./context/AuthContext";
+import './App.css';
 
 import Login from "./pages/Login";
 import NotAuthorized from "./pages/NotAuthorized";
@@ -12,15 +11,22 @@ import CompanyAdminLayout from "./layouts/CompanyAdminLayout";
 import HRLayout from "./layouts/HRLayout";
 
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
-import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
-import HRDashboard from "./pages/hr/Dashboard";
+import AddDriver from "./pages/AddDriver";
+import AddCar from "./pages/AddCar";
+import AddCustomer from "./pages/AddCustomer";
+import ViewAdmin from "./pages/ViewAdmin";
+import ViewDriver from "./pages/ViewDriver";
+import ViewCar from "./pages/ViewCar";
+import ViewCustomer from "./pages/ViewCustomer";
+import BookRide from "./pages/BookRide";
+import AddAdmin from "./pages/AddAdmin";
 
-import AddAdmin from "./pages/superadmin/AddAdmin";
+import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+import HR from "./pages/AddHR";
+import HRDashboard from "./pages/hr/Dashboard";
 
 export default function App() {
   return (
-    //  <div className="min-h-screen bg-green-300 flex items-center justify-center">
-
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/not-authorized" element={<NotAuthorized />} />
@@ -34,9 +40,22 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<SuperadminDashboard />}>
-        <Route path="addAdmin" element={<AddAdmin />} />
-        </Route>
+        <Route path="dashboard" element={<SuperadminDashboard />} />
+
+        {/* Company-specific admin routes */}
+        <Route path="company/:companyId/admin/viewAdmin" element={<ViewAdmin />} />
+        <Route path="company/:companyId/admin/addAdmin" element={<AddAdmin />} />
+        <Route path="company/:companyId/admin/bookRide" element={<BookRide />} />
+
+        {/* Company-specific HR routes */}
+        <Route path="company/:companyId/hr" element={<HRDashboard />} />
+        <Route path="company/:companyId/hr/addDriver" element={<AddDriver />} />
+        <Route path="company/:companyId/hr/addCustomer" element={<AddCustomer />} />
+        <Route path="company/:companyId/hr/addCar" element={<AddCar />} />
+        <Route path="company/:companyId/hr/viewDriver" element={<ViewDriver />} />
+        <Route path="company/:companyId/hr/viewCustomer" element={<ViewCustomer />} />
+        <Route path="company/:companyId/hr/viewCar" element={<ViewCar />} />
+        <Route path="company/:companyId/hr/bookRide" element={<BookRide />} />
       </Route>
 
       {/* Company Admin */}
@@ -49,6 +68,8 @@ export default function App() {
         }
       >
         <Route path="dashboard" element={<CompanyAdminDashboard />} />
+        <Route path="addHr" element={<HR />} />
+        <Route path="addAdmin" element={<AddAdmin />} />
       </Route>
 
       {/* HR */}
@@ -63,11 +84,88 @@ export default function App() {
         <Route path="dashboard" element={<HRDashboard />} />
       </Route>
     </Routes>
-
-    //  </div>
-
   );
 }
+
+//-----------------------------------Before Adding Dummy Data ------------------------------------
+
+// import { Routes, Route } from "react-router-dom";
+// import { useAuth } from "./context/AuthContext";
+// import ProtectedRoute from "./components/ProtectedRoute";
+// // import './App.css'; // Added CSS import
+// import './App.css'
+
+// import Login from "./pages/Login";
+// import NotAuthorized from "./pages/NotAuthorized";
+
+// import SuperadminLayout from "./layouts/SuperadminLayout";
+// import CompanyAdminLayout from "./layouts/CompanyAdminLayout";
+// import HRLayout from "./layouts/HRLayout";
+
+// import SuperadminDashboard from "./pages/superadmin/Dashboard";
+// import AddDriver from "./pages/AddDriver";
+// import AddCar from "./pages/AddCar";
+// import AddCustomer from "./pages/AddCustomer";
+// import AddAdmin from "./pages/superadmin/AddAdmin";
+
+// import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+// import HRDashboard from "./pages/hr/Dashboard";
+
+
+// export default function App() {
+//   return (
+//     //  <div className="min-h-screen bg-green-300 flex items-center justify-center">
+
+//     <Routes>
+//       <Route path="/" element={<Login />} />
+//       <Route path="/not-authorized" element={<NotAuthorized />} />
+
+//       {/* Superadmin */}
+//       <Route
+//         path="/superAdmin/*"
+//         element={
+//           <ProtectedRoute allowedRoles={["superAdmin"]}>
+//             <SuperadminLayout />
+//           </ProtectedRoute>
+//         }
+//       >
+//         <Route path="dashboard" element={<SuperadminDashboard />}>
+//           <Route path="addDriver" element={<AddDriver />} />
+//           <Route path="addCar" element={<AddCar />} />
+//           <Route path="addCustomer" element={<AddCustomer/>}/>
+//           <Route path="addAdmin" element={<AddAdmin />} />
+//         </Route>
+//       </Route>
+
+//       {/* Company Admin */}
+//       <Route
+//         path="/company-admin/*"
+//         element={
+//           <ProtectedRoute allowedRoles={["company_admin"]}>
+//             <CompanyAdminLayout />
+//           </ProtectedRoute>
+//         }
+//       >
+//         <Route path="dashboard" element={<CompanyAdminDashboard />} />
+//       </Route>
+
+//       {/* HR */}
+//       <Route
+//         path="/hr/*"
+//         element={
+//           <ProtectedRoute allowedRoles={["hr"]}>
+//             <HRLayout />
+//           </ProtectedRoute>
+//         }
+//       >
+//         <Route path="dashboard" element={<HRDashboard />} />
+//       </Route>
+//     </Routes>
+
+//     //  </div>
+
+//   );
+// }
 
 // import { Routes, Route } from "react-router-dom";
 // import {useAuth} from "./context/AuthContext"

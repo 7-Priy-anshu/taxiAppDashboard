@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
-import BackButton from './BackButton';
+import BackButton from "../components/BackButton"
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
 

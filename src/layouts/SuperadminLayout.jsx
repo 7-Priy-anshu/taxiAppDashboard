@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar/Sidebar'; // Adjusted from '../components/Sidebar/Sidebar'
 import NavbarHR from '../components/Navbar/NavbarHR'; // Adjusted path
 import { Outlet } from 'react-router-dom';
+import SuperadminSidebar from '../components/SuperadminSidebar';
 
 export default function SuperadminLayout() {
   const { user } = useAuth();
@@ -10,9 +11,9 @@ export default function SuperadminLayout() {
     <div className="flex w-full h-screen flex-col">
       <NavbarHR />
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 bg-gray-100">
-          <Sidebar user={user} />
-        </aside>
+        {/* <aside className="w-64 bg-gray-100">  */}
+          <SuperadminSidebar/>
+         {/* </aside> */}
         <main className="flex-1 bg-white overflow-y-auto">
           <Outlet />
         </main>
@@ -20,6 +21,28 @@ export default function SuperadminLayout() {
     </div>
   );
 }
+// // import { useAuth } from '../../context/AuthContext'; // Adjusted from '../context/AuthContext'
+// import { useAuth } from '../context/AuthContext';
+// import Sidebar from '../components/Sidebar/Sidebar'; // Adjusted from '../components/Sidebar/Sidebar'
+// import NavbarHR from '../components/Navbar/NavbarHR'; // Adjusted path
+// import { Outlet } from 'react-router-dom';
+
+// export default function SuperadminLayout() {
+//   const { user } = useAuth();
+//   return (
+//     <div className="flex w-full h-screen flex-col">
+//       <NavbarHR />
+//       <div className="flex flex-1 overflow-hidden">
+//         {/* <aside className="w-64 bg-gray-100"> */}
+//           {/* <Sidebar user={user} /> */}
+//         {/* </aside> */}
+//         <main className="flex-1 bg-white overflow-y-auto">
+//           <Outlet />
+//         </main>
+//       </div>
+//     </div>
+//   );
+// }
 
 // import { useAuth } from '../context/AuthContext';
 // import Sidebar from '../components/Sidebar/Sidebar';
