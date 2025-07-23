@@ -13,7 +13,7 @@ export default function CompanyAdminDashboard() {
       {/* Top-right Add Admin Button */}
       <div className="flex gap-2 justify-end">
         <Link to="/company-admin/addAdmin">
-          <AddButton text="Add Admin">
+          <AddButton text="Add Employee">
             <FaPlus className="ml-2" />
           </AddButton>
         </Link>

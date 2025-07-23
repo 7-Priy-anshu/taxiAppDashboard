@@ -11,19 +11,24 @@ import CompanyAdminLayout from "./layouts/CompanyAdminLayout";
 import HRLayout from "./layouts/HRLayout";
 
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
-import AddDriver from "./pages/AddDriver";
+import AddDriver from "./pages/superadmin/AddDriver";
 import AddCar from "./pages/AddCar";
 import AddCustomer from "./pages/AddCustomer";
-import ViewAdmin from "./pages/ViewAdmin";
+import ViewAdmin from "./pages/superadmin/ViewAdmin";
 import ViewDriver from "./pages/ViewDriver";
 import ViewCar from "./pages/ViewCar";
 import ViewCustomer from "./pages/ViewCustomer";
 import BookRide from "./pages/BookRide";
 import AddAdmin from "./pages/AddAdmin";
+import AddClient from "./pages/superadmin/AddClient";
+import ViewClient from "./pages/ViewClient";
+import ClientDetails from "./pages/superadmin/ClientDetails";
+
 
 import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
 import HR from "./pages/AddHR";
 import HRDashboard from "./pages/hr/Dashboard";
+import DriverHistory from "./pages/superadmin/DriverHistory";
 
 export default function App() {
   return (
@@ -32,7 +37,34 @@ export default function App() {
       <Route path="/not-authorized" element={<NotAuthorized />} />
 
       {/* Superadmin */}
-      <Route
+<Route path="/superAdmin/*" element={
+  <ProtectedRoute allowedRoles={["superAdmin"]}>
+    <SuperadminLayout />
+  </ProtectedRoute>
+}>
+  <Route path="dashboard" element={<SuperadminDashboard />} />
+  <Route path="addAdmin" element={<AddAdmin />} />
+  <Route path="viewAdmin" element={<ViewAdmin />} />
+  <Route path="addClient" element={<AddClient />} />
+  <Route path="viewClient" element={<ViewClient />} />
+  <Route path="driverHistory" element={<DriverHistory />} />
+
+  {/* Dynamic Client Routes */}
+  <Route path="client/:clientId/clientDetails" element={<ClientDetails />} />
+  <Route path="client/:clientId/addAdmin" element={<AddAdmin />} />
+  <Route path="client/:clientId/viewAdmin" element={<ViewAdmin />} />
+  <Route path="client/:clientId/bookRide" element={<BookRide />} />
+  <Route path="client/:clientId/addDriver" element={<AddDriver />} />
+  <Route path="client/:clientId/addCustomer" element={<AddCustomer />} />
+  <Route path="client/:clientId/addCar" element={<AddCar />} />
+  <Route path="client/:clientId/viewDriver" element={<ViewDriver />} />
+  <Route path="client/:clientId/viewCustomer" element={<ViewCustomer />} />
+  <Route path="client/:clientId/viewCar" element={<ViewCar />} />
+  <Route path="client/:clientId/driver-history" element={<DriverHistory />} />
+</Route>
+
+
+      {/* <Route
         path="/superAdmin/*"
         element={
           <ProtectedRoute allowedRoles={["superAdmin"]}>
@@ -41,13 +73,17 @@ export default function App() {
         }
       >
         <Route path="dashboard" element={<SuperadminDashboard />} />
-
-        {/* Company-specific admin routes */}
-        <Route path="company/:companyId/admin/viewAdmin" element={<ViewAdmin />} />
+        <Route path="addAdmin" element={<AddAdmin />} />
+        <Route path="viewAdmin" element={<ViewAdmin />} />
+        <Route path="addClient" element={<AddClient />} />
+        <Route path="viewClient" element={<ViewClient />} />
+        <Route path="driverHistory" element={<DriverHistory />} />
+        {/* Company-specific HR routes */}
+        {/* Company-specific admin routes *
+       <Route path="company/:companyId/admin/viewAdmin" element={<ViewAdmin />} />
         <Route path="company/:companyId/admin/addAdmin" element={<AddAdmin />} />
         <Route path="company/:companyId/admin/bookRide" element={<BookRide />} />
 
-        {/* Company-specific HR routes */}
         <Route path="company/:companyId/hr" element={<HRDashboard />} />
         <Route path="company/:companyId/hr/addDriver" element={<AddDriver />} />
         <Route path="company/:companyId/hr/addCustomer" element={<AddCustomer />} />
@@ -56,7 +92,9 @@ export default function App() {
         <Route path="company/:companyId/hr/viewCustomer" element={<ViewCustomer />} />
         <Route path="company/:companyId/hr/viewCar" element={<ViewCar />} />
         <Route path="company/:companyId/hr/bookRide" element={<BookRide />} />
-      </Route>
+        <Route path="addClient" element={<AddClient />}/> 
+      </Route> */}
+
 
       {/* Company Admin */}
       <Route

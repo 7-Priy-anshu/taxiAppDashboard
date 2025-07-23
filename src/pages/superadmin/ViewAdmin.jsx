@@ -3,13 +3,15 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import SearchBar from "../components/SearchBar";
-import BackButton from "../components/BackButton";
+import SearchBar from "../../components/SearchBar";
+import BackButton from "../../components/BackButton";
+// import SearchBar from "../../components/SearchBar";
+// import BackButton from "../../components/BackButton";
 
 
 export default function ViewAdmin() {
   const navigate = useNavigate();
-
+  const VITE_API = import.meta.env.VITE_API;
   const [viewAdmin, setViewAdmin] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -54,11 +56,12 @@ export default function ViewAdmin() {
   );
 
   const columns = [
-    { name: "ID", selector: (row) => row._id, sortable: true, wrap: true },
+    { id: "ID", selector: (row) => row._id, sortable: true, wrap: true },
     { name: "Name", selector: (row) => row.name, sortable: true },
-    { name: "Email", selector: (row) => row.email, sortable: true },
-    { name: "Phone", selector: (row) => row.phoneNumber, sortable: true },
-    { name: "Role", selector: (row) => row.role || row.role, sortable: true },
+    { email: "Email", selector: (row) => row.email, sortable: true },
+    { phoneNumber: "Phone", selector: (row) => row.phoneNumber, sortable: true },
+    { role: "Role", selector: (row) => row.role || row.role, sortable: true },
+    { clientName: "ClientName", selector: (row) => row.clientName || row.clientName, sortable: true },
     {
       name: "Created On",
       selector: (row) =>

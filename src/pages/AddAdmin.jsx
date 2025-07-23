@@ -30,6 +30,7 @@ export default function AddAdmin() {
     password: '',
     phoneNumber: '',
     role: '',
+    clientName: '',
     permissions: [],
   });
 
@@ -132,9 +133,21 @@ export default function AddAdmin() {
       setSubmitting(false);
     }
   };
-
+    const [clients, setclients] = useState([]);
+  
+    useEffect(() => {
+      // Replace with your real API endpoint
+      axios.get(`${VITE_API}view/client`)
+        .then((response) => {
+          setclients(response.data.clientData || []);
+          console.log(response.data.clientData )
+        })
+        .catch((error) => {
+          console.error("Failed to fetch client:", error);
+        });
+    }, []);
+  
   if (loading) return <div className="text-center mt-10">Loading admin info...</div>;
-
   return (
     // <div className="max-w-4xl mx-auto p-4 sm:p-8">
     // <div className="flex items-center justify-center min-h-screen bg-white  p-4">
@@ -250,20 +263,28 @@ export default function AddAdmin() {
               </div>
               <div className="relative">
                 <Field
-                  type="text"
-                  name="role"
-                  placeholder="Enter Role"
+                  as="select"
+                  name="clientName"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
+                >
+                  <option value="">Select Client Name</option>
+                  {clients.map((client) => (
+                    <option key={client._id} value={client.clientName}>
+                      {client.clientName}
+                    </option>
+                  ))}
+                </Field>
+
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaUser className="text-gray-500" />
                 </div>
                 <ErrorMessage
-                  name="role"
+                  name="clientName"
                   component="div"
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
               <div className="relative">
                 <Field
                   type="text"
@@ -275,7 +296,7 @@ export default function AddAdmin() {
                   <FaUser className="text-gray-500" />
                 </div>
                 <ErrorMessage
-                  name="role"
+                  name="password"
                   component="div"
                   className="text-red-500 text-xs mt-1"
                 />

@@ -437,9 +437,9 @@ export default function BookRide() {
       });
     });
 
-    socket.on("ride_approved", (data) => {
-      console.log("Server acknowledged ride approval", data);
-    });
+    // socket.on("ride_approved", (data) => {
+    //   console.log("Server acknowledged ride approval", data);
+    // });
 
     return () => {
       socket.disconnect();

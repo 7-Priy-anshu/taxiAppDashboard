@@ -15,7 +15,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const VITE_API = import.meta.env.VITE_API;
-//--------------------------------------------hardCoded-------------------------------
+
 // const handleSubmit = async (values, { setSubmitting }) => {
 //   try {
 //     const { email, password } = values;
@@ -75,33 +75,37 @@ export default function Login() {
 //   }
 // };
 
-
-//-----------------------------------Superadmin Login----------------------------------
 const handleSubmit = async (values, { setSubmitting }) => {
   try {
     const res = await axios.post(`${VITE_API}superAdmin/login`, values, {
       withCredentials: true,
     });
+    // const res = await axios.post(`${VITE_API}superAdmin/login`, values, {
+    //   withCredentials: true,
+    // });
 
     console.log("Full login response:", res.data);
 
-    // Extract superAdminData
-    const user = res.data.superAdminData;
+    // Try different possible structures
+    const user =
+      res.data.user || res.data.data || {
+        email: res.data.email,
+        role: res.data.role,
+        permissions: res.data.permissions
+      };
 
     if (!user || !user.email || !user.role) {
-      throw new Error("Invalid login response: Missing user info");
+      throw new Error("Invalid login response: Missing email or role");
     }
 
-    // Save to localStorage and update context
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
 
-    // Redirect based on role
     switch (user.role) {
       case "superAdmin":
         navigate("/superAdmin/dashboard");
         break;
-      case "admin":
+      case "company_admin":
         navigate("/company-admin/dashboard");
         break;
       case "hr":
@@ -117,46 +121,6 @@ const handleSubmit = async (values, { setSubmitting }) => {
     setSubmitting(false);
   }
 };
-
-
-//---------------------------------Admin Login----------------------------------------
-// const handleSubmit = async (values, { setSubmitting }) => {
-//   try {
-//     const res = await axios.post(`${VITE_API}login`, values, {
-//       withCredentials: true,
-//     });
-
-//     console.log("Full login response:", res.data);
-
-//     const user = res.data.user;
-
-//     if (!user || !user.role) {
-//       throw new Error("Invalid login response: Missing role");
-//     }
-
-//     localStorage.setItem("user", JSON.stringify(user));
-//     setUser(user);
-
-//     switch (user.role) {
-//       case "superAdmin":
-//         navigate("/superAdmin/dashboard");
-//         break;
-//       case "admin":
-//         navigate("/company-admin/dashboard");
-//         break;
-//       case "hr":
-//         navigate("/hr/dashboard");
-//         break;
-//       default:
-//         navigate("/not-authorized");
-//     }
-//   } catch (err) {
-//     console.error("Login failed", err);
-//     alert(err.message || "Login failed. Check credentials or server response.");
-//   } finally {
-//     setSubmitting(false);
-//   }
-// };
 
   return (
     <div className="min-h-screen flex flex-row items-center justify-center bg-gray-100 p-4">
