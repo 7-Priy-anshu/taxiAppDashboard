@@ -155,31 +155,6 @@ export default function AddCar() {
                 </button>
               </div>
             </Form>
-            // <Form className="flex flex-col gap-4">
-            //   <div className="flex flex-col">
-            //     <label htmlFor="carName" className="text-base font-medium">Car Name</label>
-            //     <Field name="carName" type="text" className="border rounded p-2" placeholder="Enter car name" />
-            //     <ErrorMessage name="carName" component="div" className="text-red-500 text-sm" />
-            //   </div>
-            //   <div className="flex flex-col">
-            //     <label htmlFor="carModel" className="text-base font-medium">Car Model</label>
-            //     <Field name="carModel" type="text" className="border rounded p-2" placeholder="Enter car model" />
-            //     <ErrorMessage name="carModel" component="div" className="text-red-500 text-sm" />
-            //   </div>
-            //   <div className="flex flex-col">
-            //     <label htmlFor="carNumber" className="text-base font-medium">Car Number</label>
-            //     <Field name="carNumber" type="text" className="border rounded p-2" placeholder="Enter Car Number" />
-            //     <ErrorMessage name="carNumber" component="div" className="text-red-500 text-sm" />
-            //   </div>
-
-            //   <button
-            //     type="submit"
-            //     disabled={isSubmitting}
-            //     className="bg-blue-500 text-white p-2 rounded disabled:opacity-50 hover:bg-blue-700 transition-colors"
-            //   >
-            //     {isSubmitting ? "Saving..." : id ? "Update Car" : "Add Car"}
-            //   </button>
-            // </Form>
           )}
         </Formik>
       </div>
@@ -188,3 +163,29 @@ export default function AddCar() {
 }
 
 
+
+          // <Form className="flex flex-col gap-4">
+          //   <div className="flex flex-col">
+          //     <label htmlFor="carName" className="text-base font-medium">Car Name</label>
+          //     <Field name="carName" type="text" className="border rounded p-2" placeholder="Enter car name" />
+          //     <ErrorMessage name="carName" component="div" className="text-red-500 text-sm" />
+          //   </div>
+          //   <div className="flex flex-col">
+          //     <label htmlFor="carModel" className="text-base font-medium">Car Model</label>
+          //     <Field name="carModel" type="text" className="border rounded p-2" placeholder="Enter car model" />
+          //     <ErrorMessage name="carModel" component="div" className="text-red-500 text-sm" />
+          //   </div>
+          //   <div className="flex flex-col">
+          //     <label htmlFor="carNumber" className="text-base font-medium">Car Number</label>
+          //     <Field name="carNumber" type="text" className="border rounded p-2" placeholder="Enter Car Number" />
+          //     <ErrorMessage name="carNumber" component="div" className="text-red-500 text-sm" />
+          //   </div>
+
+          //   <button
+          //     type="submit"
+          //     disabled={isSubmitting}
+          //     className="bg-blue-500 text-white p-2 rounded disabled:opacity-50 hover:bg-blue-700 transition-colors"
+          //   >
+          //     {isSubmitting ? "Saving..." : id ? "Update Car" : "Add Car"}
+          //   </button>
+          // </Form>

@@ -31,6 +31,7 @@ export default function AddClient() {
   useEffect(() => {
     if (id) {
       axios.get(`${VITE_API}add/client/${id}`)
+      // axios.get(`${VITE_API}view/client/${id}`)
         .then(res => {
           // console.log("Fetched car data:", res.data);
           setInitialValues(res.data); // or res.data.car
@@ -51,7 +52,7 @@ export default function AddClient() {
         navigation('/superAdmin/viewClient');
       }).catch(err => console.error());
     } else {
-      axios.put(`${VITE_API}edit/client`, values).then(() => {
+      axios.put(`${VITE_API}update/client`, values).then(() => {
         navigation('/superAdmin/viewClient');
       }).catch(err => console.error());
     }

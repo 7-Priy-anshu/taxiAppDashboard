@@ -1,7 +1,7 @@
 // import { useAuth } from '../../context/AuthContext'; // Adjusted from '../context/AuthContext'
 import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar/Sidebar'; // Adjusted from '../components/Sidebar/Sidebar'
-import NavbarHR from '../components/Navbar/NavbarHR'; // Adjusted path
+import Navbar from '../components/Navbar/Navbar';
 import { Outlet } from 'react-router-dom';
 import SuperadminSidebar from '../components/SuperadminSidebar';
 
@@ -9,7 +9,7 @@ export default function SuperadminLayout() {
   const { user } = useAuth();
   return (
     <div className="flex w-full h-screen flex-col">
-      <NavbarHR />
+      <Navbar />
       <div className="flex flex-1 overflow-hidden">
         {/* <aside className="w-64 bg-gray-100">  */}
           <SuperadminSidebar/>

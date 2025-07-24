@@ -6,7 +6,7 @@ import { MdEmail } from "react-icons/md";
 import * as Yup from 'yup';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import BackButton from "../components/BackButton"
+import BackButton from '../../components/BackButton';
 
 const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -38,15 +38,15 @@ const validationSchema = Yup.object({
         { _id: 'delete_customer', label: 'Delete Customer' },
       ],
     },
-    {
-      group: "Car",
-      items: [
-        { _id: 'view_car', label: 'View Cars' },
-        { _id: 'add_car', label: 'Add Car' },
-        { _id: 'edit_car', label: 'Edit Car' },
-        { _id: 'delete_car', label: 'Delete Car' },
-      ],
-    },
+    // {
+    //   group: "Car",
+    //   items: [
+    //     { _id: 'view_car', label: 'View Cars' },
+    //     { _id: 'add_car', label: 'Add Car' },
+    //     { _id: 'edit_car', label: 'Edit Car' },
+    //     { _id: 'delete_car', label: 'Delete Car' },
+    //   ],
+    // },
     {
       group: "Approve Rides",
       items: [
@@ -57,7 +57,7 @@ const validationSchema = Yup.object({
   ];
   
 
-export default function HR() {
+export default function AddHR() {
   const { id } = useParams();
   const navigate = useNavigate();
   const VITE_API = import.meta.env.VITE_API;

@@ -6,7 +6,9 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   if (!user || !allowedRoles.includes(user.role)) {
     // return <Navigate to="/not-authorized" />;
+      return children; // 👈 Allow access unconditionally
+
   }
 
-  return children;
+  // return children;
 }

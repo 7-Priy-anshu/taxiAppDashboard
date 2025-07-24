@@ -21,14 +21,16 @@ import ViewCustomer from "./pages/ViewCustomer";
 import BookRide from "./pages/BookRide";
 import AddAdmin from "./pages/AddAdmin";
 import AddClient from "./pages/superadmin/AddClient";
-import ViewClient from "./pages/ViewClient";
+import ViewClient from "./pages/superadmin/ViewClient";
+import AddHub from "./pages/superadmin/AddHub";
+import ViewHub from "./pages/superadmin/viewHub";
 import ClientDetails from "./pages/superadmin/ClientDetails";
 
-
 import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
-import HR from "./pages/AddHR";
+import AddHR from "./pages/company-admin/AddHR";
 import HRDashboard from "./pages/hr/Dashboard";
 import DriverHistory from "./pages/superadmin/DriverHistory";
+import EmployeeDetails from "./pages/superadmin/EmployeeDetails";
 
 export default function App() {
   return (
@@ -38,9 +40,9 @@ export default function App() {
 
       {/* Superadmin */}
 <Route path="/superAdmin/*" element={
-  <ProtectedRoute allowedRoles={["superAdmin"]}>
+  // <ProtectedRoute allowedRoles={["superAdmin"]}>
     <SuperadminLayout />
-  </ProtectedRoute>
+  // </ProtectedRoute>
 }>
   <Route path="dashboard" element={<SuperadminDashboard />} />
   <Route path="addAdmin" element={<AddAdmin />} />
@@ -48,9 +50,17 @@ export default function App() {
   <Route path="addClient" element={<AddClient />} />
   <Route path="viewClient" element={<ViewClient />} />
   <Route path="driverHistory" element={<DriverHistory />} />
+  <Route path="addHub" element={<AddHub />} />
+  <Route path="viewHub" element={<ViewHub />} />
+  {/* Edit Routes */}
+  <Route path="addClient/:id" element={<AddClient />} />
+  <Route path="addHub/:id" element={<AddHub />} />
+
 
   {/* Dynamic Client Routes */}
+  <Route path="client/:clientId/employee/:id" element={<EmployeeDetails />} />
   <Route path="client/:clientId/clientDetails" element={<ClientDetails />} />
+  <Route path="client/:clientId/addHr" element={<AddHR />} />
   <Route path="client/:clientId/addAdmin" element={<AddAdmin />} />
   <Route path="client/:clientId/viewAdmin" element={<ViewAdmin />} />
   <Route path="client/:clientId/bookRide" element={<BookRide />} />
@@ -106,7 +116,9 @@ export default function App() {
         }
       >
         <Route path="dashboard" element={<CompanyAdminDashboard />} />
-        <Route path="addHr" element={<HR />} />
+          <Route path="client/:clientId/addHr" element={<AddHR />} />
+
+        <Route path="addHr" element={<AddHR />} />
         <Route path="addAdmin" element={<AddAdmin />} />
       </Route>
 

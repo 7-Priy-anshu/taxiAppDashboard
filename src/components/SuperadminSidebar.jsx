@@ -6,22 +6,28 @@ import { useParams } from "react-router-dom";
 
 import { useAuth } from '../context/AuthContext';
 import DriverHistory from '../pages/superadmin/DriverHistory';
-// const dummyCompanies = [
-//   { id: '1', name: 'Alpha Tech' },
-//   { id: '2', name: 'Beta Corp' },
-//   { id: '3', name: 'Gamma Ltd' },
-// ];
 
 export default function SuperadminSidebar() {
   const { user } = useAuth(); // ✅ if you’re using context
-
-const { clientId } = useParams();
+  const { clientId } = useParams();
+  const [expandedMenuStatic, setExpandedMenuStatic] = useState({});
   const [clients, setClients] = useState([]);
   const [expandedClient, setExpandedClient] = useState(null);
   const [expandedMenu, setExpandedMenu] = useState({}); // { companyId: 'admin' | 'hr' }
 
   const VITE_API = import.meta.env.VITE_API;
 
+
+  // Toggle Sub-menu for companies  
+const toggleSubMenuStatic = (key) => {
+  setExpandedMenuStatic((prev) => ({
+    ...prev,
+    [key]: prev[key] ? null : true,
+  }));
+};
+
+
+  // Toggle Sub-menu for companies  
   const toggleCompany = (_id) => {
     setExpandedClient(prev => (prev === _id ? null : _id));
     setExpandedMenu({}); // collapse nested menus
@@ -48,27 +54,60 @@ const { clientId } = useParams();
   }, []);
 
   return (
-    <div className="w-64 bg-gray-100 h-screen p-4 overflow-auto">
+    <div className="w-64 bg-blue-50 h-screen p-4 overflow-auto">
       <div className="mb-2 ">
         <div className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300">
           <Link to="driverHistory"><span>Driver History</span></Link>
         </div>
       </div>
-      <div className="mb-2 ">
-        <div className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300">
-          <span>Hub</span>
-        </div>
-      </div>
+   <div className="mb-2">
+  <div
+    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
+    onClick={() => toggleSubMenuStatic('client')}
+  >
+    <span>Manage Client</span>
+    {expandedMenuStatic['client'] ? <FaChevronDown /> : <FaChevronRight />}
+  </div>
+
+  {expandedMenuStatic['client'] && (
+    <div className="ml-4 mt-2 space-y-1 text-sm">
+      <Link to="/superAdmin/addClient" className="block hover:underline">
+        Add Client
+      </Link>
+      <Link to="/superAdmin/viewClient" className="block hover:underline">
+        View Clients
+      </Link>
+    </div>
+  )}
+</div>
+
+  <div className="mb-2">
+  <div
+    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
+    onClick={() => toggleSubMenuStatic('hub')}
+  >
+    <span>Hub</span>
+    {expandedMenuStatic['hub'] ? <FaChevronDown /> : <FaChevronRight />}
+  </div>
+
+  {expandedMenuStatic['hub'] && (
+    <div className="ml-4 mt-2 space-y-1 text-sm">
+      <Link to="/superadmin/addHub" className="block hover:underline">Add Hub</Link>
+      <Link to="/superadmin/viewHub" className="block hover:underline">View Hub</Link>
+    </div>
+  )}
+</div>
+
       <h2 className="text-xl font-bold mb-4">Companies</h2>
       {/* <DriverHistory/> */}
       {clients.map((client) => (
         <div key={client._id} className="mb-2">
           <div
-            className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="*:object-contain flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
             onClick={() => toggleCompany(client._id)}
           >
             <span>{client.clientName}</span>
-            {expandedClient === client._id ? <FaChevronDown /> : <FaChevronRight />}
+            {expandedClient === client._id ? <FaChevronDown className='opacity-70' /> : <FaChevronRight className='opacity-60' />}
           </div>
 
           {expandedClient === client._id && (
@@ -85,9 +124,10 @@ const { clientId } = useParams();
 
                 {expandedMenu[client._id] === 'admin' && (
                   <div className="ml-4 mt-1 text-sm space-y-1">
-                    <Link to={`/client/${client._id}/addAdmin`} className="block hover:underline">Add Admin</Link>
-                    <Link to={`/client/${client._id}/viewAdmin`} className="block hover:underline">View Admin</Link>
-                    <Link to={`/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
+                    <Link to={`/superadmin/client/${client._id}/addAdmin`} className="block hover:underline">Add Admin</Link>
+                    <Link to={`/superadmin/client/${client._id}/addHr`} className="block hover:underline">Add Hr</Link>
+                    <Link to={`/superadmin/client/${client._id}/viewAdmin`} className="block hover:underline">View Admin</Link>
+                    <Link to={`/superadmin/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
                   </div>
                 )}
               </div>
@@ -104,13 +144,13 @@ const { clientId } = useParams();
 
                 {expandedMenu[client._id] === 'hr' && (
                   <div className="ml-4 mt-1 text-sm space-y-1">
-                    <Link to={`/client/${client._id}/addDriver`} className="block hover:underline">Add Driver</Link>
-                    <Link to={`/client/${client._id}/addCustomer`} className="block hover:underline">Add Customer</Link>
-                    <Link to={`/client/${client._id}/addCar`} className="block hover:underline">Add Car</Link>
-                    <Link to={`/client/${client._id}/viewDriver`} className="block hover:underline">View Drivers</Link>
-                    <Link to={`/client/${client._id}/viewCustomer`} className="block hover:underline">View Customers</Link>
-                    <Link to={`/client/${client._id}/viewCar`} className="block hover:underline">View Cars</Link>
-                    <Link to={`/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
+                    <Link to={`/superadmin/client/${client._id}/addDriver`} className="block hover:underline">Add Driver</Link>
+                    <Link to={`/superadmin/client/${client._id}/addCustomer`} className="block hover:underline">Add Customer</Link>
+                    {/* <Link to={`/superadmin/client/${client._id}/addCar`} className="block hover:underline">Add Car</Link> */}
+                    <Link to={`/superadmin/client/${client._id}/viewDriver`} className="block hover:underline">View Drivers</Link>
+                    <Link to={`/superadmin/client/${client._id}/viewCustomer`} className="block hover:underline">View Customers</Link>
+                    {/* <Link to={`/superadmin/client/${client._id}/viewCar`} className="block hover:underline">View Cars</Link> */}
+                    <Link to={`/superadmin/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
 
                         {/* ✅ Add this line for Driver History */}
     <Link to={`/client/${client._id}/driver-history`} className="block hover:underline">Driver History</Link>

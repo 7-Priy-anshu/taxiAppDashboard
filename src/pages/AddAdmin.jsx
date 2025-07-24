@@ -30,7 +30,7 @@ export default function AddAdmin() {
     password: '',
     phoneNumber: '',
     role: '',
-    clientName: '',
+    clientEmail: '',
     permissions: [],
   });
 
@@ -50,13 +50,13 @@ export default function AddAdmin() {
         { _id: 'add_customer', label: 'Add Customer' }
       ],
     },
-    {
-      group: "Car",
-      items: [
-        { _id: 'view_car', label: 'View Cars' },
-        { _id: 'add_car', label: 'Add Car' }
-      ],
-    },
+    // {
+    //   group: "Car",
+    //   items: [
+    //     { _id: 'view_car', label: 'View Cars' },
+    //     { _id: 'add_car', label: 'Add Car' }
+    //   ],
+    // },
     {
       group: "HR",
       items: [
@@ -264,13 +264,13 @@ export default function AddAdmin() {
               <div className="relative">
                 <Field
                   as="select"
-                  name="clientName"
+                  name="clientEmail"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Select Client Name</option>
                   {clients.map((client) => (
-                    <option key={client._id} value={client.clientName}>
-                      {client.clientName}
+                    <option key={client._id} value={client.clientEmail}>
+                      {client.clientEmail}
                     </option>
                   ))}
                 </Field>
@@ -279,7 +279,7 @@ export default function AddAdmin() {
                   <FaUser className="text-gray-500" />
                 </div>
                 <ErrorMessage
-                  name="clientName"
+                  name="clientEmail"
                   component="div"
                   className="text-red-500 text-xs mt-1"
                 />

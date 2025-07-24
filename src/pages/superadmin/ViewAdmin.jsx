@@ -56,12 +56,12 @@ export default function ViewAdmin() {
   );
 
   const columns = [
-    { id: "ID", selector: (row) => row._id, sortable: true, wrap: true },
+    { name: "ID", selector: (row) => row._id, sortable: true, wrap: true },
     { name: "Name", selector: (row) => row.name, sortable: true },
-    { email: "Email", selector: (row) => row.email, sortable: true },
-    { phoneNumber: "Phone", selector: (row) => row.phoneNumber, sortable: true },
-    { role: "Role", selector: (row) => row.role || row.role, sortable: true },
-    { clientName: "ClientName", selector: (row) => row.clientName || row.clientName, sortable: true },
+    { name: "Email", selector: (row) => row.email, sortable: true },
+    { name: "Phone", selector: (row) => row.phoneNumber, sortable: true },
+    { name: "Role", selector: (row) => row.role || row.role, sortable: true },
+    { name: "ClientEmail", selector: (row) => row.clientEmail || row.clientEmail, sortable: true },
     {
       name: "Created On",
       selector: (row) =>

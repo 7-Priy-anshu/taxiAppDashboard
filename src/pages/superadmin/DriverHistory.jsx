@@ -1,43 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import DataTable from "react-data-table-component";
+import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 export default function DriverHistory() {
+  const { user, authLoading } = useAuth(); // get the logged-in user
   const [drivers, setDrivers] = useState([]);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const VITE_API = import.meta.env.VITE_API;
 
-  // Dummy driver data
-  const dummyDrivers = Array.from({ length: 10 }).map((_, i) => ({
-    _id: `driver${i + 1}`,
-    name: `Driver ${i + 1}`,
-    email: `driver${i + 1}@example.com`,
-    phoneNumber: `99900000${i + 1}`,
-  }));
-
-  // Dummy ride history data
-  const dummyRideHistory = Array.from({ length: 10 }).map((_, i) => ({
-    from: `Location ${i + 1}`,
-    to: `Destination ${i + 1}`,
-    rideTime: `${20 + i} mins`,
-    rideDateTime: `2025-07-2${i} 10:${i}0 AM`,
-    rideStatus: i % 2 === 0 ? "Completed" : "Cancelled",
-    driverId: `driver${(i % 10) + 1}`,
-  }));
-
+  // Fetch drivers when user is ready
   useEffect(() => {
-    setDrivers(dummyDrivers);
-  }, []);
+    if (!authLoading && user && user._id) {
+      fetchDrivers();
+    }
+  }, [authLoading, user]);
 
-  const fetchDriverHistory = (driverId) => {
+  const fetchDrivers = async () => {
+    try {
+      const res = await axios.get(`${VITE_API}view/driver/${user._id}`);
+      console.log("Driver list response:", res.data);
+
+      // Adjust according to actual API response
+      const driverList = Array.isArray(res.data.driverData)
+        ? res.data.driverData
+        : res.data.drivers || [];
+
+      setDrivers(driverList);
+    } catch (error) {
+      console.error("Error fetching drivers:", error);
+      setDrivers([]);
+    }
+  };
+
+  const fetchDriverHistory = async (driverId) => {
+    if (!user || !user._id) return;
+
     setSelectedDriverId(driverId);
     setLoading(true);
-    setTimeout(() => {
-      const filtered = dummyRideHistory.filter((r) => r.driverId === driverId);
-      setHistory(filtered);
+    try {
+      const res = await axios.get(`${VITE_API}driverRideHistory/${user._id}?driverId=${driverId}`);
+      console.log("Ride history response:", res.data);
+
+      const rideList = Array.isArray(res.data) ? res.data : res.data.rideHistory || [];
+      setHistory(rideList);
+    } catch (error) {
+      console.error("Error fetching ride history:", error);
+      setHistory([]);
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   const driverColumns = [
@@ -62,7 +77,12 @@ export default function DriverHistory() {
     { name: "From", selector: (row) => row.from, sortable: true },
     { name: "To", selector: (row) => row.to, sortable: true },
     { name: "Ride Time", selector: (row) => row.rideTime, sortable: true },
-    { name: "Ride Date/Time", selector: (row) => row.rideDateTime, sortable: true },
+    {
+      name: "Ride Date/Time",
+      selector: (row) =>
+        row.rideDateTime ? new Date(row.rideDateTime).toLocaleString() : "N/A",
+      sortable: true,
+    },
     { name: "Status", selector: (row) => row.rideStatus, sortable: true },
   ];
 
@@ -103,7 +123,7 @@ export default function DriverHistory() {
   };
 
   return (
-    <div className="p-6 flex flex-col gap-2">
+    <div className="p-6 flex flex-col gap-4">
       <div className="bg-white rounded-xl shadow border border-gray-200 p-4">
         <h1 className="text-2xl font-bold mb-4">Driver List</h1>
         <DataTable
@@ -131,7 +151,6 @@ export default function DriverHistory() {
               columns={historyColumns}
               data={history}
               pagination
-              selectableRows
               highlightOnHover
               pointerOnHover
               striped
@@ -144,6 +163,155 @@ export default function DriverHistory() {
     </div>
   );
 }
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { FaEye } from "react-icons/fa";
+// import DataTable from "react-data-table-component";
+
+// export default function DriverHistory() {
+//   const [drivers, setDrivers] = useState([]);
+//   const [selectedDriverId, setSelectedDriverId] = useState(null);
+//   const [history, setHistory] = useState([]);
+//   const [loading, setLoading] = useState(false);
+
+//   // Dummy driver data
+//   const dummyDrivers = Array.from({ length: 10 }).map((_, i) => ({
+//     _id: `driver${i + 1}`,
+//     name: `Driver ${i + 1}`,
+//     email: `driver${i + 1}@example.com`,
+//     phoneNumber: `99900000${i + 1}`,
+//   }));
+
+//   // Dummy ride history data
+//   const dummyRideHistory = Array.from({ length: 10 }).map((_, i) => ({
+//     from: `Location ${i + 1}`,
+//     to: `Destination ${i + 1}`,
+//     rideTime: `${20 + i} mins`,
+//     rideDateTime: `2025-07-2${i} 10:${i}0 AM`,
+//     rideStatus: i % 2 === 0 ? "Completed" : "Cancelled",
+//     driverId: `driver${(i % 10) + 1}`,
+//   }));
+
+//   useEffect(() => {
+//     setDrivers(dummyDrivers);
+//   }, []);
+
+//   const fetchDriverHistory = (driverId) => {
+//     setSelectedDriverId(driverId);
+//     setLoading(true);
+//     setTimeout(() => {
+//       const filtered = dummyRideHistory.filter((r) => r.driverId === driverId);
+//       setHistory(filtered);
+//       setLoading(false);
+//     }, 500);
+//   };
+
+//   const driverColumns = [
+//     { name: "Name", selector: (row) => row.name, sortable: true },
+//     { name: "Email", selector: (row) => row.email, sortable: true },
+//     { name: "Mobile", selector: (row) => row.phoneNumber, sortable: true },
+//     {
+//       name: "Action",
+//       cell: (row) => (
+//         <button
+//           onClick={() => fetchDriverHistory(row._id)}
+//           className="text-blue-600 hover:text-blue-800"
+//           title="View Ride History"
+//         >
+//           <FaEye />
+//         </button>
+//       ),
+//     },
+//   ];
+
+//   const historyColumns = [
+//     { name: "From", selector: (row) => row.from, sortable: true },
+//     { name: "To", selector: (row) => row.to, sortable: true },
+//     { name: "Ride Time", selector: (row) => row.rideTime, sortable: true },
+//     { name: "Ride Date/Time", selector: (row) => row.rideDateTime, sortable: true },
+//     { name: "Status", selector: (row) => row.rideStatus, sortable: true },
+//   ];
+
+//   const customStyles = {
+//     table: {
+//       style: {
+//         borderRadius: "0.75rem",
+//         overflow: "hidden",
+//       },
+//     },
+//     headRow: {
+//       style: {
+//         backgroundColor: "#f9fafb",
+//         fontWeight: "600",
+//         fontSize: "14px",
+//         borderBottom: "1px solid #e5e7eb",
+//       },
+//     },
+//     rows: {
+//       style: {
+//         minHeight: "60px",
+//         borderBottom: "1px solid #e5e7eb",
+//         "&:hover": {
+//           backgroundColor: "#f9fafb",
+//         },
+//       },
+//     },
+//     headCells: {
+//       style: {
+//         fontSize: "14px",
+//       },
+//     },
+//     cells: {
+//       style: {
+//         fontSize: "14px",
+//       },
+//     },
+//   };
+
+//   return (
+//     <div className="p-6 flex flex-col gap-2">
+//       <div className="bg-white rounded-xl shadow border border-gray-200 p-4">
+//         <h1 className="text-2xl font-bold mb-4">Driver List</h1>
+//         <DataTable
+//           columns={driverColumns}
+//           data={drivers}
+//           pagination
+//           selectableRows
+//           highlightOnHover
+//           pointerOnHover
+//           striped
+//           customStyles={customStyles}
+//           noDataComponent="No drivers found."
+//         />
+//       </div>
+
+//       {selectedDriverId && (
+//         <div className="bg-white rounded-xl shadow border border-gray-200 p-4 mt-4">
+//           <h2 className="text-xl font-semibold mb-2">Ride History</h2>
+//           {loading ? (
+//             <p className="text-center">Loading ride history...</p>
+//           ) : history.length === 0 ? (
+//             <p className="text-center">No ride history found for this driver.</p>
+//           ) : (
+//             <DataTable
+//               columns={historyColumns}
+//               data={history}
+//               pagination
+//               selectableRows
+//               highlightOnHover
+//               pointerOnHover
+//               striped
+//               customStyles={customStyles}
+//               noDataComponent="No ride history found."
+//             />
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";

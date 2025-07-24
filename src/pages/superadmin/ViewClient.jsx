@@ -3,10 +3,10 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import {Link, useNavigate,useParams} from 'react-router-dom';
-import SearchBar from "../components/SearchBar";
-import { useAuth } from "../context/AuthContext";
-import BackButton from "../components/BackButton";
-import globalTableStyles from "../styles/globalTableStyles";
+import SearchBar from "../../components/SearchBar";
+import { useAuth } from "../../context/AuthContext";
+import BackButton from "../../components/BackButton";
+import globalTableStyles from "../../styles/globalTableStyles";
 
 export default function ViewClient() {
   const {user} = useAuth();
@@ -61,11 +61,11 @@ export default function ViewClient() {
   const getAllItems = () => {
     setIsLoading(true);
     setError(null);
-    axios
+    axios 
       // .get(`${VITE_API}view/client`)
-      .get(`${VITE_API}view/client/${user.id}`)
+      .get(`${VITE_API}view/client`)
       .then((res) => {
-        // console.log("Fetched client:", res.data);
+        console.log("Fetched  client on view:", res.data);
         // adjust if response format is: { data: [...] }
         setViewClient(res.data.clientData); 
         setIsLoading(false);
@@ -82,13 +82,8 @@ export default function ViewClient() {
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );   
-
-  // useEffect(() => {
-  //   getAllItems(); // Used for fetching the API 
-  //     // setViewClient(dummyclients); 
-  // }, []);
     useEffect(() => {
-  if (user && user.id) {
+  if (user && user._id) {
     getAllItems();
   }
 }, [user]);
