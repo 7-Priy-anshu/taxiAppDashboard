@@ -14,6 +14,7 @@ export default function AddClient() {
     clientName: Yup.string().required("Client Name is required"),
     clientEmail: Yup.string().required("Client Email is required"),
     clientPhone: Yup.string().required("Client Phone is required")
+    
   })
   const { id } = useParams();
   const [submitError, setSubmitError] = useState(null);
@@ -58,17 +59,12 @@ export default function AddClient() {
     }
   }
   return (  <>
-  <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+ <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
-        {/* Add Admin */}
-        {/* <Link to="/superAdmin"> */}
-          <BackButton text="Back">
-          </BackButton>
-        {/* </Link> */}
+        <BackButton text="Back" />
       </div>
-      {/* <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md"> */}
-      <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
 
+      <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
         <h1 className="text-3xl font-bold mb-4">{id ? "Edit" : "Add"} Client</h1>
 
         {submitError && (
@@ -77,101 +73,88 @@ export default function AddClient() {
             <button onClick={() => setSubmitError(null)} className="text-red-700">✕</button>
           </div>
         )}
+
         <Formik
           initialValues={initialValues}
           validationSchema={ClientSchema}
-          enableReinitialize={true}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
-          <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Name */}
-            <div className="relative">
-              <Field
-                type="text"
-                name="clientName"
-                placeholder="Enter Client Name"
-                className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                <FaUser className="text-gray-500" />
+            <Form className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Client Name */}
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="clientName"
+                  placeholder="Enter Client Name"
+                  className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <FaUser className="text-gray-500" />
+                </div>
+                <ErrorMessage name="clientName" component="div" className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  />
               </div>
-              <ErrorMessage
-                name="clientName"
-                component="div"
-                className="text-red-500 text-xs mt-1"
-              />
-            </div>
 
-            {/* Email */}
-            <div className="relative">
-              <Field
-                type="email"
-                name="clientEmail"
-                placeholder="Enter Client Email"
-                className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                <MdEmail className="text-gray-500" />
+              {/* Email */}
+              <div className="relative">
+                <Field
+                  type="email"
+                  name="clientEmail"
+                  placeholder="Enter Client Email"
+                  className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <MdEmail className="text-gray-500" />
+                </div>
+                <ErrorMessage name="clientEmail" component="div" className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
               </div>
-              <ErrorMessage
-                name="clientEmail"
-                component="div"
-                className="text-red-500 text-xs mt-1"
-              />
-            </div>
 
-            {/* Contact */}
-            <div className="relative">
-              <Field
-                type="text"
-                name="clientPhone"
-                placeholder="Enter Client Number"
-                className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
-                <FaPhone className="text-gray-500" />
+              {/* Phone */}
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="clientPhone"
+                  placeholder="Enter Client Number"
+                  className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <FaPhone className="text-gray-500" />
+                </div>
+                <ErrorMessage name="clientPhone" component="div" className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
               </div>
-              <ErrorMessage
-                name="clientPhone"
-                component="div"
-                className="text-red-500 text-xs mt-1"
-              />
-            </div>
-            {/* Contact */}
-            <div className="relative">
-              <Field
-                type="password"
-                name="clientPassword"
-                placeholder="Enter Client Password"
-                className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
-                <FaPhone className="text-gray-500" />
+
+              {/* Password */}
+              <div className="relative">
+                <Field
+                  type="password"
+                  name="clientPassword"
+                  placeholder="Enter Client Password"
+                  className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                  <FaPhone className="text-gray-500" />
+                </div>
+                <ErrorMessage name="clientPassword" component="div" className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
               </div>
-              <ErrorMessage
-                name="clientPassword"
-                component="div"
-                className="text-red-500 text-xs mt-1"
-              />
-            </div>
-            {/* Submit Button */}
-            <div className="sm:col-span-2 flex justify-end mt-4">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
-              >
-                {id ? "Update" : "Add"} Client
-              </button>
-            </div>
-          </Form>
-            )}
+
+              {/* Submit */}
+              <div className="md:col-span-2 flex justify-end mt-4">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+                >
+                  {id ? "Update" : "Add"} Client
+                </button>
+              </div>
+            </Form>
+          )}
         </Formik>
       </div>
-    // </div>
+    </div>
     </>
   )
 }
 
 
+  

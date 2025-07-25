@@ -24,9 +24,9 @@ useEffect(() => {
 
 
   return (
-    <header className="w-full h-16 bg-gray-100 flex items-center justify-between px-8 shadow-md">
-      <div className="flex items-center gap-4">
-        <button className="md:hidden text-2xl text-gray-600" onClick={onMenuClick}>
+    <header className="w-full h-16 bg-gray-100 flex items-center max-md:px-1 justify-between px-4 shadow-md">
+      <div className="flex items-center sm:gap-2 gap-2">
+        <button className="md:hidden  text-2xl text-gray-600 m-4" onClick={onMenuClick}>
           <FaBars />
         </button>
         <img
@@ -34,10 +34,10 @@ useEffect(() => {
           alt="Logo"
           className="rounded-full w-10 h-10 object-cover "
         />
-        <div className="text-2xl font-bold text-gray-700">Taxi App</div>
+        <div className="text-2xl max-sm:text-lg font-bold text-gray-700">Taxi App</div>
       </div>
 
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex   justify-end gap-2 ">
         <Badges count={pendingCount} />
         <img
           src="../images/userIcon.png"

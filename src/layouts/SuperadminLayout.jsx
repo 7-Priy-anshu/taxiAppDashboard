@@ -2,17 +2,21 @@
 import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar/Sidebar'; // Adjusted from '../components/Sidebar/Sidebar'
 import Navbar from '../components/Navbar/Navbar';
+// import Navbar from '../components/Navbar/NavbarHR';
 import { Outlet } from 'react-router-dom';
 import SuperadminSidebar from '../components/SuperadminSidebar';
+import { useState } from 'react';
 
 export default function SuperadminLayout() {
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const { user } = useAuth();
   return (
     <div className="flex w-full h-screen flex-col">
-      <Navbar />
+      <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex flex-1 overflow-hidden">
         {/* <aside className="w-64 bg-gray-100">  */}
-          <SuperadminSidebar/>
+          <SuperadminSidebar isOpen={isSidebarOpen}/>
          {/* </aside> */}
         <main className="flex-1 bg-white overflow-y-auto">
           <Outlet />

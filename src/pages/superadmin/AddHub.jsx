@@ -67,133 +67,264 @@ export default function AddHub() {
   if (loading) return <div>Loading Hub info...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
-      <div className="w-full max-w-4xl flex gap-2">
-        {/* <Link to="/superadmin"> */}
-          <BackButton text="Back"></BackButton>
-        {/* </Link> */}
+    // <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+    //   <div className="w-full max-w-4xl flex gap-2">
+    //     {/* <Link to="/superadmin"> */}
+    //       <BackButton text="Back"></BackButton>
+    //     {/* </Link> */}
+    //   </div>
+    //   <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
+    //     <h1 className="text-3xl font-bold mb-6 text-center">{id ? "Edit" : "Add"} Hub</h1>
+    //     {submitError && (
+    //       <div className="text-red-500 mb-4 flex justify-between items-center bg-red-100 p-2 rounded">
+    //         {submitError}
+    //         <button onClick={() => setSubmitError(null)} className="text-red-700">✕</button>
+    //       </div>
+    //     )}
+    //     <Formik
+    //       initialValues={initialValues}
+    //       enableReinitialize
+    //       validationSchema={validationSchema}
+    //       onSubmit={submitHub}
+    //     >
+    //       {({ isSubmitting }) => (
+    //         <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    //           {/* Hub Name */}
+    //           <div className="relative">
+    //             <Field
+    //               type="text"
+    //               name="hubName"
+    //               placeholder="Enter Hub Name"
+    //               className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+    //             />
+    //             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+    //               <FaUser className="text-gray-500" />
+    //             </div>
+    //             <ErrorMessage
+    //               name="hubName"
+    //               component="div"
+    //               className="text-red-500 text-xs mt-1"
+    //             />
+    //           </div>
+
+    //           {/* Hub Location */}
+    //           <div className="relative">
+    //             <Field
+    //               type="text"
+    //               name="hubLocation"
+    //               placeholder="Enter Hub Location"
+    //               className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+    //             />
+    //             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+    //               <FaLocationPin className="text-gray-500" />
+    //             </div>
+    //             <ErrorMessage
+    //               name="hubLocation"
+    //               component="div"
+    //               className="text-red-500 text-xs mt-1"
+    //             />
+    //           </div>
+
+    //           {/* Car Capacity */}
+    //           <div className="relative">
+    //             <Field
+    //               type="text"
+    //               name="hubCarCapacity"
+    //               placeholder="Enter Car Capacity"
+    //               className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+    //             />
+    //             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+    //               <FaStore className="text-gray-500" />
+    //             </div>
+    //             <ErrorMessage
+    //               name="hubCarCapacity"
+    //               component="div"
+    //               className="text-red-500 text-xs mt-1"
+    //             />
+    //           </div>
+
+    //           {/* Latitude */}
+    //           <div className="relative">
+    //             <Field
+    //               type="text"
+    //               name="latitude"
+    //               placeholder="Enter Latitude"
+    //               className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+    //             />
+    //             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+    //               <FaIdCard className="text-gray-500" />
+    //             </div>
+    //             <ErrorMessage
+    //               name="latitude"
+    //               component="div"
+    //               className="text-red-500 text-xs mt-1"
+    //             />
+    //           </div>
+
+    //           {/* Longitude */}
+    //           <div className="relative">
+    //             <Field
+    //               type="text"
+    //               name="longitude"
+    //               placeholder="Enter Longitude"
+    //               className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+    //             />
+    //             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+    //               <FaRegCreditCard className="text-gray-500" />
+    //             </div>
+    //             <ErrorMessage
+    //               name="longitude"
+    //               component="div"
+    //               className="text-red-500 text-xs mt-1"
+    //             />
+    //           </div>
+
+    //           {/* Submit Button */}
+    //           <div className="sm:col-span-2 flex justify-end mt-4">
+    //             <button
+    //               type="submit"
+    //               disabled={isSubmitting}
+    //               className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+    //             >
+    //               {id ? "Update" : "Add"} Hub
+    //             </button>
+    //           </div>
+    //         </Form>
+    //       )}
+    //     </Formik>
+    //   </div>
+    // </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+  {/* Back Button Row */}
+  <div className="w-full max-w-4xl mb-4">
+    <BackButton text="Back" />
+  </div>
+
+  {/* Form Card */}
+  <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
+    <h1 className="text-3xl font-bold mb-6 text-center">{id ? "Edit" : "Add"} Hub</h1>
+
+    {submitError && (
+      <div className="text-red-500 mb-4 flex justify-between items-center bg-red-100 p-2 rounded">
+        {submitError}
+        <button onClick={() => setSubmitError(null)} className="text-red-700">✕</button>
       </div>
-      <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center">{id ? "Edit" : "Add"} Hub</h1>
-        {submitError && (
-          <div className="text-red-500 mb-4 flex justify-between items-center bg-red-100 p-2 rounded">
-            {submitError}
-            <button onClick={() => setSubmitError(null)} className="text-red-700">✕</button>
+    )}
+
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      validationSchema={validationSchema}
+      onSubmit={submitHub}
+    >
+      {({ isSubmitting }) => (
+        <Form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Hub Name */}
+          <div className="relative">
+            <Field
+              type="text"
+              name="hubName"
+              placeholder="Enter Hub Name"
+              className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+              <FaUser className="text-gray-500" />
+            </div>
+            <ErrorMessage
+              name="hubName"
+              component="div"
+              className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" 
+            />
           </div>
-        )}
-        <Formik
-          initialValues={initialValues}
-          enableReinitialize
-          validationSchema={validationSchema}
-          onSubmit={submitHub}
-        >
-          {({ isSubmitting }) => (
-            <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Hub Name */}
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="hubName"
-                  placeholder="Enter Hub Name"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaUser className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="hubName"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
 
-              {/* Hub Location */}
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="hubLocation"
-                  placeholder="Enter Hub Location"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaLocationPin className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="hubLocation"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
+          {/* Hub Location */}
+          <div className="relative">
+            <Field
+              type="text"
+              name="hubLocation"
+              placeholder="Enter Hub Location"
+              className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+              <FaLocationPin className="text-gray-500" />
+            </div>
+            <ErrorMessage
+              name="hubLocation"
+              component="div"
+              className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" 
+            />
+          </div>
 
-              {/* Car Capacity */}
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="hubCarCapacity"
-                  placeholder="Enter Car Capacity"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaStore className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="hubCarCapacity"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
+          {/* Car Capacity */}
+          <div className="relative">
+            <Field
+              type="text"
+              name="hubCarCapacity"
+              placeholder="Enter Car Capacity"
+              className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+              <FaStore className="text-gray-500" />
+            </div>
+            <ErrorMessage
+              name="hubCarCapacity"
+              component="div"
+             className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" 
+            />
+          </div>
 
-              {/* Latitude */}
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="latitude"
-                  placeholder="Enter Latitude"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaIdCard className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="latitude"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
+          {/* Latitude */}
+          <div className="relative">
+            <Field
+              type="text"
+              name="latitude"
+              placeholder="Enter Latitude"
+              className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+              <FaIdCard className="text-gray-500" />
+            </div>
+            <ErrorMessage
+              name="latitude"
+              component="div"
+              className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" 
+            />
+          </div>
 
-              {/* Longitude */}
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="longitude"
-                  placeholder="Enter Longitude"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaRegCreditCard className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="longitude"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
+          {/* Longitude */}
+          <div className="relative">
+            <Field
+              type="text"
+              name="longitude"
+              placeholder="Enter Longitude"
+              className="peer py-2.5 px-4 ps-11 w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+              <FaRegCreditCard className="text-gray-500" />
+            </div>
+            <ErrorMessage
+              name="longitude"
+              component="div"
+             className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" 
+            />
+          </div>
 
-              {/* Submit Button */}
-              <div className="sm:col-span-2 flex justify-end mt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
-                >
-                  {id ? "Update" : "Add"} Hub
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </div>
+          {/* Submit Button */}
+          <div className="md:col-span-2 flex justify-end mt-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+            >
+              {id ? "Update" : "Add"} Hub
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+  </div>
+</div>
+
   );
 }
 

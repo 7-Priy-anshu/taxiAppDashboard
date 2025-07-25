@@ -90,7 +90,7 @@ export default function AddCar() {
 
         >
           {({ isSubmitting }) => (
-            <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Form className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Name */}
               <div className="relative">
                 <Field
@@ -145,7 +145,7 @@ export default function AddCar() {
                 />
               </div>
               {/* Submit Button */}
-              <div className="sm:col-span-2 flex justify-end mt-4">
+              <div className="    md:col-span-2 flex justify-end mt-4">
                 <button
                   type="submit"
                   disabled={isSubmitting}

@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import DriverHistory from '../pages/superadmin/DriverHistory';
 
-export default function SuperadminSidebar() {
+export default function SuperadminSidebar({isOpen}) {
   const { user } = useAuth(); // ✅ if you’re using context
   const { clientId } = useParams();
   const [expandedMenuStatic, setExpandedMenuStatic] = useState({});
@@ -54,40 +54,50 @@ const toggleSubMenuStatic = (key) => {
   }, []);
 
   return (
-      <div className=" max-sm:absolute max-sm:-translate-x-full duration-300 md:w-52 lg:w-64 h-screen bg-blue-50 p-5 overflow-auto shadow-lg">
+
+    
+     <div  className={`duration-300 h-screen bg-blue-50 p-5 overflow-auto shadow-lg
+     md:translate-x-0  w-56 lg:w-64
+    max-md:fixed  max-md:top-16 max-md:left-0 max-sm:w-44 max-md:z-50
+    ${isOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full"}
+  `}
+>
+
       <div className="mb-2 ">
-        <div className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300">
+        <div className="flex justify-between items-center cursor-pointer text-sm max-sm:text-[12px] md:text-sm   p-2 bg-gray-200 rounded hover:bg-gray-300">
           <Link to="/superAdmin/driver"><span>Driver History</span></Link>
         </div>
       </div>
    <div className="mb-2">
   <div
-    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
+    className="flex justify-between items-center  cursor-pointer text-sm max-sm:text-[12px] md:text-sm  p-2 bg-gray-200 rounded hover:bg-gray-300"
     onClick={() => toggleSubMenuStatic('client')}
   >
     <span>Manage Client</span>
-    {expandedMenuStatic['client'] ? <FaChevronDown  className='text-xs'/> : <FaChevronRight className='text-xs' />}
+    {expandedMenuStatic['client'] ? <FaChevronDown className='text-xs sm:text-sm '  /> : <FaChevronRight className='text-xs sm:text-sm ' />}
   </div>
 
   {expandedMenuStatic['client'] && (
-    <div className="ml-4 mt-2 space-y-1 text-sm">
+    <div className="ml-4 mt-2 space-y-1 text-xs sm:text-sm ">
       <Link to="/superAdmin/addClient" className="block hover:bg-gray-300 hover:text-black rounded-md px-2 py-0.5 transition">
         Add Client
       </Link>
       <Link to="/superAdmin/viewClient" className="block hover:bg-gray-300 hover:text-black rounded-md px-2 py-0.5 transition">
         View Clients
       </Link>
+    
+      
     </div>
   )}
 </div>
 
   <div className="mb-2">
   <div
-    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
+    className="flex  text-sm max-sm:text-[12px] md:text-sm justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
     onClick={() => toggleSubMenuStatic('hub')}
   >
-    <span>Hub</span>
-    {expandedMenuStatic['hub'] ? <FaChevronDown className='text-xs' /> : <FaChevronRight  className='text-xs'/>}
+    <span >Hub</span>
+    {expandedMenuStatic['hub'] ? <FaChevronDown className='text-xs sm:text-sm ' /> : <FaChevronRight  className='text-xs sm:text-sm '/>}
   </div>
 
   {expandedMenuStatic['hub'] && (
@@ -102,7 +112,8 @@ const toggleSubMenuStatic = (key) => {
   )}
 </div>
 
-      <h2 className="text-xl font-bold mb-4">Companies</h2>
+      <h2 className="text-sm sm:text-lg p-1  font-medium mb-4">Companies</h2>
+      
       {/* <DriverHistory/> */}
       {clients.map((client) => (
         <div key={client._id} className="mb-2">

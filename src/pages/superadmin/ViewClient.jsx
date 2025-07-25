@@ -37,7 +37,7 @@ export default function ViewClient() {
       cell: (row) => (
        <div className="flex gap-4">
         <Link to={`/superAdmin/addClient/${row._id}`}>
-          <FaEdit className="text-blue-500 cursor-pointer" />
+          <FaEdit className="text-blue-500 " />
         </Link>
         <Link to={`/superAdmin/deleteClient/${row._id}`}>
           <FaTrash
