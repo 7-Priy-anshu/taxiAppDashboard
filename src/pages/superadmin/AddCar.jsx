@@ -4,11 +4,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
-import BackButton from "../components/BackButton"
+import BackButton from '../../components/BackButton';
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
-
-
+import { useAuth } from '../../context/AuthContext';
 const CarSchema = Yup.object().shape({
   carName: Yup.string().required('Car Name is required'),
   carModel: Yup.string().required('Car Model is required'),
@@ -17,6 +16,7 @@ const CarSchema = Yup.object().shape({
 
 export default function AddCar() {
   const { id } = useParams();
+  const {user} = useAuth();
   const navigate = useNavigate();
 
   const [submitError, setSubmitError] = useState(null);
@@ -24,6 +24,8 @@ export default function AddCar() {
     carName: '',
     carModel: '',
     carNumber: '',
+    carBrand:'',
+    sittingCapacity:''
   });
   const [loading, setLoading] = useState(!!id);
 
@@ -31,9 +33,9 @@ export default function AddCar() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${VITE_API}add/car/${id}`)
+      axios.get(`${VITE_API}add/car`)
         .then(res => {
-          // console.log("Fetched car data:", res.data);
+          console.log("Fetched car data:", res.data);
           setInitialValues(res.data); // or res.data.car
           setLoading(false);
         })
@@ -50,10 +52,10 @@ export default function AddCar() {
     if (id) {
       axios.put(`${VITE_API}update/car/${id}`, values)
         .then(() => {
-          navigate("/superadmin/viewCar");
+          navigate(`/superadmin/viewCar/${user._id}`);
         }).catch(err => console.error("Update failed:", err));
     } else {
-      axios.post(`${VITE_API}add/car`, values)
+      axios.post(`${VITE_API}add/car/${user._id}`, values)
         .then(() => navigate("/superadmin/viewCar"))
         .catch(err => console.error("Add failed:", err));
     }
@@ -90,7 +92,7 @@ export default function AddCar() {
 
         >
           {({ isSubmitting }) => (
-            <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Form className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Name */}
               <div className="relative">
                 <Field
@@ -112,7 +114,7 @@ export default function AddCar() {
               {/* Email */}
               <div className="relative">
                 <Field
-                  type="email"
+                  type="text"
                   name="carModel"
                   placeholder="Enter Model Number"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
@@ -127,7 +129,7 @@ export default function AddCar() {
                 />
               </div>
 
-              {/* Contact */}
+              {/* CarNumber */}
               <div className="relative">
                 <Field
                   type="text"
@@ -140,6 +142,40 @@ export default function AddCar() {
                 </div>
                 <ErrorMessage
                   name="carNumber"
+                  component="div"
+                  className="text-red-500 text-xs mt-1"
+                />
+              </div>
+              {/* Sitting Capacity */}
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="sittingCapacity"
+                  placeholder="Enter Car Number"
+                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+                  <FaPhone className="text-gray-500" />
+                </div>
+                <ErrorMessage
+                  name="sittingCapacity"
+                  component="div"
+                  className="text-red-500 text-xs mt-1"
+                />
+              </div>
+              {/* Car Brand */}
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="carBrand"
+                  placeholder="Enter Car Brand"
+                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+                  <FaPhone className="text-gray-500" />
+                </div>
+                <ErrorMessage
+                  name="carBrand"
                   component="div"
                   className="text-red-500 text-xs mt-1"
                 />

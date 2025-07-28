@@ -3,7 +3,7 @@ import { FaEye } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 export default function DriverHistory() {
   const { user, authLoading } = useAuth(); // get the logged-in user
   const [drivers, setDrivers] = useState([]);
@@ -11,6 +11,7 @@ export default function DriverHistory() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const VITE_API = import.meta.env.VITE_API;
+  const navigate = useNavigate();
 
   // Fetch drivers when user is ready
   useEffect(() => {
@@ -44,7 +45,6 @@ export default function DriverHistory() {
     try {
       const res = await axios.get(`${VITE_API}driverRideHistory/${user._id}?driverId=${driverId}`);
       console.log("Ride history response:", res.data);
-
       const rideList = Array.isArray(res.data) ? res.data : res.data.rideHistory || [];
       setHistory(rideList);
     } catch (error) {
@@ -58,14 +58,17 @@ export default function DriverHistory() {
   const driverColumns = [
     { name: "Name", selector: (row) => row.name, sortable: true },
     { name: "Email", selector: (row) => row.email, sortable: true },
-    { name: "Mobile", selector: (row) => row.phoneNumber, sortable: true },
+    { name: "Mobile", selector: (row) => row.contact, sortable: true },
     {
       name: "Action",
       cell: (row) => (
         <button
-          onClick={() => fetchDriverHistory(row._id)}
-          className="text-blue-600 hover:text-blue-800"
-          title="View Ride History"
+          // onClick={() => fetchDriverHistory(row._id)}  // Display on same page 
+      // onClick={() => navigate(`/superAdmin/viewDriverHistory?driverId=${row._id}`)}   // Display on the redirected page with specifc ID 
+      onClick={() => navigate(`/superAdmin/viewDriverHistory/${row._id}`)}
+      // onClick={() => navigate(`/superAdmin/viewDriverHistory`)}
+      className="text-blue-600 hover:text-blue-800 cursor-pointer"
+      title="View Ride History"
         >
           <FaEye />
         </button>

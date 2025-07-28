@@ -14,7 +14,8 @@ export default function SuperadminLayout() {
         {/* <aside className="w-64 bg-gray-100">  */}
           <SuperadminSidebar/>
          {/* </aside> */}
-        <main className="flex-1 bg-white overflow-y-auto">
+        {/* <main className="flex-1 bg-white overflow-y-auto"> */}
+        <main className="flex-1 bg-[#fff] overflow-y-auto">
           <Outlet />
         </main>
       </div>

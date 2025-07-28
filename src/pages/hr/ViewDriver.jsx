@@ -4,11 +4,12 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import SearchBar from '../components/SearchBar';
-import { useAuth } from "../context/AuthContext";
+// import SearchBar from '../../components/SearchBar';
+import SearchBar from "../../components/SearchBar";
+import { useAuth } from "../../context/AuthContext";
 // import BackButton from "./BackButton";
-import BackButton from "../components/BackButton";
-import globalTableStyles from '../styles/globalTableStyles';
+import BackButton from "../../components/BackButton";
+import globalTableStyles from '../../styles/globalTableStyles';
 
 export default function ViewDriver() {
   const { role, id } = useParams();

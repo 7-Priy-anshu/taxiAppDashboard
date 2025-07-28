@@ -3,10 +3,10 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import SearchBar from '../components/SearchBar'
-import { useAuth } from "../context/AuthContext";
-import BackButton from "../components/BackButton";
-import globalTableStyles from '../styles/globalTableStyles';
+import SearchBar from '../../components/SearchBar'
+import { useAuth } from "../../context/AuthContext";
+import BackButton from "../../components/BackButton";
+import globalTableStyles from '../../styles/globalTableStyles';
 
 
 export default function ViewCustomer() {

@@ -61,8 +61,18 @@ export default function AddHR() {
   const { id } = useParams();
   const navigate = useNavigate();
   const VITE_API = import.meta.env.VITE_API;
+  const [clients, setclients] = useState([]);
 
-
+    useEffect(() => {
+      // Replace with your real API endpoint
+      axios.get(`${VITE_API}view/client`)
+        .then((response) => {
+          setclients(response.data.clients || []);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch clients:", error);
+        });
+    }, []);
   const [initialValues, setInitialValues] = useState({
     name: '',
     email: '',
@@ -202,6 +212,30 @@ export default function AddHR() {
                 />
               </div>
 
+                            <div className="relative">
+                              <Field
+                                as="select"
+                                name="clientName"
+                                className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                              >
+                              <option value="">Select Client Name</option>
+                                {clients.map((client) => (
+                                  <option key={client._id} value={client.clientName}>
+                                    {client.clientName}
+                                  </option>
+                                ))}
+                              </Field>
+              
+                              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+                                <FaUser className="text-gray-500" />
+                              </div>
+                              <ErrorMessage
+                                name="clientName"
+                                component="div"
+                                className="text-red-500 text-xs mt-1"
+                              />
+                            </div>
+              
               <div className="col-span-full mt-4">
                 <label className="block font-medium mb-2 text-sm">Assign Permissions</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

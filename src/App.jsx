@@ -9,15 +9,17 @@ import NotAuthorized from "./pages/NotAuthorized";
 import SuperadminLayout from "./layouts/SuperadminLayout";
 import CompanyAdminLayout from "./layouts/CompanyAdminLayout";
 import HRLayout from "./layouts/HRLayout";
-
+import DriverId from "./pages/DriverId";
+import ClientInvoice from "./pages/ClientInvoice";
+//----------------------------------Superadmin--------------------------------------
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
 import AddDriver from "./pages/superadmin/AddDriver";
-import AddCar from "./pages/AddCar";
-import AddCustomer from "./pages/AddCustomer";
+import AddCar from "./pages/superadmin/AddCar";
+import AddCustomer from "./pages/hr/AddCustomer";
 import ViewAdmin from "./pages/superadmin/ViewAdmin";
-import ViewDriver from "./pages/ViewDriver";
-import ViewCar from "./pages/ViewCar";
-import ViewCustomer from "./pages/ViewCustomer";
+import ViewDriver from "./pages/hr/ViewDriver";
+import ViewCar from "./pages/superadmin/ViewCar";
+import ViewCustomer from "./pages/hr/ViewCustomer";
 import BookRide from "./pages/BookRide";
 import AddAdmin from "./pages/AddAdmin";
 import AddClient from "./pages/superadmin/AddClient";
@@ -25,12 +27,17 @@ import ViewClient from "./pages/superadmin/ViewClient";
 import AddHub from "./pages/superadmin/AddHub";
 import ViewHub from "./pages/superadmin/viewHub";
 import ClientDetails from "./pages/superadmin/ClientDetails";
-
-import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
-import AddHR from "./pages/company-admin/AddHR";
-import HRDashboard from "./pages/hr/Dashboard";
+import AssignCarToHub from "./pages/superadmin/AssignCarToHub";
+import ViewCarInHub from "./pages/superadmin/ViewCarInHub";
 import DriverHistory from "./pages/superadmin/DriverHistory";
-import EmployeeDetails from "./pages/superadmin/EmployeeDetails";
+import ViewDriverHistory from "./pages/superadmin/ViewDriverHistory";
+import CustomerDetails from "./pages/superadmin/CustomerDetails";
+//----------------------------------Admin--------------------------------------
+import CompanyAdminDashboard from "./pages/admin/Dashboard";
+// import CompanyAdminDashboard from
+import AddHR from "./pages/admin/AddHR";
+import HRDashboard from "./pages/hr/Dashboard";
+import EmployeeDetails from "./pages/superadmin/CustomerDetails";
 
 export default function App() {
   return (
@@ -44,21 +51,33 @@ export default function App() {
     <SuperadminLayout />
   // </ProtectedRoute>
 }>
+
+  <Route path="customerDetails/:customerId" element={<CustomerDetails />} />
+  <Route path="clientInvoice" element={<ClientInvoice />} />
+  <Route path="driverId" element={<DriverId />} />
   <Route path="dashboard" element={<SuperadminDashboard />} />
   <Route path="addAdmin" element={<AddAdmin />} />
   <Route path="viewAdmin" element={<ViewAdmin />} />
   <Route path="addClient" element={<AddClient />} />
   <Route path="viewClient" element={<ViewClient />} />
   <Route path="driverHistory" element={<DriverHistory />} />
+  <Route path="viewDriverHistory" element={<ViewDriverHistory />} />
+
   <Route path="addHub" element={<AddHub />} />
   <Route path="viewHub" element={<ViewHub />} />
+  <Route path="assignCarHub/:hubId" element={<AssignCarToHub/>}/>
+  <Route path="viewCarHub/:hubId" element={<ViewCarInHub/>}/>
+  <Route path="viewCar" element={<ViewCar />} />
+  <Route path="addCar" element={<AddCar />} /> 
+  <Route path="addCar/:id" element={<AddCar />} />
+
   {/* Edit Routes */}
   <Route path="addClient/:id" element={<AddClient />} />
   <Route path="addHub/:id" element={<AddHub />} />
 
 
   {/* Dynamic Client Routes */}
-  <Route path="client/:clientId/employee/:id" element={<EmployeeDetails />} />
+  {/* <Route path="client/:clientId/employeeDetails/:id" element={<EmployeeDetails />} /> */}
   <Route path="client/:clientId/clientDetails" element={<ClientDetails />} />
   <Route path="client/:clientId/addHr" element={<AddHR />} />
   <Route path="client/:clientId/addAdmin" element={<AddAdmin />} />
@@ -66,10 +85,8 @@ export default function App() {
   <Route path="client/:clientId/bookRide" element={<BookRide />} />
   <Route path="client/:clientId/addDriver" element={<AddDriver />} />
   <Route path="client/:clientId/addCustomer" element={<AddCustomer />} />
-  <Route path="client/:clientId/addCar" element={<AddCar />} />
   <Route path="client/:clientId/viewDriver" element={<ViewDriver />} />
   <Route path="client/:clientId/viewCustomer" element={<ViewCustomer />} />
-  <Route path="client/:clientId/viewCar" element={<ViewCar />} />
   <Route path="client/:clientId/driver-history" element={<DriverHistory />} />
 </Route>
 
@@ -108,16 +125,15 @@ export default function App() {
 
       {/* Company Admin */}
       <Route
-        path="/company-admin/*"
+        path="/admin/*"
         element={
-          <ProtectedRoute allowedRoles={["company_admin"]}>
+          <ProtectedRoute allowedRoles={["admin"]}>
             <CompanyAdminLayout />
           </ProtectedRoute>
         }
       >
         <Route path="dashboard" element={<CompanyAdminDashboard />} />
-          <Route path="client/:clientId/addHr" element={<AddHR />} />
-
+        <Route path="client/:clientId/addHr" element={<AddHR />} />
         <Route path="addHr" element={<AddHR />} />
         <Route path="addAdmin" element={<AddAdmin />} />
       </Route>
@@ -158,7 +174,7 @@ export default function App() {
 // import AddCustomer from "./pages/AddCustomer";
 // import AddAdmin from "./pages/superadmin/AddAdmin";
 
-// import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+// import CompanyAdminDashboard from "./pages/admin/Dashboard";
 // import HRDashboard from "./pages/hr/Dashboard";
 
 
@@ -189,7 +205,7 @@ export default function App() {
 
 //       {/* Company Admin */}
 //       <Route
-//         path="/company-admin/*"
+//         path="/admin/*"
 //         element={
 //           <ProtectedRoute allowedRoles={["company_admin"]}>
 //             <CompanyAdminLayout />
@@ -229,7 +245,7 @@ export default function App() {
 // import HRLayout from "./layouts/HRLayout";
 
 // import SuperadminDashboard from "./pages/superadmin/Dashboard";
-// import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+// import CompanyAdminDashboard from "./pages/admin/Dashboard";
 // import HRDashboard from "./pages/hr/Dashboard";
 
 // import AddAdmin from "./pages/superadmin/AddAdmin";
@@ -256,7 +272,7 @@ export default function App() {
 
 //       {/* Company Admin */}
 //       <Route
-//         path="/company-admin/*"
+//         path="/admin/*"
 //         element={
 //           <ProtectedRoute allowedRoles={["company_admin"]}>
 //             <CompanyAdminLayout />
@@ -296,11 +312,11 @@ export default function App() {
 
 // // Pages
 // import SuperadminDashboard from "./pages/superadmin/Dashboard";
-// import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+// import CompanyAdminDashboard from "./pages/admin/Dashboard";
 // import HRDashboard from "./pages/hr/Dashboard";
 
 // // import SuperadminDashboard from "./pages/superadmin/Dashboard";
-// // import CompanyAdminDashboard from "./pages/company-admin/Dashboard";
+// // import CompanyAdminDashboard from "./pages/admin/Dashboard";
 // // import HRDashboard from "./pages/hr/Dashboard";
 
 // export default function App() {
@@ -320,7 +336,7 @@ export default function App() {
 
 //       {/* Company Admin Routes */}
 //       {user?.role === "company_admin" && (
-//         <Route path="/company-admin/" element={<CompanyAdminLayout />}>
+//         <Route path="/admin/" element={<CompanyAdminLayout />}>
 //           <Route path="dashboard" element={<CompanyAdminDashboard />} />
 //           {/* Add more company admin routes */}
 //         </Route>

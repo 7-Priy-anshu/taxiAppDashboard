@@ -88,7 +88,7 @@ export default function AddHub() {
           onSubmit={submitHub}
         >
           {({ isSubmitting }) => (
-            <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Form className="grid md:grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Hub Name */}
               <div className="relative">
                 <Field

@@ -1,128 +1,495 @@
-// src/pages/superadmin/ClientDetails.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 export default function ClientDetails() {
   const { clientId } = useParams();
+  const VITE_API = import.meta.env.VITE_API || "http://localhost:5000/api/"; // Fallback for testing
 
-  const initialEmployees = [
-    { id: "EMP001", name: "Alice Smith" },
-    { id: "EMP002", name: "Bob Johnson" },
-    { id: "EMP003", name: "Charlie Brown" },
-    { id: "EMP004", name: "David Lee" },
-    { id: "EMP005", name: "Eva Green" },
-    { id: "EMP006", name: "Frank Wright" },
-    { id: "EMP007", name: "Grace Hopper" },
-    { id: "EMP008", name: "Henry Ford" },
-    { id: "EMP009", name: "Isla Fisher" },
-    { id: "EMP010", name: "Jack Ryan" },
-  ];
+  const [client, setClient] = useState(null);
+  const [drivers, setDrivers] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [hubs, setHubs] = useState([]);
+  const [rideCounts, setRideCounts] = useState({});
+  const [error, setError] = useState(null);
 
-  const initialRides = {
-    EMP001: 8,
-    EMP002: 12,
-    EMP003: 5,
-    EMP004: 7,
-    EMP005: 10,
-    EMP006: 6,
-    EMP007: 9,
-    EMP008: 4,
-    EMP009: 11,
-    EMP010: 3,
-  };
+  useEffect(() => {
+    if (!clientId) {
+      console.log("No clientId provided");
+      return;
+    }
+    console.log("clientId:", clientId);
 
-  const [employees, setEmployees] = useState(initialEmployees);
-  const [rideCounts, setRideCounts] = useState(initialRides);
+    async function fetchData() {
+      try {
+        const [clientRes] = await Promise.all([
+          axios.get(`${VITE_API}view/client/${clientId}`),
+          // axios.get(`${VITE_API}view/driver/client/${clientId}`), // Uncomment and adjust
+          // axios.get(`${VITE_API}view/customer/client/${clientId}`),
+          // axios.get(`${VITE_API}view/car/client/${clientId}`),
+          // axios.get(`${VITE_API}view/hub/client/${clientId}`),
+          // axios.get(`${VITE_API}view/ride/summary/client/${clientId}?month=07&year=2025`),
+        ]);
 
-  const handleAddEmployee = () => {
-    const newId = `EMP${(employees.length + 1).toString().padStart(3, "0")}`;
-    const newName = `Employee ${employees.length + 1}`;
-    const randomRides = Math.floor(Math.random() * 15) + 1;
+        console.log("Client Response", clientRes.data);
+        setClient(clientRes.data);
+      } catch (err) {
+        console.error("Error loading client details:", err.message);
+        setError(err.message);
+      }
+    }
 
-    const newEmployee = { id: newId, name: newName };
-    setEmployees((prev) => [...prev, newEmployee]);
-    setRideCounts((prev) => ({ ...prev, [newId]: randomRides }));
-  };
+    fetchData();
+  }, [clientId, VITE_API]);
+
+  // Debug state
+  console.log("Client State", client);
+
+  if (!client && !error) {
+    return <div className="p-4 text-center text-gray-600">Loading client details…</div>;
+  }
+
+  if (error) {
+    return <div className="p-4 text-center text-red-600">Error: {error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left text-gray-800">
-        Company Details - Alpha Tech Solutions
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 text-center sm:text-left">
+        Company Details – {client?.clientName || "Unknown Client"}
       </h1>
 
       {/* Basic Info */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Basic Information</h2>
+      <div className="bg-white p-6 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">Basic Information</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
-          <p><strong className="text-gray-900">Company ID:</strong> {clientId || "CLT123"}</p>
-          <p><strong className="text-gray-900">Registration Date:</strong> 2023-05-15</p>
-          <p><strong className="text-gray-900">Contact Name:</strong> John Doe</p>
-          <p><strong className="text-gray-900">Email:</strong> john.doe@alphatech.com</p>
-          <p><strong className="text-gray-900">Phone:</strong> +91-9876543210</p>
-          <p className="sm:col-span-2"><strong className="text-gray-900">Address:</strong> 123 Business Park, Mumbai, India</p>
+          <div><strong className="text-gray-900">ID:</strong> {clientId}</div>
+          <div><strong className="text-gray-900">Registered:</strong> {client?.createdAt?.split("T")[0] || "N/A"}</div>
+          <div><strong className="text-gray-900">Client Name:</strong> {client?.clientName || "N/A"}</div>
+          <div><strong className="text-gray-900">Email:</strong> {client?.clientEmail || "N/A"}</div>
+          <div><strong className="text-gray-900">Phone:</strong> {client?.clientPhone || "N/A"}</div>
+          <div className="sm:col-span-2"><strong className="text-gray-900">Address:</strong> {client?.address || "N/A"}</div>
         </div>
       </div>
 
-      {/* Resources */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Resources</h2>
+      {/* Resource Summary */}
+      <div className="bg-white p-6 rounded shadow mb-6">
+        <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">Resources</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
-          <p><strong className="text-gray-900">Total Drivers:</strong> 15</p>
-          <Link to={`/superadmin/client/${clientId}/viewDriver`} className="text-blue-500 hover:underline">View Drivers</Link>
-          <p><strong className="text-gray-900">Total Customers:</strong> 50</p>
-          <Link to={`/superadmin/client/${clientId}/viewCustomer`} className="text-blue-500 hover:underline">View Customers</Link>
-          <p><strong className="text-gray-900">Total Cars:</strong> 10</p>
-          <Link to={`/superadmin/client/${clientId}/viewCar`} className="text-blue-500 hover:underline">View Cars</Link>
-          <p><strong className="text-gray-900">Total Hubs:</strong> 2</p>
-          <Link to="/superadmin/addHub" className="text-blue-500 hover:underline">Manage Hubs</Link>
+          <div><strong className="text-gray-900">Drivers:</strong> {drivers.length} – <Link to={`/superadmin/client/${clientId}/viewDriver`} className="text-blue-500 hover:underline">View</Link></div>
+          <div><strong className="text-gray-900">Customers:</strong> {customers.length} – <Link to={`/superadmin/client/${clientId}/viewCustomer`} className="text-blue-500 hover:underline">View</Link></div>
+          <div><strong className="text-gray-900">Cars:</strong> {cars.length} – <Link to={`/superadmin/client/${clientId}/viewCar`} className="text-blue-500 hover:underline">View</Link></div>
+          <div><strong className="text-gray-900">Hubs:</strong> {hubs.length} – {/* Add manage hubs link if needed */}</div>
         </div>
       </div>
 
-      {/* Employee List */}
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-700 border-b pb-2">Employees</h2>
-          <button
-            onClick={handleAddEmployee}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            + Add Employee
-          </button>
-        </div>
-
-        <div className="overflow-x-auto">
+      {/* Ride Summary */}
+      <div className="bg-white p-6 rounded shadow">
+        <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">Employee Rides (July 2025)</h2>
+        {Object.keys(rideCounts).length === 0 ? (
+          <p className="text-gray-500">No ride data available.</p>
+        ) : (
           <table className="min-w-full border border-gray-200">
             <thead className="bg-gray-100">
               <tr>
-                <th className="py-2 px-4 border">ID</th>
-                <th className="py-2 px-4 border">Name</th>
-                <th className="py-2 px-4 border">Rides (July 2025)</th>
-                <th className="py-2 px-4 border">Action</th>
+                <th className="p-2 border text-gray-700 font-medium">Employee ID</th>
+                <th className="p-2 border text-gray-700 font-medium">Name</th>
+                <th className="p-2 border text-gray-700 font-medium">Rides</th>
+                <th className="p-2 border text-gray-700 font-medium">Car Used</th>
+                <th className="p-2 border text-gray-700 font-medium">Approved By</th>
+                <th className="p-2 border text-gray-700 font-medium">Status</th>
               </tr>
             </thead>
             <tbody>
-              {employees.map((emp) => (
-                <tr key={emp.id}>
-                  <td className="py-2 px-4 border">{emp.id}</td>
-                  <td className="py-2 px-4 border">{emp.name}</td>
-                  <td className="py-2 px-4 border">{rideCounts[emp.id] || 0}</td>
-                  <td className="py-2 px-4 border">
-                    <Link
-                      to={`/superadmin/client/${clientId}/employee/${emp.id}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      View Details
-                    </Link>
-                  </td>
+              {Object.entries(rideCounts).map(([empId, data]) => (
+                <tr key={empId} className="hover:bg-gray-100 transition-colors">
+                  <td className="p-2 border text-gray-600">{empId}</td>
+                  <td className="p-2 border text-gray-600">{data.name || "–"}</td>
+                  <td className="p-2 border text-gray-600">{data.totalRides || 0}</td>
+                  <td className="p-2 border text-gray-600">{data.car || "–"}</td>
+                  <td className="p-2 border text-gray-600">{data.approvedBy || "–"}</td>
+                  <td className="p-2 border text-gray-600">{data.status || "–"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        )}
       </div>
     </div>
   );
 }
+
+// // src/pages/superadmin/ClientDetails.jsx
+// import React, { useState, useEffect } from "react";
+// import { useParams, Link } from "react-router-dom";
+// import axios from "axios";
+
+// export default function ClientDetails() {
+//   const { clientId } = useParams();
+//   const VITE_API = import.meta.env.VITE_API;
+
+//   const [client, setClient] = useState(null);
+//   const [drivers, setDrivers] = useState([]);
+//   const [customers, setCustomers] = useState([]);
+//   const [cars, setCars] = useState([]);
+//   const [hubs, setHubs] = useState([]);
+//   const [rideCounts, setRideCounts] = useState({});
+
+//   useEffect(() => {
+//     if (!clientId) return;
+
+//     async function fetchData() {
+//       try {
+//         const [
+//           clientRes,
+//           driversRes,
+//           customersRes,
+//           carsRes,
+//           hubsRes,
+//           ridesRes
+//         ] = await Promise.all([
+//           axios.get(`${VITE_API}view/client/${clientId}`),
+//           axios.get(`${VITE_API}view/driver/client/${clientId}`),
+//           axios.get(`${VITE_API}view/customer/client/${clientId}`),
+//           axios.get(`${VITE_API}view/car/client/${clientId}`),
+//           axios.get(`${VITE_API}view/hub/client/${clientId}`),
+//           // axios.get(`${VITE_API}ride/summary/client/${clientId}?month=07&year=2025`)
+//         ]);
+ 
+//         console.log("Client",clientRes.data.client)
+//         console.log("Drivers",driversRes.data.drivers )
+//         console.log("Customers",customersRes.data.customers)
+//         console.log("Cars",carsRes.data.cars)
+//         console.log("Hubs",hubsRes.data.hubs)
+//         console.log("Rides",ridesRes.data.rideCounts)
+//         setClient(clientRes.data.client);
+//         setDrivers(driversRes.data.drivers || []);
+//         setCustomers(customersRes.data.customers || []);
+//         setCars(carsRes.data.cars || []);
+//         setHubs(hubsRes.data.hubs || []);
+//         // setRideCounts(ridesRes.data.rideCounts || {});
+//       } catch (err) {
+//         console.error("Error loading client details:", err);
+//       }
+//     }
+
+//     fetchData();
+//   }, [clientId]);
+
+//   if (!client) {
+//     return <div className="p-4">Loading client details…</div>;
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+//       <h1 className="text-3xl font-bold mb-6 text-gray-800">
+//         Company Details – {client.clientName}
+//       </h1>
+
+//       {/* Basic Info */}
+//       <div className="bg-white p-6 rounded shadow mb-6">
+//         <h2 className="text-xl font-semibold mb-4 border-b pb-2">Basic Information</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <div><strong>ID:</strong> {clientId}</div>
+//           <div><strong>Registered:</strong> {client.createdAt?.split("T")[0]}</div>
+//           <div><strong>Contact:</strong> {client.contactPerson}</div>
+//           <div><strong>Email:</strong> {client.email}</div>
+//           <div><strong>Phone:</strong> {client.phone}</div>
+//           <div className="sm:col-span-2"><strong>Address:</strong> {client.address}</div>
+//         </div>
+//       </div>
+
+//       {/* Resource Summary */}
+//       <div className="bg-white p-6 rounded shadow mb-6">
+//         <h2 className="text-xl font-semibold mb-4 border-b pb-2">Resources</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <div><strong>Drivers:</strong> {drivers.length} – <Link to={`/superadmin/client/${clientId}/viewDriver`} className="text-blue-500">View</Link></div>
+//           <div><strong>Customers:</strong> {customers.length} – <Link to={`/superadmin/client/${clientId}/viewCustomer`} className="text-blue-500">View</Link></div>
+//           <div><strong>Cars:</strong> {cars.length} – <Link to={`/superadmin/client/${clientId}/viewCar`} className="text-blue-500">View</Link></div>
+//           <div><strong>Hubs:</strong> {hubs.length} – {/* manage hubs link if needed */}</div>
+//         </div>
+//       </div>
+
+//       {/* Ride Summary */}
+//       <div className="bg-white p-6 rounded shadow">
+//         <h2 className="text-xl font-semibold mb-4 border-b pb-2">Employee Rides (July 2025)</h2>
+
+//         {Object.keys(rideCounts).length === 0 ? (
+//           <p className="text-gray-500">No ride data.</p>
+//         ) : (
+//           <table className="min-w-full border border-gray-200">
+//             <thead className="bg-gray-100">
+//               <tr>
+//                 <th className="p-2">Employee ID</th>
+//                 <th className="p-2">Name</th>
+//                 <th className="p-2">Rides</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {Object.entries(rideCounts).map(([empId, data]) => (
+//                 <tr key={empId}>
+//                   <td className="p-2 border">{empId}</td>
+//                   <td className="p-2 border">{data.name}</td>
+//                   <td className="p-2 border">{data.totalRides}</td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// import React, { useState, useEffect } from "react";
+// import { useParams, Link } from "react-router-dom";
+// import axios from "axios";
+
+// export default function ClientDetails() {
+//   const { clientId } = useParams();
+//   const API = import.meta.env.VITE_API;
+
+//   const [client, setClient] = useState(null);
+//   const [drivers, setDrivers] = useState([]);
+//   const [customers, setCustomers] = useState([]);
+//   const [cars, setCars] = useState([]);
+//   const [hubs, setHubs] = useState([]);
+//   const [rideCounts, setRideCounts] = useState({});
+
+//   // Fetch client data
+//   useEffect(() => {
+//     if (!clientId) return;
+
+//     const fetchData = async () => {
+//       try {
+//         const [
+//           clientRes,
+//           driversRes,
+//           customersRes,
+//           carsRes,
+//           hubsRes,
+//           ridesRes
+//         ] = await Promise.all([
+//           axios.get(`${API}client/${clientId}`),
+//           axios.get(`${API}driver/client/${clientId}`),
+//           axios.get(`${API}customer/client/${clientId}`),
+//           axios.get(`${API}car/client/${clientId}`),
+//           axios.get(`${API}hub/client/${clientId}`),
+//           axios.get(`${API}ride/summary/client/${clientId}?month=07&year=2025`)
+//         ]);
+
+//         setClient(clientRes.data.client || {});
+//         setDrivers(driversRes.data.drivers || []);
+//         setCustomers(customersRes.data.customers || []);
+//         setCars(carsRes.data.cars || []);
+//         setHubs(hubsRes.data.hubs || []);
+//         setRideCounts(ridesRes.data.rideCounts || {});
+//       } catch (err) {
+//         console.error("Error loading client details:", err);
+//       }
+//     };
+
+//     fetchData();
+//   }, [clientId]);
+
+//   if (!client) {
+//     return <div className="p-4">Loading client details...</div>;
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+//       <h1 className="text-3xl font-bold mb-6 text-center sm:text-left text-gray-800">
+//         Company Details - {client.clientName || "N/A"}
+//       </h1>
+
+//       {/* Basic Info */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Basic Information</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <p><strong className="text-gray-900">Company ID:</strong> {clientId}</p>
+//           <p><strong className="text-gray-900">Registration Date:</strong> {client.createdAt?.split("T")[0]}</p>
+//           <p><strong className="text-gray-900">Contact Name:</strong> {client.contactPerson || "N/A"}</p>
+//           <p><strong className="text-gray-900">Email:</strong> {client.email}</p>
+//           <p><strong className="text-gray-900">Phone:</strong> {client.phone}</p>
+//           <p className="sm:col-span-2"><strong className="text-gray-900">Address:</strong> {client.address}</p>
+//         </div>
+//       </div>
+
+//       {/* Resources */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Resources</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <p><strong className="text-gray-900">Total Drivers:</strong> {drivers.length}</p>
+//           <Link to={`/superadmin/client/${clientId}/viewDriver`} className="text-blue-500 hover:underline">View Drivers</Link>
+//           <p><strong className="text-gray-900">Total Customers:</strong> {customers.length}</p>
+//           <Link to={`/superadmin/client/${clientId}/viewCustomer`} className="text-blue-500 hover:underline">View Customers</Link>
+//           <p><strong className="text-gray-900">Total Cars:</strong> {cars.length}</p>
+//           <Link to={`/superadmin/client/${clientId}/viewCar`} className="text-blue-500 hover:underline">View Cars</Link>
+//           <p><strong className="text-gray-900">Total Hubs:</strong> {hubs.length}</p>
+//           <Link to="/superadmin/addHub" className="text-blue-500 hover:underline">Manage Hubs</Link>
+//         </div>
+//       </div>
+
+//       {/* Employee Ride Summary */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <h2 className="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Employee Rides (July 2025)</h2>
+//         {Object.keys(rideCounts).length === 0 ? (
+//           <p className="text-gray-500">No ride data available.</p>
+//         ) : (
+//           <div className="overflow-x-auto">
+//             <table className="min-w-full border border-gray-200">
+//               <thead className="bg-gray-100">
+//                 <tr>
+//                   <th className="py-2 px-4 border">Employee ID</th>
+//                   <th className="py-2 px-4 border">Name</th>
+//                   <th className="py-2 px-4 border">Rides</th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {Object.entries(rideCounts).map(([empId, data]) => (
+//                   <tr key={empId}>
+//                     <td className="py-2 px-4 border">{empId}</td>
+//                     <td className="py-2 px-4 border">{data.name || "N/A"}</td>
+//                     <td className="py-2 px-4 border">{data.totalRides}</td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// // src/pages/superadmin/ClientDetails.jsx
+// import React, { useState } from "react";
+// import { useParams, Link } from "react-router-dom";
+
+// export default function ClientDetails() {
+//   const { clientId } = useParams();
+
+//   const initialEmployees = [
+//     { id: "EMP001", name: "Alice Smith" },
+//     { id: "EMP002", name: "Bob Johnson" },
+//     { id: "EMP003", name: "Charlie Brown" },
+//     { id: "EMP004", name: "David Lee" },
+//     { id: "EMP005", name: "Eva Green" },
+//     { id: "EMP006", name: "Frank Wright" },
+//     { id: "EMP007", name: "Grace Hopper" },
+//     { id: "EMP008", name: "Henry Ford" },
+//     { id: "EMP009", name: "Isla Fisher" },
+//     { id: "EMP010", name: "Jack Ryan" },
+//   ];
+
+//   const initialRides = {
+//     EMP001: 8,
+//     EMP002: 12,
+//     EMP003: 5,
+//     EMP004: 7,
+//     EMP005: 10,
+//     EMP006: 6,
+//     EMP007: 9,
+//     EMP008: 4,
+//     EMP009: 11,
+//     EMP010: 3,
+//   };
+
+//   const [employees, setEmployees] = useState(initialEmployees);
+//   const [rideCounts, setRideCounts] = useState(initialRides);
+
+//   const handleAddEmployee = () => {
+//     const newId = `EMP${(employees.length + 1).toString().padStart(3, "0")}`;
+//     const newName = `Employee ${employees.length + 1}`;
+//     const randomRides = Math.floor(Math.random() * 15) + 1;
+
+//     const newEmployee = { id: newId, name: newName };
+//     setEmployees((prev) => [...prev, newEmployee]);
+//     setRideCounts((prev) => ({ ...prev, [newId]: randomRides }));
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
+//       <h1 className="text-3xl font-bold mb-6 text-center sm:text-left text-gray-800">
+//         Company Details - Alpha Tech Solutions
+//       </h1>
+
+//       {/* Basic Info */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Basic Information</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <p><strong className="text-gray-900">Company ID:</strong> {clientId || "CLT123"}</p>
+//           <p><strong className="text-gray-900">Registration Date:</strong> 2023-05-15</p>
+//           <p><strong className="text-gray-900">Contact Name:</strong> John Doe</p>
+//           <p><strong className="text-gray-900">Email:</strong> john.doe@alphatech.com</p>
+//           <p><strong className="text-gray-900">Phone:</strong> +91-9876543210</p>
+//           <p className="sm:col-span-2"><strong className="text-gray-900">Address:</strong> 123 Business Park, Mumbai, India</p>
+//         </div>
+//       </div>
+
+//       {/* Resources */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Resources</h2>
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
+//           <p><strong className="text-gray-900">Total Drivers:</strong> 15</p>
+//           <Link to={`/superadmin/client/${clientId}/viewDriver`} className="text-blue-500 hover:underline">View Drivers</Link>
+//           <p><strong className="text-gray-900">Total Customers:</strong> 50</p>
+//           <Link to={`/superadmin/client/${clientId}/viewCustomer`} className="text-blue-500 hover:underline">View Customers</Link>
+//           <p><strong className="text-gray-900">Total Cars:</strong> 10</p>
+//           <Link to={`/superadmin/client/${clientId}/viewCar`} className="text-blue-500 hover:underline">View Cars</Link>
+//           <p><strong className="text-gray-900">Total Hubs:</strong> 2</p>
+//           <Link to="/superadmin/addHub" className="text-blue-500 hover:underline">Manage Hubs</Link>
+//         </div>
+//       </div>
+
+//       {/* Employee List */}
+//       <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+//         <div className="flex justify-between items-center mb-4">
+//           <h2 className="text-xl font-semibold text-gray-700 border-b pb-2">Employees</h2>
+//           <button
+//             onClick={handleAddEmployee}
+//             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+//           >
+//             + Add Employee
+//           </button>
+//         </div>
+
+//         <div className="overflow-x-auto">
+//           <table className="min-w-full border border-gray-200">
+//             <thead className="bg-gray-100">
+//               <tr>
+//                 <th className="py-2 px-4 border">ID</th>
+//                 <th className="py-2 px-4 border">Name</th>
+//                 <th className="py-2 px-4 border">Rides (July 2025)</th>
+//                 <th className="py-2 px-4 border">Action</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {employees.map((emp) => (
+//                 <tr key={emp.id}>
+//                   <td className="py-2 px-4 border">{emp.id}</td>
+//                   <td className="py-2 px-4 border">{emp.name}</td>
+//                   <td className="py-2 px-4 border">{rideCounts[emp.id] || 0}</td>
+//                   <td className="py-2 px-4 border">
+//                     <Link
+//                       to={`/superadmin/client/${clientId}/employee/${emp.id}`}
+//                       className="text-blue-600 hover:underline"
+//                     >
+//                       View Details
+//                     </Link>
+//                   </td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 // import React, { useState } from "react";

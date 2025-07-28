@@ -17,14 +17,13 @@ export default function SuperadminSidebar() {
 
   const VITE_API = import.meta.env.VITE_API;
 
-
   // Toggle Sub-menu for companies  
-const toggleSubMenuStatic = (key) => {
-  setExpandedMenuStatic((prev) => ({
-    ...prev,
-    [key]: prev[key] ? null : true,
-  }));
-};
+  const toggleSubMenuStatic = (key) => {
+    setExpandedMenuStatic((prev) => ({
+      ...prev,
+      [key]: prev[key] ? null : true,
+    }));
+  };
 
 
   // Toggle Sub-menu for companies  
@@ -44,9 +43,9 @@ const toggleSubMenuStatic = (key) => {
     // Replace this URL with your actual backend endpoint
     axios.get(`${VITE_API}view/client`)
       .then((response) => {
-      console.log("Response from /view/client:", response.data);
-      setClients(response.data.clientData || []);
-  })
+        console.log("Response from /view/client:", response.data);
+        setClients(response.data.clientData || []);
+      })
 
       .catch((error) => {
         console.error("Error fetching companies:", error);
@@ -56,58 +55,104 @@ const toggleSubMenuStatic = (key) => {
   return (
     <div className="w-64 bg-blue-50 h-screen p-4 overflow-auto">
       <div className="mb-2 ">
-        <div className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300">
-          <Link to="driverHistory"><span>Driver History</span></Link>
+        <div className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200">
+          <Link to="/superAdmin/driverHistory"><span>Driver History</span></Link>
         </div>
       </div>
-   <div className="mb-2">
-  <div
-    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
-    onClick={() => toggleSubMenuStatic('client')}
-  >
-    <span>Manage Client</span>
-    {expandedMenuStatic['client'] ? <FaChevronDown /> : <FaChevronRight />}
-  </div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('client')}
+        >
+          <span>Manage Client</span>
+          {expandedMenuStatic['client'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
 
-  {expandedMenuStatic['client'] && (
-    <div className="ml-4 mt-2 space-y-1 text-sm">
-      <Link to="/superAdmin/addClient" className="block hover:underline">
-        Add Client
-      </Link>
-      <Link to="/superAdmin/viewClient" className="block hover:underline">
-        View Clients
-      </Link>
-    </div>
-  )}
-</div>
+        {expandedMenuStatic['client'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superAdmin/addClient" className="block hover:underline">
+              Add Client
+            </Link>
+            <Link to="/superAdmin/viewClient" className="block hover:underline">
+              View Clients
+            </Link>
+          </div>
+        )}
+      </div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('car')}
+        >
+          <span>Manage Car</span>
+          {expandedMenuStatic['car'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
 
-  <div className="mb-2">
-  <div
-    className="flex justify-between items-center cursor-pointer p-2 bg-gray-200 rounded hover:bg-gray-300"
-    onClick={() => toggleSubMenuStatic('hub')}
-  >
-    <span>Hub</span>
-    {expandedMenuStatic['hub'] ? <FaChevronDown /> : <FaChevronRight />}
-  </div>
+        {expandedMenuStatic['car'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superAdmin/addCar" className="block hover:underline">
+              Add Car
+            </Link>
+            <Link to="/superAdmin/viewCar" className="block hover:underline">
+              View Cars
+            </Link>
+          </div>
+        )}
+      </div>
 
-  {expandedMenuStatic['hub'] && (
-    <div className="ml-4 mt-2 space-y-1 text-sm">
-      <Link to="/superadmin/addHub" className="block hover:underline">Add Hub</Link>
-      <Link to="/superadmin/viewHub" className="block hover:underline">View Hub</Link>
-    </div>
-  )}
-</div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('hub')}
+        >
+          <span>Hub</span>
+          {expandedMenuStatic['hub'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
+
+        {expandedMenuStatic['hub'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superadmin/addHub" className="block hover:underline">Add Hub</Link>
+            <Link to="/superadmin/viewHub" className="block hover:underline">View Hub</Link>
+            {/* <Link to="/superadmin/assignCarHub" className="block hover:underline">AssignCar Hub</Link>
+      <Link to="/superadmin/viewCarHub" className="block hover:underline">ViewCar Hub</Link> */}
+          </div>
+        )}
+      </div>
 
       <h2 className="text-xl font-bold mb-4">Companies</h2>
       {/* <DriverHistory/> */}
       {clients.map((client) => (
         <div key={client._id} className="mb-2">
-          <div
+          {/* <div
             className="*:object-contain flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
             onClick={() => toggleCompany(client._id)}
           >
             <span>{client.clientName}</span>
             {expandedClient === client._id ? <FaChevronDown className='opacity-70' /> : <FaChevronRight className='opacity-60' />}
+          </div> */}
+          <div className="flex justify-between items-center p-2 rounded hover:bg-blue-200">
+            {/* Clicking on client name navigates to ClientDetails */}
+            <Link
+              to={`/superadmin/client/${client._id}/clientDetails`}
+              className="flex-grow text-black-800 font-medium "
+            >
+              {client.clientName}
+            </Link>
+
+            {/* Chevron icon only toggles submenus */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCompany(client._id);
+              }}
+              className="ml-2 text-gray-600 hover:text-black"
+            >
+              {expandedClient === client._id ? (
+                <FaChevronDown className="opacity-70" />
+              ) : (
+                <FaChevronRight className="opacity-60" />
+              )}
+            </button>
           </div>
 
           {expandedClient === client._id && (
@@ -152,8 +197,8 @@ const toggleSubMenuStatic = (key) => {
                     {/* <Link to={`/superadmin/client/${client._id}/viewCar`} className="block hover:underline">View Cars</Link> */}
                     <Link to={`/superadmin/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
 
-                        {/* ✅ Add this line for Driver History */}
-    <Link to={`/client/${client._id}/driver-history`} className="block hover:underline">Driver History</Link>
+                    {/* ✅ Add this line for Driver History */}
+                    <Link to={`/client/${client._id}/driver-history`} className="block hover:underline">Driver History</Link>
                   </div>
                 )}
               </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import SearchBar from "../../components/SearchBar";
 import {useAuth} from "../../context/AuthContext"
@@ -30,11 +30,17 @@ export default function ViewHub() {
 
   const columns = [
     { name: "Id", selector: row => row._id, sortable: true },
-    { name: "hubName", selector: row => row.hubName, sortable: true },
-    { name: "hubLocation", selector: row => row.hubLocation, sortable: true },
-    { name: "hubCarCapacity", selector: row => row.hubCarCapacity, sortable: true },
-    { name: "longitude", selector: row => row.coordinates.coordinates[0], sortable: true },
-    { name: "latitude", selector: row => row.coordinates.coordinates[1], sortable: true },
+    { name: "HubName", selector: row => row.hubName, sortable: true },
+    { name: "HubLocation", selector: row => row.hubLocation, sortable: true },
+    { name: "HubCarCapacity", selector: row => row.hubCarCapacity, sortable: true },
+    { name: "Longitude", selector: row => row.coordinates.coordinates[0], sortable: true },
+    { name: "Latitude", selector: row => row.coordinates.coordinates[1], sortable: true },
+    { name: "AssignCars", cell: (row) =>(  
+              <div className="justify-center ms-5">
+          <Link to={`/superAdmin/assignCarHub/${row._id}`}>
+            <FaPlus className="text-blue-500 cursor-pointer" />
+          </Link>
+          </div> ) },
     {
       name: "Actions",
       cell: (row) => (
@@ -47,6 +53,9 @@ export default function ViewHub() {
               className="text-red-500 cursor-pointer"
               onClick={() => deleteHub(row._id)}
             />
+          </Link>
+          <Link to={`/superAdmin/viewCarHub/${row._id}`}>
+            <FaEye className="text-blue-500 cursor-pointer" />
           </Link>
         </div>
       ),
@@ -63,7 +72,7 @@ export default function ViewHub() {
     setError(null);
     axios.get(`${VITE_API}view/hub`)
       .then((res) => {
-        console.log("Fetched Hub:", res.data);
+        // console.log("Fetched Hub:", res.data);
         setViewHub(res.data);
         setIsLoading(false);
       }).catch((error) => {
@@ -79,7 +88,7 @@ export default function ViewHub() {
       .includes(searchTerm.toLowerCase())
   );
 useEffect(() => {
-  console.log("Auth status - user:", user);
+  // console.log("Auth status - user:", user);
   if ( user && user._id) {
     getAllItems();
   }
