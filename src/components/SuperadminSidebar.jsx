@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaChevronDown, FaChevronRight, FaUser, FaUsers, FaCar, FaBook } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
+import DriverHistory from '../pages/superadmin/DriverHistory';
 
 export default function SuperadminSidebar() {
   const { user, token } = useAuth();
@@ -11,6 +12,8 @@ export default function SuperadminSidebar() {
   const [expandedMenuStatic, setExpandedMenuStatic] = useState({});
   const [clients, setClients] = useState([]);
   const [expandedClient, setExpandedClient] = useState(null);
+  const [expandedMenu, setExpandedMenu] = useState({});
+  const [adminsByClient, setAdminsByClient] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   const VITE_API = import.meta.env.VITE_API;
@@ -26,11 +29,17 @@ export default function SuperadminSidebar() {
         withCredentials: true,
       });
       console.log(`Response from /view/authorizedPerson for client ${clientId}:`, response.data);
+      setAdminsByClient((prev) => ({
+        ...prev,
+        [clientId]: response.data.user || [],
+      }));
     } catch (error) {
       console.error(`Error fetching admins for client ${clientId}:`, {
         message: error.message,
         status: error.response?.status,
         data: error.response?.data || "No data available",
+        headers: error.response?.headers || "No headers",
+        config: error.config || "No config",
       });
     }
   };
@@ -61,6 +70,8 @@ export default function SuperadminSidebar() {
           message: error.message,
           status: error.response?.status,
           data: error.response?.data || "No data available",
+          headers: error.response?.headers || "No headers",
+          config: error.config || "No config",
         });
         setIsLoading(false);
       }
@@ -87,10 +98,76 @@ export default function SuperadminSidebar() {
 
   const toggleCompany = (_id) => {
     setExpandedClient(prev => (prev === _id ? null : _id));
+    if (_id && !adminsByClient[_id]) {
+      fetchAdminsForClient(_id);
+    }
+    setExpandedMenu({});
+  };
+
+  const toggleSubMenu = (companyId, type) => {
+    setExpandedMenu(prev => ({
+      ...prev,
+      [companyId]: prev[companyId] === type ? null : type,
+    }));
+  };
+
+  const isAdminCreatedBySuperAdminOrMainAdmin = (admin) => {
+    // Filter by clientId since createdBy is not available
+    return admin.client === clientId;
   };
 
   return (
     <div className="w-64 bg-blue-50 h-screen p-4 overflow-auto">
+      <div className="mb-2">
+        <div className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200">
+          <Link to="/superAdmin/driverHistory"><span>Driver History</span></Link>
+        </div>
+      </div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('client')}
+        >
+          <span>Manage Client</span>
+          {expandedMenuStatic['client'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
+        {expandedMenuStatic['client'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superAdmin/addClient" className="block hover:underline">Add Client</Link>
+            <Link to="/superAdmin/viewClient" className="block hover:underline">View Clients</Link>
+          </div>
+        )}
+      </div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('car')}
+        >
+          <span>Manage Car</span>
+          {expandedMenuStatic['car'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
+        {expandedMenuStatic['car'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superAdmin/addCar" className="block hover:underline">Add Car</Link>
+            <Link to="/superAdmin/viewCar" className="block hover:underline">View Cars</Link>
+          </div>
+        )}
+      </div>
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('hub')}
+        >
+          <span>Hub</span>
+          {expandedMenuStatic['hub'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
+        {expandedMenuStatic['hub'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superadmin/addHub" className="block hover:underline">Add Hub</Link>
+            <Link to="/superadmin/viewHub" className="block hover:underline">View Hub</Link>
+          </div>
+        )}
+      </div>
       <h2 className="text-xl font-bold mb-4">Companies</h2>
       {clients.map((client) => (
         <div key={client._id} className="mb-2">
@@ -113,7 +190,56 @@ export default function SuperadminSidebar() {
           </div>
           {expandedClient === client._id && (
             <div className="ml-4 mt-2 space-y-1">
-              <Link to={`/superadmin/client/${client._id}/viewAdmin`} className="block hover:underline text-sm">View Admin</Link>
+              <div>
+                <div
+                  className="flex items-center justify-between cursor-pointer p-1 hover:bg-gray-300 rounded"
+                  onClick={() => toggleSubMenu(client._id, 'main-admin')}
+                >
+                  <span className="text-sm font-semibold">Manage Admin</span>
+                  {expandedMenu[client._id] === 'main-admin' ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+                {expandedMenu[client._id] === 'main-admin' && (
+                  <div className="ml-4 mt-1 text-sm space-y-1">
+                    <Link to={`/superadmin/client/${client._id}/addAdmin`} className="block hover:underline">Add Admin</Link>
+                    <Link to={`/superadmin/client/${client._id}/addHr`} className="block hover:underline">Add Hr</Link>
+                    <Link to={`/superadmin/client/${client._id}/viewAdminTable`} className="block hover:underline">View Admin</Link>
+                    {adminsByClient[client._id]?.length > 0 ? (
+                      adminsByClient[client._id]
+                        .filter(isAdminCreatedBySuperAdminOrMainAdmin)
+                        .map((admin) => (
+                          <Link
+                            key={admin._id}
+                            to={`/superadmin/client/${client._id}/viewAdminTable/${admin._id}`}
+                            className="block hover:underline"
+                          >
+                            {/* {admin.name || admin.email} (Client: {admin.client}) */}
+                          </Link>
+                        ))
+                    ) : (
+                      <span>No admins found</span>
+                    )}
+                    <Link to={`/superadmin/client/${client._id}/bookRide`} className="block hover:underline">Book Ride</Link>
+                  </div>
+                )}
+              </div>
+              <div>
+                <div
+                  className="flex items-center justify-between cursor-pointer p-1 hover:bg-gray-300 rounded"
+                  onClick={() => toggleSubMenu(client._id, 'hr')}
+                >
+                  <span className="text-sm font-semibold">Manage HR</span>
+                  {expandedMenu[client._id] === 'hr' ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+                {expandedMenu[client._id] === 'hr' && (
+                  <div className="ml-4 mt-1 text-sm space-y-1">
+                    <Link to={`/superadmin/client/${client._id}/addDriver`} className="block hover:underline">Add Driver</Link>
+                    <Link to={`/superadmin/client/${client._id}/addCustomer`} className="block hover:underline">Add Customer</Link>
+                    <Link to={`/superadmin/client/${client._id}/viewDriver`} className="block hover:underline">View Drivers</Link>
+                    <Link to={`/superadmin/client/${client._id}/viewCustomer`} className="block hover:underline">View Customers</Link>
+                    <Link to={`/client/${client._id}/driver-history`} className="block hover:underline">Driver History</Link>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
