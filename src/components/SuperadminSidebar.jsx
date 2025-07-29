@@ -46,7 +46,7 @@ export default function SuperadminSidebar() {
 
   useEffect(() => {
     if (!user || !token) {
-      // console.error("No user or token available for authentication", { user, token });
+      console.error("No user or token available for authentication", { user, token });
       setIsLoading(false);
       return;
     }
@@ -118,11 +118,13 @@ export default function SuperadminSidebar() {
 
   return (
     <div className="w-64 bg-blue-50 h-screen p-4 overflow-auto">
+      {/* Driver History */}
       <div className="mb-2">
         <div className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200">
           <Link to="/superAdmin/driverHistory"><span>Driver History</span></Link>
         </div>
       </div>
+      {/* Manage Client */}
       <div className="mb-2">
         <div
           className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
@@ -138,6 +140,23 @@ export default function SuperadminSidebar() {
           </div>
         )}
       </div>
+      {/* Manage Driver */}
+      <div className="mb-2">
+        <div
+          className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
+          onClick={() => toggleSubMenuStatic('driver')}
+        >
+          <span>Manage Driver</span>
+          {expandedMenuStatic['driver'] ? <FaChevronDown /> : <FaChevronRight />}
+        </div>
+        {expandedMenuStatic['driver'] && (
+          <div className="ml-4 mt-2 space-y-1 text-sm">
+            <Link to="/superAdmin/addCar" className="block hover:underline">Add Car</Link>
+            <Link to="/superAdmin/viewCar" className="block hover:underline">View Cars</Link>
+          </div>
+        )}
+      </div>
+      {/* Manage Car */}
       <div className="mb-2">
         <div
           className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
@@ -153,12 +172,13 @@ export default function SuperadminSidebar() {
           </div>
         )}
       </div>
+      {/* Manage Hub */}
       <div className="mb-2">
         <div
           className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200"
           onClick={() => toggleSubMenuStatic('hub')}
         >
-          <span>Hub</span>
+          <span>Manage Hub</span>
           {expandedMenuStatic['hub'] ? <FaChevronDown /> : <FaChevronRight />}
         </div>
         {expandedMenuStatic['hub'] && (

@@ -13,11 +13,11 @@ import DriverId from "./pages/DriverId";
 import ClientInvoice from "./pages/superadmin/ClientInvoice";
 //----------------------------------Superadmin--------------------------------------
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
-import AddDriver from "./pages/AddDriver";
+import AddDriver from "./pages/superadmin/AddDriver";
 import AddCar from "./pages/superadmin/AddCar";
 import AddCustomer from "./pages/AddCustomer";
 import ViewAdmin from "./pages/superadmin/ViewAdmin";
-import ViewDriver from "./pages/ViewDriver";
+import ViewDriver from "./pages/superadmin/ViewDriver";
 import ViewCar from "./pages/superadmin/ViewCar";
 import ViewCustomer from "./pages/ViewCustomer";
 import BookRide from "./pages/BookRide";

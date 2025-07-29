@@ -21,13 +21,13 @@ const validationSchema = Yup.object({
 });
 
 const groupPermissions = [
-  {
-    group: "Driver",
-    items: [
-      { _id: "view_driver", label: "View Driver" },
-      { _id: "add_driver", label: "Add Driver" }
-    ],
-  },
+  // {
+  //   group: "Driver",
+  //   items: [
+  //     { _id: "view_driver", label: "View Driver" },
+  //     { _id: "add_driver", label: "Add Driver" }
+  //   ],
+  // },
   {
     group: "Customer",
     items: [
@@ -73,11 +73,12 @@ export default function AddHR() {
 
         // Fetch existing HR data if editing
         if (id) {
-          const hrResponse = await axios.get(`${VITE_API}view/client/person/${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const hrResponse = await getApiAuth(`view/client/person/${id}`)
+          // await axios.get(`${VITE_API}view/client/person/${id}`, {
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //   },
+          // });
           const hrData = hrResponse.data;
           setInitialValues({
             name: hrData.name || "",
@@ -109,11 +110,12 @@ export default function AddHR() {
           },
         });
       } else {
-        await axios.post(`${VITE_API}add/client/person`, payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+           await post(`add/client/person`, payload)
+        // await axios.post(`${VITE_API}add/client/person`, payload, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // });
       }
       navigate("/main-admin/viewAdmin");
     } catch (err) {

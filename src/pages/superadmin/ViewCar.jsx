@@ -7,6 +7,7 @@
   import { useAuth } from "../../context/AuthContext";
   import BackButton from "../../components/BackButton";
   import globalTableStyles from "../../styles/globalTableStyles";
+import { getApiAuth } from "../../utils/apiServices";
 
   export default function ViewCar() {
     const { user,token } = useAuth();
@@ -88,14 +89,15 @@
     const getAllItems = () => {
     setIsLoading(true);
     setError(null);
-    axios
-      .get(`${VITE_API}view/car`, {
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
-      .then((res) => {
+    // axios
+    //   .get(`${VITE_API}view/car`, {
+    //   headers:{
+    //     "Content-Type":"application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   }
+    // })
+      getApiAuth(`view/car`)
+      then((res) => {
         console.log("View Car Response:", res.data); // Log full response
         setViewCar(res.data.carData || []); // Updated to match API response
         setIsLoading(false);

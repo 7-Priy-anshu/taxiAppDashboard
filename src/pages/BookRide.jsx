@@ -19,6 +19,10 @@ export default function BookRide() {
   const socketRef = useRef(null);
   const hrId = "1234565432";
 
+    // ✅ Retrieve user from localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const approvedById = storedUser?._id || null;
+
   // ✅ Update pending badge count globally
   const updatePendingBadge = (rideList) => {
     const pending = rideList.filter((ride) => ride.status === "inactive").length;
@@ -78,7 +82,7 @@ export default function BookRide() {
     return () => {
       socket.disconnect();
     };
-  }, [SOCKET_URL]);
+  }, [SOCKET_URL,approvedById]);
 
   const handleOpenDialog = (ride, action) => {
     setSelectedRide(ride);
@@ -109,6 +113,7 @@ socketRef.current.emit("ride_assign", {
   email: selectedRide.email,
   rideTime: selectedRide.rideTime,
   rideDateTime: selectedRide.rideDateTime,
+  approvedBy: approvedById, 
 });
 
     } else if (decision === "rejected") {

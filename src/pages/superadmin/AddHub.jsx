@@ -9,6 +9,7 @@ import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
 import BackButton from "../../components/BackButton";
 import { FaLocationPin } from "react-icons/fa6";
+import { getApiAuth,postApiAuth } from "../../utils/apiServices";
 
 const validationSchema = Yup.object({
   hubName: Yup.string().required("Hub Name is required"),
@@ -37,13 +38,14 @@ export default function AddHub() {
 
   useEffect(() => {
     if (id) {
-      axios
-        .get(`${VITE_API}/add/hub/${id}`,{
-        headers:{
-          "Content-type":"application/json",
-           Authorization:`Bearer ${token}`
-        }
-      })
+      // axios
+      //   .get(`${VITE_API}/add/hub/${id}`,{
+      //   headers:{
+      //     "Content-type":"application/json",
+      //      Authorization:`Bearer ${token}`
+      //   }
+      // })
+      getApiAuth(`view/hub/${id}`)
         .then((res) => {
           setInitialValues(res.data);
           setLoading(false);
@@ -55,7 +57,7 @@ export default function AddHub() {
     }
   }, [id]);
 
-  const submitHub = (values) => {
+  const submitHub = async (values) => {
     if (id) {
       axios
         .put(`${VITE_API}update/hub/${id}`, values,{
@@ -67,15 +69,11 @@ export default function AddHub() {
         .then(() => navigate(`/superAdmin/viewHub`))
         .catch((err) => console.error("Update failed:", err));
     } else {
-      axios
-        .post(`${VITE_API}add/hub`, values,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
-        .then(() => navigate(`/superAdmin/viewHub`))
-        .catch((err) => console.error("Add failed:", err));
+   
+    const res = await postApiAuth('add/hub',values)
+    console.log({ res });   
+        // then(() => navigate(`/superAdmin/viewHub`))
+        // .catch((err) => console.error("Add failed:", err));
     }
   };
 

@@ -3,11 +3,12 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
-import BackButton from "../components/BackButton";
+import BackButton from "../../components/BackButton";
+import { getApiAuth, postApiAuth } from "../../utils/apiServices";
 
 
 const validationSchema = Yup.object({
@@ -43,14 +44,15 @@ export default function AddDriver() {
 
   useEffect(() => {
     if (id) {
-      axios
-        .get(`${VITE_API}/add/driver/${id}`,{
-        headers:{
-          "Content-type":"application/json",
-           Authorization:`Bearer ${token}`
-        }
-      })
-        .then((res) => {
+      getApiAuth(`add/driver/${id}`)
+      // axios
+      //   .get(`${VITE_API}/add/driver/${id}`,{
+      //   headers:{
+      //     "Content-type":"application/json",
+      //      Authorization:`Bearer ${token}`
+      //   }
+      // })
+        then((res) => {
           setInitialValues(res.data);
           setLoading(false);
         })
@@ -61,7 +63,7 @@ export default function AddDriver() {
     }
   }, [id]);
 
-const submitDriver = (values) => {
+const submitDriver = async (values) => {
   if (id) {
     axios
       .put(`${VITE_API}update/driver/${id}`, values,{
@@ -73,14 +75,15 @@ const submitDriver = (values) => {
       .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Update failed:", err));
   } else {
-    axios
-      .post(`${VITE_API}add/driver`, values,{
-        headers:{
-          "Content-type":"application/json",
-           Authorization:`Bearer ${token}`
-        }
-      })
-      .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
+    // axios
+    //   .post(`${VITE_API}add/driver`, values,{
+    //     headers:{
+    //       "Content-type":"application/json",
+    //        Authorization:`Bearer ${token}`
+    //     }
+    //   })
+      const response = await postApiAuth(`add/driver`,values)
+      then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Add failed:", err));
   }
 };

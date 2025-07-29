@@ -6,6 +6,8 @@ import SearchBar from "../../components/SearchBar";
 import BackButton from "../../components/BackButton";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
+import { getApiAuth } from '../../utils/apiServices';
+
 
 export default function ViewAdminTable() {
   const { clientId } = useParams();
@@ -20,17 +22,18 @@ export default function ViewAdminTable() {
     setIsLoading(true);
     setError(null);
     try {
-      const authToken = token || localStorage.getItem("token");
-      const response = await axios.get(
-        `${VITE_API}view/authorizedPerson?clientId=${clientId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      // const authToken = token || localStorage.getItem("token");
+      const response = await getApiAuth(`view/authorizedPerson?clientId=${clientId}`)
+      // await axios.get(
+      //   `${VITE_API}view/authorizedPerson?clientId=${clientId}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${authToken}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //     withCredentials: true,
+      //   }
+      // );
       const filteredAdmins = (response.data.user || []).filter(
         (admin) => admin.client === clientId
       );

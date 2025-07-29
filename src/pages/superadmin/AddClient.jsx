@@ -8,6 +8,7 @@ import BackButton from "../../components/BackButton"
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext';
+import { getApiAuth, postApiAuth } from '../../utils/apiServices';
 export default function AddClient() {
 
   const ClientSchema = Yup.object().shape({
@@ -32,12 +33,13 @@ const { token } = useAuth();
 useEffect(() => {
   console.log("Token",token)
   if (id) {
-    axios.get(`${VITE_API}add/client/${id}`, {
-     headers: {
-    Authorization: `Bearer ${token}`,
-  },
-    })
-    .then(res => {
+  //   axios.get(`${VITE_API}add/client/${id}`, {
+  //    headers: {
+  //   Authorization: `Bearer ${token}`,
+  // },
+  //   })
+  const response = getAuthApi(`add/client/${id}`)
+    then(res => {
       setInitialValues(res.data);
       setLoading(false);
     })
@@ -61,7 +63,8 @@ const handleSubmit = (values,{ setSubmitting  }) => {
 
   if (!id) {
     // Add new client (POST)
-    axios.post(`${VITE_API}add/client`, values, config)
+    // axios.post(`${VITE_API}add/client`, values, config)
+    postApiAuth(`add/client`,values)
       .then(() => {
         navigation('/superAdmin/viewClient');
       })

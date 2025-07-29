@@ -7,8 +7,7 @@ import SearchBar from '../components/SearchBar'
 import { useAuth } from "../context/AuthContext";
 import BackButton from "../components/BackButton";
 import globalTableStyles from '../styles/globalTableStyles';
-
-
+import { getApiAuth } from "../utils/apiServices";
 export default function ViewCustomer() {
   const {user,token} = useAuth();
   const {role,id} = useParams();
@@ -64,16 +63,17 @@ export default function ViewCustomer() {
 
   const VITE_API = import.meta.env.VITE_API;
 
-  const getAllCustomer = () => {
+  const getAllCustomer = async () => {
     setIsLoading(true);
     setError(null);
-    axios
-      .get(`${VITE_API}view/customer`,{
-        headers:{
-          "Content-type":"application/json",
-          Authorization:`Bearer ${token}`
-        }
-      })
+    const response = await getApiAuth(`view/customer`)
+    // axios
+    //   .get(`${VITE_API}view/customer`,{
+    //     headers:{
+    //       "Content-type":"application/json",
+    //       Authorization:`Bearer ${token}`
+    //     }
+    //   })
       .then((res) => {
         // console.log("Fetched Customers:", res.data);
         // adjust if response format is: { data: [...] }

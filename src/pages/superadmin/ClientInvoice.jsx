@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { getApiAuth } from "../../utils/apiServices";
 
 export default function ClientInvoice() {
   const months = [
@@ -35,14 +36,15 @@ export default function ClientInvoice() {
     setError("");
     try {
       const formattedMonth = String(selectedMonth).padStart(2, "0");
-      const response = await axios.get(
-        `${import.meta.env.VITE_API}company/${clientId}/invoice?month=${selectedYear}-${formattedMonth}?tax=${taxPercent}%`
-      ,{
-        headers:{
-          "Content-type":"application/json",
-          Authorization:`Bearer ${token}`
-        }
-      });
+      const response = await getApiAuth(`company/${clientId}/invoice?month=${selectedYear}-${formattedMonth}?tax=${taxPercent}%`)
+      // await axios.get(
+      //   `${import.meta.env.VITE_API}company/${clientId}/invoice?month=${selectedYear}-${formattedMonth}?tax=${taxPercent}%`
+      // ,{
+      //   headers:{
+      //     "Content-type":"application/json",
+      //     Authorization:`Bearer ${token}`
+      //   }
+      // });
 
       // Expected format: array of ride objects
       setRideData(response.data?.rides || []);

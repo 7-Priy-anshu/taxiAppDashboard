@@ -556,14 +556,15 @@ export default function ViewDriverHistory() {
 
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${VITE_API}driverRideHistory/?driverId=${driverId}`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    }
-);
+//         const res = await axios.get(
+//           `${VITE_API}driverRideHistory/?driverId=${driverId}`,{
+//       headers:{
+//         "Content-Type":"application/json",
+//         Authorization: `Bearer ${token}`,
+//       }
+//     }
+// );
+    const res = await getApiAuth(`driverRideHistory/?driverId=${driverId}`)
 const driverData = Array.isArray(res.data.driverData)
   ? res.data.driverData[0]  // Take the first driver
   : res.data;

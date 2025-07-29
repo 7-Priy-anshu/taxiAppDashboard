@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { getApiAuth } from '../../utils/apiServices';
 
 const ViewAdminTable = () => {
   const { clientId } = useParams();
@@ -13,14 +14,15 @@ const ViewAdminTable = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const authToken = token || localStorage.getItem("token");
-        const response = await axios.get(`${VITE_API}view/authorizedPerson?clientId=${clientId}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        });
+        // const authToken = token || localStorage.getItem("token");
+        const response =  await getApiAuth(`view/authorizedPerson?clientId=${clientId}`)
+        //  await axios.get(`${VITE_API}view/authorizedPerson?clientId=${clientId}`, {
+        //   headers: {
+        //     Authorization: `Bearer ${authToken}`,
+        //     'Content-Type': 'application/json',
+        //   },
+        //   withCredentials: true,
+        // });
         console.log(`Response from /view/authorizedPerson for client ${clientId}:`, response.data);
         setAdmins(response.data.user || []);
         setIsLoading(false);

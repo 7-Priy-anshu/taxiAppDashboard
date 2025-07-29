@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import Button from "../../components/Button";
 import { useAuth } from "../../context/AuthContext";
+import { getApiAuth } from "../../utils/apiServices";
 export default function ClientDetails() {
   const {token} = useAuth();
   const { clientId } = useParams();
@@ -26,12 +27,13 @@ export default function ClientDetails() {
     async function fetchData() {
       try {
         const [clientRes] = await Promise.all([
-          axios.get(`${VITE_API}view/client/${clientId}`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    }),
+          await getApiAuth(`view/client/${clientId}`)
+    //       axios.get(`${VITE_API}view/client/${clientId}`,{
+    //   headers:{
+    //     "Content-Type":"application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   }
+    // }),
           // axios.get(`${VITE_API}view/driver/client/${clientId}`), // Uncomment and adjust
           // axios.get(`${VITE_API}view/customer/client/${clientId}`),
           // axios.get(`${VITE_API}view/car/client/${clientId}`),

@@ -8,6 +8,7 @@ import { MdEmail } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import BackButton from '../components/BackButton';
 import { useAuth } from '../context/AuthContext';
+import { getApiAuth } from '../utils/apiServices';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -36,13 +37,13 @@ export default function AddAdmin() {
   });
 
   const groupPermissions = [
-    {
-      group: "Driver",
-      items: [
-        { _id: "view_driver", label: "View Driver" },
-        { _id: "add_driver", label: "Add Driver" }
-      ],
-    },
+    // {
+    //   group: "Driver",
+    //   items: [
+    //     { _id: "view_driver", label: "View Driver" },
+    //     { _id: "add_driver", label: "Add Driver" }
+    //   ],
+    // },
     {
       group: "Customer",
       items: [
@@ -73,15 +74,17 @@ export default function AddAdmin() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const clientsResponse = await axios.get(`${VITE_API}view/client`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const clientsResponse = get(`view/client`)
+        // await axios.get(`${VITE_API}view/client`, {
+        //   headers: { Authorization: `Bearer ${token}` },
+        // });
         setClients(clientsResponse.data.clients || []); // Corrected to match expected key
 
         if (id) {
-          const response = await axios.get(`${VITE_API}view/client/${clientId}/person/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = getApiAuth(`view/client/${clientId}/person/${id}`) 
+          // await axios.get(`${VITE_API}view/client/${clientId}/person/${id}`, {
+          //   headers: { Authorization: `Bearer ${token}` },
+          // });
           const hrData = response.data;
           setInitialValues({
             name: hrData.name || "",

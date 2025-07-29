@@ -7,6 +7,7 @@ import SearchBar from "../../components/SearchBar";
 import { useAuth } from "../../context/AuthContext";
 import BackButton from "../../components/BackButton";
 import globalTableStyles from "../../styles/globalTableStyles";
+import { getApiAuth } from '../../utils/apiServices';
 
 export default function ViewClient() {
   const {user,token} = useAuth();
@@ -58,17 +59,17 @@ export default function ViewClient() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   
-  const getAllItems = () => {
+  const getAllItems = async () => {
     setIsLoading(true);
     setError(null);
-    axios 
-      // .get(`${VITE_API}view/client`)
-      .get(`${VITE_API}view/client`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
+    const response = await getApiAuth(`view/client`)
+    // axios 
+    //   .get(`${VITE_API}view/client`,{
+    //   headers:{
+    //     "Content-Type":"application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   }
+    // })
       .then((res) => {
         // console.log("Fetched  client on view:", res.data);
         // adjust if response format is: { data: [...] }

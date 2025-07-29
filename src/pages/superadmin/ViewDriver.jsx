@@ -4,10 +4,11 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import SearchBar from "../components/SearchBar";
-import { useAuth } from "../context/AuthContext";
-import BackButton from "../components/BackButton";
-import globalTableStyles from '../styles/globalTableStyles';
+import SearchBar from "../../components/SearchBar";
+import { useAuth } from "../../context/AuthContext";
+import BackButton from "../../components/BackButton";
+import globalTableStyles from '../../styles/globalTableStyles';
+import { getApiAuth } from "../../utils/apiServices";
 
 export default function ViewDriver() {
   const { role, id } = useParams();
@@ -75,27 +76,24 @@ export default function ViewDriver() {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const getAllItems = () => {
-    setIsLoading(true);
-    setError(null);
-    axios
-      .get(`${VITE_API}view/driver`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
-      .then((res) => {
-        console.log(res.data.driverData)
-        setViewDriver(res.data.driverData);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching drivers:", error);
-        setError("Failed to load drivers. Please try again later.");
-        setIsLoading(false);
-      });
-  };
+const getAllItems = async () => {
+  setIsLoading(true);
+  setError(null);
+  try {
+    const res = await getApiAuth(`view/driver`);
+    console.log("API response:", res.data); 
+    setViewDriver(res.data.driverData ?? []);
+
+    // console.log(res.data.driverData);
+    // setViewDriver(res.data.driverData);
+  } catch (error) {
+    console.error("Error fetching drivers:", error);
+    setError("Failed to load drivers. Please try again later.");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const filteredDrivers = viewDriver.filter((driver) =>
     `${driver.name},${driver.email}`.toLowerCase().includes(searchTerm.toLowerCase())
@@ -173,8 +171,8 @@ export default function ViewDriver() {
               highlightOnHover
               pointerOnHover
               striped
-              // customStyles={customStyles}
-              globalTableStyles={globalTableStyles}
+              customStyles={customStyles}
+              // globalTableStyles={globalTableStyles}
               noDataComponent="No drivers found."
             />
           </>

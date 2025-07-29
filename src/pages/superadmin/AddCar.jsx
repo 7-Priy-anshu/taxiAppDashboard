@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext';
 import { FaTruckField } from 'react-icons/fa6';
+import { getApiAuth, postApiAuth } from '../../utils/apiServices';
 const CarSchema = Yup.object().shape({
   carName: Yup.string().required('Car Name is required'),
   carModel: Yup.string().required('Car Model is required'),
@@ -35,13 +36,14 @@ export default function AddCar() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${VITE_API}add/car`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
-        .then(res => {
+    //   axios.get(`${VITE_API}add/car`,{
+    //   headers:{
+    //     "Content-Type":"application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   }
+    // })
+      const resposne =  getApiAuth(`add/car/${id}`);
+        then(res => {
           console.log("Fetched car data:", res.data);
           setInitialValues(res.data); // or res.data.car
           setLoading(false);
@@ -55,7 +57,7 @@ export default function AddCar() {
   }, [id]);
 
 
-  const handleSubmit = (values,{ setSubmitting }) => {
+  const handleSubmit = async (values,{ setSubmitting }) => {
     if (id) {
       axios.put(`${VITE_API}update/car/${id}`, values,{
       headers:{
@@ -68,13 +70,15 @@ export default function AddCar() {
         }).catch(err => console.error("Update failed:", err))
         .finally(()=>setSubmitting(false));
     } else {
-      axios.post(`${VITE_API}add/car`, values,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization: `Bearer ${token}`,
-      }
-    })
-        .then(() => navigate("/superadmin/viewCar"))
+      const response = await postApiAuth(`add/car`,values);
+      // axios.post(`${VITE_API}add/car`, values,{
+      // headers:{
+      //   "Content-Type":"application/json",
+      //   Authorization: `Bearer ${token}`,
+      // }
+      // })
+        console.log("Add Car Post :",response)
+        then(() => navigate("/superadmin/viewCar"))
         .catch(err => console.error("Add failed:", err))
         .finally(()=>setSubmitting(false));
     }
