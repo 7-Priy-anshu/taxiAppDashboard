@@ -50,7 +50,7 @@ useEffect(() => {
 }, [id]);
 
 
-const handleSubmit = (values) => {
+const handleSubmit = (values,{ setSubmitting  }) => {
 
   const config = {
     withCredentials: true,
@@ -68,7 +68,8 @@ const handleSubmit = (values) => {
       .catch(err => {
         console.error(err);
         setSubmitError("Failed to add client.");
-      });
+      })
+      .finally(()=>setSubmitting(false));
   } else {
     // Update existing client (PUT)
     axios.put(`${VITE_API}update/client`, values, config)
@@ -78,7 +79,8 @@ const handleSubmit = (values) => {
       .catch(err => {
         console.error(err);
         setSubmitError("Failed to update client.");
-      });
+      })
+      .finally(()=>setSubmitting(false));
   }
 };
 

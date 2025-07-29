@@ -55,7 +55,7 @@ export default function AddCar() {
   }, [id]);
 
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values,{ setSubmitting }) => {
     if (id) {
       axios.put(`${VITE_API}update/car/${id}`, values,{
       headers:{
@@ -65,7 +65,8 @@ export default function AddCar() {
     })
         .then(() => {
           navigate(`/superadmin/viewCar/${user._id}`);
-        }).catch(err => console.error("Update failed:", err));
+        }).catch(err => console.error("Update failed:", err))
+        .finally(()=>setSubmitting(false));
     } else {
       axios.post(`${VITE_API}add/car`, values,{
       headers:{
@@ -74,7 +75,8 @@ export default function AddCar() {
       }
     })
         .then(() => navigate("/superadmin/viewCar"))
-        .catch(err => console.error("Add failed:", err));
+        .catch(err => console.error("Add failed:", err))
+        .finally(()=>setSubmitting(false));
     }
   };
 
