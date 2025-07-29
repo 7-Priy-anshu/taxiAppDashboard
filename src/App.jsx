@@ -15,11 +15,11 @@ import ClientInvoice from "./pages/ClientInvoice";
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
 import AddDriver from "./pages/superadmin/AddDriver";
 import AddCar from "./pages/superadmin/AddCar";
-import AddCustomer from "./pages/person/AddCustomer";
+import AddCustomer from "./pages/hr/AddCustomer";
 import ViewAdmin from "./pages/superadmin/ViewAdmin";
-import ViewDriver from "./pages/person/ViewDriver";
+import ViewDriver from "./pages/ViewDriver";
 import ViewCar from "./pages/superadmin/ViewCar";
-import ViewCustomer from "./pages/person/ViewCustomer";
+import ViewCustomer from "./pages/hr/ViewCustomer";
 import BookRide from "./pages/BookRide";
 import AddAdmin from "./pages/AddAdmin";
 import AddClient from "./pages/superadmin/AddClient";
@@ -36,7 +36,7 @@ import ViewAdminTable from "./pages/superadmin/ViewAdminTable";
 import CompanyAdminDashboard from "./pages/main-admin/Dashboard";
 // import CompanyAdminDashboard from
 import AddHR from "./pages/main-admin/AddHR";
-import HRDashboard from "./pages/person/Dashboard";
+import HRDashboard from "./pages/hr/Dashboard";
 import CustomerDetails from "./pages/superadmin/CustomerDetails";
 
 export default function App() {
