@@ -65,12 +65,12 @@ export default function ViewClient() {
       // .get(`${VITE_API}view/client`)
       .get(`${VITE_API}view/client`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
       .then((res) => {
-        console.log("Fetched  client on view:", res.data);
+        // console.log("Fetched  client on view:", res.data);
         // adjust if response format is: { data: [...] }
         setViewClient(res.data.clientData); 
         setIsLoading(false);

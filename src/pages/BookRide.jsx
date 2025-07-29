@@ -4,11 +4,9 @@ import { Dialog } from "@headlessui/react";
 import { io } from "socket.io-client";
 import { Link } from "react-router-dom";
 import BackButton from "../components/BackButton";
-import { useAuth } from "../context/AuthContext";
 // import BackButton from "./BackButton";
 
 export default function BookRide() {
-  const {token} = useAuth();
   const [rides, setRides] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRide, setSelectedRide] = useState(null);
@@ -34,23 +32,10 @@ export default function BookRide() {
     socketRef.current = socket;
 
     // Fetch inactive drivers
-    // fetch(`${VITE_API}view/driver`)
-    //   .then((res) => res.json())
-    //   .then((data) => setDrivers(data))
-    //   .catch((err) => console.error("Failed to fetch inactive drivers:", err));
-    fetch(`${VITE_API}view/driver`,{
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`,
-      }
-    })
-  .then((res) => res.json())
-  .then((data) => {
-    console.log("Driver data:", data); // 👈 check actual structure
-    setDrivers(Array.isArray(data) ? data : data.drivers || []);
-  })
-  .catch((err) => console.error("Failed to fetch drivers:", err));
-
+    fetch(`${VITE_API}driver/status/inactive`)
+      .then((res) => res.json())
+      .then((data) => setDrivers(data))
+      .catch((err) => console.error("Failed to fetch inactive drivers:", err));
 
     socket.on("connect", () => {
       console.log("Connected:", socket.id);

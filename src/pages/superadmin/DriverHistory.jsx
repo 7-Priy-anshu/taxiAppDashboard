@@ -24,7 +24,7 @@ export default function DriverHistory() {
     try {
       const res = await axios.get(`${VITE_API}view/driver`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });
@@ -50,7 +50,7 @@ export default function DriverHistory() {
     try {
       const res = await axios.get(`${VITE_API}driverRideHistory/driverId=${driverId}`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });

@@ -3,14 +3,14 @@ import DataTable from "react-data-table-component";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import SearchBar from '../../components/SearchBar'
-import { useAuth } from "../../context/AuthContext";
-import BackButton from "../../components/BackButton";
-import globalTableStyles from '../../styles/globalTableStyles';
+import SearchBar from '../components/SearchBar'
+import { useAuth } from "../context/AuthContext";
+import BackButton from "../components/BackButton";
+import globalTableStyles from '../styles/globalTableStyles';
 
 
 export default function ViewCustomer() {
-  const {user} = useAuth();
+  const {user,token} = useAuth();
   const {role,id} = useParams();
 
   // if (role !== user.role) return <div>Access denied</div>;
@@ -33,6 +33,7 @@ export default function ViewCustomer() {
     { name: "Customer Name", selector: row => row.customerName, sortable: true },
     { name: "Customer Email", selector: row => row.customerEmail, sortable: true },
     { name: "Customer Mobile", selector: row => row.customerMobile, sortable: true },
+    // { name: "Customer Aadhar", selector: row => row.aadhar, sortable: true },
     {
     name: "Actions",
     cell: (row) => (
@@ -67,7 +68,12 @@ export default function ViewCustomer() {
     setIsLoading(true);
     setError(null);
     axios
-      .get(`${VITE_API}view/customer/${user.id}`)
+      .get(`${VITE_API}view/customer`,{
+        headers:{
+          "Content-type":"application/json",
+          Authorization:`Bearer ${token}`
+        }
+      })
       .then((res) => {
         // console.log("Fetched Customers:", res.data);
         // adjust if response format is: { data: [...] }
@@ -92,11 +98,11 @@ export default function ViewCustomer() {
   //     // setViewCustomer(dummyCustomers); 
   // }, []);
 
+
   useEffect(() => {
-  if (user && user.id) {
     getAllCustomer();
-  }
-}, [user]);
+  }, []);
+
 
   return (
     <div className="p-6 flex flex-col gap-2">

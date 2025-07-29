@@ -259,7 +259,7 @@ export default function AssignCarToHub() {
     const fetchHub = async () => {
       const res = await axios.get(`${VITE_API}view/hub/${hubId}`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });
@@ -268,14 +268,15 @@ export default function AssignCarToHub() {
     };
 
     const fetchCars = async () => {
-      const res = await axios.get(`${VITE_API}view/car/status=unAssign`,{
+      // const res = await axios.get(`${VITE_API}view/car/status=unAssign`,{
+      const res = await axios.get(`${VITE_API}view/car`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });
-    setCars(res.data);
-    console.log("Fetch Cars",res.data);
+    setCars(res.data.carData);
+    console.log("Fetch Cars",res.data.carData);
     };
 
     // const fetchAssignedCars = async () => {
@@ -305,7 +306,7 @@ export default function AssignCarToHub() {
     try {
       await axios.post(`${VITE_API}assign/carHub`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     }, { cars: payload });
@@ -345,7 +346,7 @@ export default function AssignCarToHub() {
         <h2 className="text-xl font-semibold">Assigned Cars</h2>
         <button
           onClick={() => setShowCarList(!showCarList)}
-          className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="flex items-center cursor-pointer bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           <FaPlus className="mr-2" /> Assign New Cars
         </button>
@@ -363,9 +364,16 @@ export default function AssignCarToHub() {
               }`}
               onClick={() => handleCarSelection(car._id)}
             >
-              <p><strong>Car Number:</strong> {car.carNumber}</p>
-              <p><strong>Model:</strong> {car.carModel}</p>
+            <div className="flex flex-row gap-2"> 
               <p><strong>Name:</strong> {car.carName}</p>
+              <p><strong>Model:</strong> {car.carModel}</p>
+              <p><strong>Car Number:</strong> {car.carNumber}</p>
+              <p><strong>Car Brand:</strong> {car.carBrand}</p>
+              <p><strong>Hub:</strong> {car.assignedHub}</p>
+              <p><strong>Fule Type:</strong> {car.fuelType}</p>
+              <p><strong>Per/Km Rate:</strong> {car.perKmRate}</p>
+              <p><strong>Sitting Capacity:</strong> {car.sittingCapacity}</p>
+            </div>
             </div>
           ))}
 
@@ -373,7 +381,7 @@ export default function AssignCarToHub() {
             <div className="col-span-full mt-4">
               <button
                 onClick={handleAssign}
-                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 flex items-center"
+                className="bg-green-600 text-white px-6 py-2 cursor-pointer rounded hover:bg-green-700 flex items-center"
               >
                 <FaCheck className="mr-2" /> Assign Selected Cars
               </button>

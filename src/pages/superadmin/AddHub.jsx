@@ -38,7 +38,12 @@ export default function AddHub() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`${VITE_API}/add/hub/${id}`)
+        .get(`${VITE_API}/add/hub/${id}`,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
         .then((res) => {
           setInitialValues(res.data);
           setLoading(false);
@@ -55,7 +60,7 @@ export default function AddHub() {
       axios
         .put(`${VITE_API}update/hub/${id}`, values,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
@@ -65,7 +70,7 @@ export default function AddHub() {
       axios
         .post(`${VITE_API}add/hub`, values,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })

@@ -6,8 +6,9 @@ import axios from 'axios';
 import { FaUser, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from 'react-router-dom';
-import BackButton from '../components/BackButton';
-import { useAuth } from '../context/AuthContext';
+// import BackButton from '../components/BackButton';
+import BackButton from '../../components/BackButton';
+import { useAuth } from '../../context/AuthContext';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -19,7 +20,7 @@ const validationSchema = Yup.object({
   permissions: Yup.array().min(1, 'Select at least one permission'),
 });
 
-export default function AddAdmin() {
+export default function SAddAdmin() {
   const { id, clientId } = useParams();
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ export default function AddAdmin() {
     // Fetch clients
     axios.get(`${VITE_API}view/client`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
@@ -131,7 +132,7 @@ export default function AddAdmin() {
         // Update existing admin
         await axios.put(`${VITE_API}update/client/${clientId}/main-admin/${id}`, values, {
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });
@@ -139,7 +140,7 @@ export default function AddAdmin() {
         // Create new admin
         await axios.post(`${VITE_API}add/client/${clientId}/main-admin`, values, {
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     });

@@ -69,13 +69,16 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-row items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md flex flex-col md:flex-row">
+    // <div className="min-h-screen flex flex-row items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex flex-row items-center justify-center bg-gray-100 p-10 max-lg:p-20">
+      {/* <div className="w-full max-w-4xl bg-white rounded-lg shadow-md flex flex-col md:flex-row"> */}
+      <div className="grid max-lg:grid-cols-1 lg:grid-cols-2  max-w-3xl bg-white rounded-lg shadow-md   md:flex-row">
         <div className="flex-1">
           <img
             src="/taxi.jpg"
             alt="Taxi"
-            className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
+            className="w-full h-full object-cover rounded-t-lg md:rounded-lt-lg md:rounded-t-lg lg:rounded-bl-lg lg:rounded-tr-none"
+            // className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-t-none"
           />
         </div>
         <div className="flex-1 p-8">
@@ -86,9 +89,9 @@ export default function Login() {
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
-              <Form className="space-y-4">
-                <div className="flex items-center border border-gray-300 rounded-md p-3">
-                  <FaUser className="text-gray-600 text-lg mr-3" />
+              <Form className="space-y-3 max-md:space-y-2">
+               <div className="flex items-center border border-gray-300 max-sm:p-1  rounded-md p-3">
+                  <FaUser className="text-gray-600 text-lg  max-sm:text-sm mr-3" />
                   <Field
                     type="email"
                     name="email"
@@ -101,8 +104,8 @@ export default function Login() {
                   component="div"
                   className="text-red-500 text-sm"
                 />
-                <div className="flex items-center border border-gray-300 rounded-md p-3">
-                  <FaLock className="text-gray-600 text-lg mr-3" />
+               <div className="flex items-center border border-gray-300 max-sm:p-1  rounded-md p-3">
+                  <FaLock className="text-gray-600 max-sm:text-sm text-lg mr-3" />
                   <Field
                     type="password"
                     name="password"
@@ -118,7 +121,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="w-full py-2 bg-blue-500 max-sm:p-1 max-sm:text-sm text-white rounded-md hover:bg-blue-600"
                 >
                   {isSubmitting ? "Logging in..." : "Login"}
                 </button>

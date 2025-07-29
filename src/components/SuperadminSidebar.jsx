@@ -28,7 +28,7 @@ export default function SuperadminSidebar() {
         },
         withCredentials: true,
       });
-      console.log(`Response from /view/authorizedPerson for client ${clientId}:`, response.data);
+      // console.log(`Response from /view/authorizedPerson for client ${clientId}:`, response.data);
       setAdminsByClient((prev) => ({
         ...prev,
         [clientId]: response.data.user || [],
@@ -46,7 +46,7 @@ export default function SuperadminSidebar() {
 
   useEffect(() => {
     if (!user || !token) {
-      console.error("No user or token available for authentication", { user, token });
+      // console.error("No user or token available for authentication", { user, token });
       setIsLoading(false);
       return;
     }
@@ -54,7 +54,7 @@ export default function SuperadminSidebar() {
     const fetchClients = async () => {
       try {
         const authToken = token || localStorage.getItem("token");
-        console.log("Fetching clients with token:", authToken, "User role:", user.role, "VITE_API:", VITE_API);
+        // console.log("Fetching clients with token:", authToken, "User role:", user.role, "VITE_API:", VITE_API);
         const response = await axios.get(`${VITE_API}view/client`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -62,7 +62,7 @@ export default function SuperadminSidebar() {
           },
           withCredentials: true,
         });
-        console.log("Response from /view/client:", response.data);
+        // console.log("Response from /view/client:", response.data);
         setClients(response.data.clientData || []);
         setIsLoading(false);
       } catch (error) {

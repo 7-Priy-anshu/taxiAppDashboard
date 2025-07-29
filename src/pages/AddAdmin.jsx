@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
   permissions: Yup.array().min(1, 'Select at least one permission'),
 });
 
-export default function AddHR() {
+export default function AddAdmin() {
   const { id, clientId } = useParams();
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -48,6 +48,14 @@ export default function AddHR() {
       items: [
         { _id: 'view_customer', label: 'View Customers' },
         { _id: 'add_customer', label: 'Add Customer' }
+      ],
+    },
+    ,
+    {
+      group: "HR",
+      items: [
+        { _id: 'view_hr', label: 'View HR' },
+        { _id: 'add_hr', label: 'Create HR' }
       ],
     },
     {
@@ -139,7 +147,7 @@ export default function AddHR() {
         </Link>
       </div>
       <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center relative z-50">{id ? 'Edit' : 'Add'} HR</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center relative z-50">{id ? 'Edit' : 'Add'} Admin</h1>
         {submitError && (
           <div className="text-red-500 bg-red-100 p-3 rounded mb-4 flex justify-between items-center">
             {submitError}

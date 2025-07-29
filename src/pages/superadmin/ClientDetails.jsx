@@ -28,7 +28,7 @@ export default function ClientDetails() {
         const [clientRes] = await Promise.all([
           axios.get(`${VITE_API}view/client/${clientId}`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     }),

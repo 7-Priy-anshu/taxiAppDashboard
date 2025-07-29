@@ -3,11 +3,11 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { Link } from "react-router-dom";
-import BackButton from "../../components/BackButton"
+import BackButton from "../components/BackButton";
 
 
 const validationSchema = Yup.object({
@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 export default function AddDriver() {
   const { id, clientId } = useParams();
   // const { clientId } = useParams(); 
-  const { user } = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const [initialValues, setInitialValues] = useState({
@@ -44,7 +44,12 @@ export default function AddDriver() {
   useEffect(() => {
     if (id) {
       axios
-        .get(`${VITE_API}/add/driver/${id}`)
+        .get(`${VITE_API}/add/driver/${id}`,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
         .then((res) => {
           setInitialValues(res.data);
           setLoading(false);
@@ -59,12 +64,22 @@ export default function AddDriver() {
 const submitDriver = (values) => {
   if (id) {
     axios
-      .put(`${VITE_API}update/driver/${id}`, values)
+      .put(`${VITE_API}update/driver/${id}`, values,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
       .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Update failed:", err));
   } else {
     axios
-      .post(`${VITE_API}add/driver/${clientId}`, values)
+      .post(`${VITE_API}add/driver`, values,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
       .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Add failed:", err));
   }

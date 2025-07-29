@@ -8,6 +8,7 @@ import BackButton from '../../components/BackButton';
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext';
+import { FaTruckField } from 'react-icons/fa6';
 const CarSchema = Yup.object().shape({
   carName: Yup.string().required('Car Name is required'),
   carModel: Yup.string().required('Car Model is required'),
@@ -25,7 +26,8 @@ export default function AddCar() {
     carModel: '',
     carNumber: '',
     carBrand:'',
-    sittingCapacity:''
+    sittingCapacity:'',
+    fuelType:''
   });
   const [loading, setLoading] = useState(!!id);
 
@@ -35,7 +37,7 @@ export default function AddCar() {
     if (id) {
       axios.get(`${VITE_API}add/car`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
@@ -57,7 +59,7 @@ export default function AddCar() {
     if (id) {
       axios.put(`${VITE_API}update/car/${id}`, values,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
@@ -67,7 +69,7 @@ export default function AddCar() {
     } else {
       axios.post(`${VITE_API}add/car`, values,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
@@ -191,6 +193,23 @@ export default function AddCar() {
                 </div>
                 <ErrorMessage
                   name="carBrand"
+                  component="div"
+                  className="text-red-500 text-xs mt-1"
+                />
+              </div>
+              {/* Fuel Type */}
+              <div className="relative">
+                <Field
+                  type="text"
+                  name="fuelType"
+                  placeholder="Enter Fuel Type"
+                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+                  <FaTruckField className="text-gray-500" />
+                </div>
+                <ErrorMessage
+                  name="fuelType"
                   component="div"
                   className="text-red-500 text-xs mt-1"
                 />

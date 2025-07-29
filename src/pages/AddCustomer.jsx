@@ -6,7 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
-import BackButton from "../../components/BackButton"
+import BackButton from "../components/BackButton"
+import { useAuth } from '../context/AuthContext';
 
 const CustomerSchema = Yup.object().shape({
   customerName: Yup.string().required('Customer name is required'),
@@ -21,6 +22,7 @@ const CustomerSchema = Yup.object().shape({
 
 export default function AddCustomer() {
   const { id } = useParams(); // will be undefined in Add mode
+  const {token} = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const [initialValues, setInitialValues] = useState({
@@ -36,7 +38,12 @@ export default function AddCustomer() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${VITE_API}add/customer/${id}`)
+      axios.get(`${VITE_API}add/customer/${id}`,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
         .then(res => {
           // const data = res.data.user || res.data
           setInitialValues(res.data);
@@ -51,12 +58,22 @@ export default function AddCustomer() {
 
   const handleSubmit = (values) => {
     if (id) {
-      axios.put(`${VITE_API}update/customer/${id}`, values)
+      axios.put(`${VITE_API}update/customer/${id}`, values,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
         .then(() => {
           navigate("/superadmin/viewCustomer");
         }).catch(err => console.error("Update failed:", err));
     } else {
-      axios.post(`${VITE_API}add/customer`, values)
+      axios.post(`${VITE_API}add/customer`, values,{
+        headers:{
+          "Content-type":"application/json",
+           Authorization:`Bearer ${token}`
+        }
+      })
         .then(() => navigate("/superadmin/viewCustomer"))
         .catch(err => console.error("Add failed:", err));
     }

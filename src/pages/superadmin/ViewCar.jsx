@@ -17,7 +17,12 @@
     const deleteCar = async (id) => {
       if (!window.confirm("Are you sure you want to delete this car?")) return;
       try {
-        await axios.delete(`${VITE_API}delete/car/${id}`)
+        await axios.delete(`${VITE_API}delete/car/${id}`,{
+      headers:{
+        "Content-Type":"application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         setViewCar(prev => prev.filter((car) => car._id !== id));
         navigate('/superadmin/viewCar');
       } catch (err) {
@@ -86,7 +91,7 @@
     axios
       .get(`${VITE_API}view/car`, {
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })

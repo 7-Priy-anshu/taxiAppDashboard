@@ -6,8 +6,8 @@ import { MdEmail } from "react-icons/md";
 import * as Yup from "yup";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import BackButton from "../../components/BackButton";
-import { useAuth } from "../../context/AuthContext";
+import BackButton from "../components/BackButton";
+import { useAuth } from "../context/AuthContext";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -25,9 +25,7 @@ const groupPermissions = [
     group: "Driver",
     items: [
       { _id: "view_driver", label: "View Driver" },
-      { _id: "add_driver", label: "Add Driver" },
-      { _id: "edit_driver", label: "Edit Driver" },
-      { _id: "delete_driver", label: "Delete Driver" },
+      { _id: "add_driver", label: "Add Driver" }
     ],
   },
   {
@@ -35,8 +33,6 @@ const groupPermissions = [
     items: [
       { _id: "view_customer", label: "View Customers" },
       { _id: "add_customer", label: "Add Customer" },
-      { _id: "edit_customer", label: "Edit Customer" },
-      { _id: "delete_customer", label: "Delete Customer" },
     ],
   },
   {

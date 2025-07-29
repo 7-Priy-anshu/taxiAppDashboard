@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ClientInvoice() {
   const months = [
@@ -36,7 +36,7 @@ export default function ClientInvoice() {
     try {
       const formattedMonth = String(selectedMonth).padStart(2, "0");
       const response = await axios.get(
-        `${import.meta.env.VITE_API}company/${clientId}/invoice/${selectedYear}-${formattedMonth}?tax=${taxPercent}%`
+        `${import.meta.env.VITE_API}company/${clientId}/invoice?month=${selectedYear}-${formattedMonth}?tax=${taxPercent}%`
       ,{
         headers:{
           "Content-type":"application/json",

@@ -72,7 +72,7 @@ export default function ViewHub() {
     setError(null);
     axios.get(`${VITE_API}view/hub`,{
       headers:{
-        "Content-Type":"json/application",
+        "Content-Type":"application/json",
         Authorization: `Bearer ${token}`,
       }
     })
