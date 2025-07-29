@@ -7,6 +7,7 @@ import { FaUser, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt, FaLock } fr
 import { MdEmail } from "react-icons/md";
 import { Link } from 'react-router-dom';
 import BackButton from '../components/BackButton';
+import { useAuth } from '../context/AuthContext';
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -18,22 +19,21 @@ const validationSchema = Yup.object({
   permissions: Yup.array().min(1, 'Select at least one permission'),
 });
 
-export default function AddAdmin() {
-  const { id } = useParams();
+export default function AddHR() {
+  const { id, clientId } = useParams();
+  const { token } = useAuth();
   const navigate = useNavigate();
   const VITE_API = import.meta.env.VITE_API;
-
 
   const [initialValues, setInitialValues] = useState({
     name: '',
     email: '',
     password: '',
     phoneNumber: '',
-    role: '',
+    role: '', // Set default role to "hr"
     clientEmail: '',
     permissions: [],
   });
-
 
   const groupPermissions = [
     {
@@ -50,118 +50,96 @@ export default function AddAdmin() {
         { _id: 'add_customer', label: 'Add Customer' }
       ],
     },
-    // {
-    //   group: "Car",
-    //   items: [
-    //     { _id: 'view_car', label: 'View Cars' },
-    //     { _id: 'add_car', label: 'Add Car' }
-    //   ],
-    // },
     {
-      group: "HR",
+      group: "BookRide",
       items: [
-        { _id: 'view_hr', label: 'View HR' },
-        { _id: 'add_hr', label: 'Create HR' }
-      ],
-    },
-    {
-      group: "Analytics",
-      items: [
-        { _id: "view_analytics", label: "View Analytics" },
+        { _id: "bookRide", label: "Book Ride" },
       ],
     },
   ];
 
   const [loading, setLoading] = useState(!!id);
   const [submitError, setSubmitError] = useState(null);
+  const [clients, setClients] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const clientsResponse = await axios.get(`${VITE_API}view/client`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setClients(clientsResponse.data.clients || []); // Corrected to match expected key
+
+        if (id) {
+          const response = await axios.get(`${VITE_API}view/client/${clientId}/person/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const hrData = response.data;
+          setInitialValues({
+            name: hrData.name || "",
+            email: hrData.email || "",
+            password: hrData.password ||"",
+            phoneNumber: hrData.phoneNumber || "",
+            role: hrData.role || "",
+            clientEmail: hrData.clientEmail || "",
+            permissions: hrData.permissions || [],
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error.response?.data || error.message);
+        setSubmitError("Failed to load data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [id, clientId, token, VITE_API]);
+
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      if (!id) {
-        // Update existing admin (PUT or PATCH)
-        await axios.post(`${VITE_API}add/admin`, values, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        //  await axios.post("http://183.18.18.71:4000/add/admin", values, {
-        //    headers: {
-        //      'Content-Type': 'application/json',
-        //    },
-        //  });
-        //  await axios.put(`http://183.18.18.71:4000/update/admin/${id}`, values, {
-        //    headers: {
-        //      'Content-Type': 'application/json',
-        //    },
-        //  });
-      }
-      else {
-        await axios.put(`${VITE_API}update/admin/${id}`, values, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      const matchedClient = clients.find(c => c.clientEmail === values.clientEmail);
+      const resolvedClientId = matchedClient?._id;
 
-        // Create new admin (POST)
-        //  await axios.post("http://183.18.18.71:4000/add/admin", values, {
-        //    headers: {
-        //      'Content-Type': 'application/json',
-        //    },
-        //  });
-      }
-      //  if (id) {
-      //    // Update existing admin (PUT or PATCH)
-      //    await axios.put(`http://183.18.18.71:4000/update/admin/${id}`, values, {
-      //      headers: {
-      //        'Content-Type': 'application/json',
-      //      },
-      //    });
-      //   }
-      //   else {
-      //    // Create new admin (POST)
-      //    await axios.post("http://183.18.18.71:4000/add/admin", values, {
-      //      headers: {
-      //        'Content-Type': 'application/json',
-      //      },
-      //    });
-      //  }
+      console.log("Resolved clientId:", resolvedClientId);
 
-      navigate('/superadmin/viewAdmin');
+      if (!resolvedClientId) {
+        setSubmitError("Invalid client selected. Please choose a valid client.");
+        return;
+      }
+
+      const url = id
+        ? `${VITE_API}update/client/${resolvedClientId}/person/${id}`
+        : `${VITE_API}add/client/${resolvedClientId}/person`;
+
+      await axios({
+        method: id ? 'put' : 'post',
+        url,
+        data: values,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      navigate('/person/viewHR'); // Updated navigation to HR context
     } catch (error) {
       console.error("Submission error:", error.response?.data || error.message);
-      setSubmitError("Failed to submit admin data. Please try again.");
+      setSubmitError("Failed to submit HR data. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
-    const [clients, setclients] = useState([]);
-  
-    useEffect(() => {
-      // Replace with your real API endpoint
-      axios.get(`${VITE_API}view/client`)
-        .then((response) => {
-          setclients(response.data.clientData || []);
-          console.log(response.data.clientData )
-        })
-        .catch((error) => {
-          console.error("Failed to fetch client:", error);
-        });
-    }, []);
-  
-  if (loading) return <div className="text-center mt-10">Loading admin info...</div>;
+
+  if (loading) return <div className="text-center mt-10">Loading HR info...</div>;
   return (
-    // <div className="max-w-4xl mx-auto p-4 sm:p-8">
-    // <div className="flex items-center justify-center min-h-screen bg-white  p-4">
     <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
-       <div className="w-full max-w-4xl flex gap-2">
-        {/* Add Admin */}
-        <Link to="/superadmin">
-          <BackButton text="Back">
-          </BackButton>
+      <div className="w-full max-w-4xl flex gap-2">
+        <Link to="/person">
+          <BackButton text="Back" />
         </Link>
       </div>
       <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
-        <h1 className="text-3xl font-bold mb-6 text-center realtive z-50">{id ? 'Edit' : 'Add'} Admin</h1>
-        {/* <h1 className="text-2xl sm:text-3xl font-bold mb-6">{id ? 'Edit' : 'Add'} Admin</h1> */}
+        <h1 className="text-3xl font-bold mb-6 text-center relative z-50">{id ? 'Edit' : 'Add'} HR</h1>
         {submitError && (
           <div className="text-red-500 bg-red-100 p-3 rounded mb-4 flex justify-between items-center">
             {submitError}
@@ -194,8 +172,6 @@ export default function AddAdmin() {
                 />
               </div>
 
-
-              {/* Email */}
               <div className="relative">
                 <Field
                   type="email"
@@ -215,7 +191,7 @@ export default function AddAdmin() {
 
               <div className="relative">
                 <Field
-                  type="text"
+                  type="password"
                   name="password"
                   placeholder="Enter Password"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
@@ -229,6 +205,7 @@ export default function AddAdmin() {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
               <div className="relative">
                 <Field
                   type="text"
@@ -245,11 +222,14 @@ export default function AddAdmin() {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
               <div className="relative">
                 <Field
                   type="text"
                   name="role"
                   placeholder="Enter Role"
+                  value="hr" // Fixed to "hr" as it's an HR form
+                  disabled // Prevent manual editing
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
@@ -261,6 +241,7 @@ export default function AddAdmin() {
                   className="text-red-500 text-xs mt-1"
                 />
               </div>
+
               <div className="relative">
                 <Field
                   as="select"
@@ -274,7 +255,6 @@ export default function AddAdmin() {
                     </option>
                   ))}
                 </Field>
-
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaUser className="text-gray-500" />
                 </div>
@@ -285,23 +265,7 @@ export default function AddAdmin() {
                 />
               </div>
 
-              <div className="relative">
-                <Field
-                  type="text"
-                  name="password"
-                  placeholder="Enter the Password"
-                  className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
-                  <FaUser className="text-gray-500" />
-                </div>
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-red-500 text-xs mt-1"
-                />
-              </div>
-
+              {/* Removed duplicate password field */}
               <div className="col-span-full mt-4">
                 <label className="block font-medium mb-2 text-sm">Assign Permissions</label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -363,11 +327,10 @@ export default function AddAdmin() {
                 <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
               </div>
 
-
               <div className="col-span-full flex justify-end gap-4 mt-6">
                 <button
                   type="button"
-                  onClick={() => navigate('/superadmin/viewAdmin')}
+                  onClick={() => navigate('/person/viewHR')}
                   className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
                 >
                   Cancel
@@ -377,7 +340,7 @@ export default function AddAdmin() {
                   disabled={isSubmitting}
                   className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white px-4 py-2 rounded disabled:opacity-50"
                 >
-                  {id ? 'Update' : 'Add'} Admin
+                  {id ? 'Update' : 'Add'} HR
                 </button>
               </div>
             </Form>
@@ -387,6 +350,438 @@ export default function AddAdmin() {
     </div>
   );
 }
+// //----------------------------------Add Admin in---------------------------------------------
+
+// import { useEffect, useState } from 'react';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import { Formik, Form, Field, ErrorMessage } from 'formik';
+// import * as Yup from 'yup';
+// import axios from 'axios';
+// import { FaUser, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt, FaLock } from "react-icons/fa";
+// import { MdEmail } from "react-icons/md";
+// import { Link } from 'react-router-dom';
+// import BackButton from '../components/BackButton';
+// import { useAuth } from '../context/AuthContext';
+
+// const validationSchema = Yup.object({
+//   name: Yup.string().required('Name is required'),
+//   email: Yup.string().email('Invalid email').required('Email is required'),
+//   phoneNumber: Yup.string()
+//     .matches(/^[0-9]{10}$/, 'Must be a 10-digit phone number')
+//     .required('Phone is required'),
+//   password: Yup.string().required('Password is required'),
+//   permissions: Yup.array().min(1, 'Select at least one permission'),
+// });
+
+// export default function AddAdmin() {
+//   const { id,clientId } = useParams();
+//   const {token} = useAuth();
+//   const navigate = useNavigate();
+//   const VITE_API = import.meta.env.VITE_API;
+
+
+//   const [initialValues, setInitialValues] = useState({
+//     name: '',
+//     email: '',
+//     password: '',
+//     phoneNumber: '',
+//     role: '',
+//     clientEmail: '',
+//     permissions: [],
+//   });
+
+
+//   const groupPermissions = [
+//     {
+//       group: "Driver",
+//       items: [
+//         { _id: "view_driver", label: "View Driver" },
+//         { _id: "add_driver", label: "Add Driver" }
+//       ],
+//     },
+//     {
+//       group: "Customer",
+//       items: [
+//         { _id: 'view_customer', label: 'View Customers' },
+//         { _id: 'add_customer', label: 'Add Customer' }
+//       ],
+//     },
+//     // {
+//     //   group: "Car",
+//     //   items: [
+//     //     { _id: 'view_car', label: 'View Cars' },
+//     //     { _id: 'add_car', label: 'Add Car' }
+//     //   ],
+//     // },
+//     {
+//       group: "HR",
+//       items: [
+//         { _id: 'view_hr', label: 'View HR' },
+//         { _id: 'add_hr', label: 'Create HR' }
+//       ],
+//     },
+//     {
+//       group: "BookRide",
+//       items: [
+//         { _id: "bookRide", label: "Book Ride" },
+//       ],
+//     },
+//   ];
+
+//   const [loading, setLoading] = useState(!!id);
+//   const [submitError, setSubmitError] = useState(null);
+//   const handleSubmit = async (values, { setSubmitting }) => {
+//   try {
+//     // Find clientId from email
+//     const matchedClient = clients.find(c => c.clientEmail === values.clientEmail);
+//     const resolvedClientId = matchedClient?._id;
+
+//     console.log("Resolved clientId:", resolvedClientId);
+
+//     if (!resolvedClientId) {
+//       setSubmitError("Invalid client selected. Please choose a valid client.");
+//       return;
+//     }
+
+//     const url = id
+//       ? `${VITE_API}update/client/${resolvedClientId}/main-admin/${id}`
+//       : `${VITE_API}add/client/${resolvedClientId}/main-admin`;
+
+//     await axios({
+//       method: id ? 'put' : 'post',
+//       url,
+//       data: values,
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     navigate('/superadmin/viewAdmin');
+//   } catch (error) {
+//     console.error("Submission error:", error.response?.data || error.message);
+//     setSubmitError("Failed to submit admin data. Please try again.");
+//   } finally {
+//     setSubmitting(false);
+//   }
+// };
+
+//   // const handleSubmit = async (values, { setSubmitting }) => {
+//   //   try {
+//   //     console.log("Admintk:",token)
+//   //     console.log("clientId:",clientId)
+//   //     if (!id) {
+//   //       // Update existing admin (PUT or PATCH)
+//   //       await axios.post(`${VITE_API}add/client/${clientId}/main-admin`, values, {
+//   //         headers: {
+//   //           'Content-Type': 'application/json',
+//   //           Authorization: `Bearer ${token}`,
+//   //         },
+//   //       });
+//   //       //  await axios.post("http://183.18.18.71:4000/add/admin", values, {
+//   //       //    headers: {
+//   //       //      'Content-Type': 'application/json',
+//   //       //    },
+//   //       //  });
+//   //       //  await axios.put(`http://183.18.18.71:4000/update/admin/${id}`, values, {
+//   //       //    headers: {
+//   //       //      'Content-Type': 'application/json',
+//   //       //    },
+//   //       //  });
+//   //     }
+//   //     else {
+//   //       await axios.put(`${VITE_API}update/client/${clientId}/main-admin/${id}`, values, {
+//   //         headers: {
+//   //           'Content-Type': 'application/json',
+//   //         },
+//   //       });
+
+//   //       // Create new admin (POST)
+//   //       //  await axios.post("http://183.18.18.71:4000/add/admin", values, {
+//   //       //    headers: {
+//   //       //      'Content-Type': 'application/json',
+//   //       //    },
+//   //       //  });
+//   //     }
+//   //     //  if (id) {
+//   //     //    // Update existing admin (PUT or PATCH)
+//   //     //    await axios.put(`http://183.18.18.71:4000/update/admin/${id}`, values, {
+//   //     //      headers: {
+//   //     //        'Content-Type': 'application/json',
+//   //     //      },
+//   //     //    });
+//   //     //   }
+//   //     //   else {
+//   //     //    // Create new admin (POST)
+//   //     //    await axios.post("http://183.18.18.71:4000/add/admin", values, {
+//   //     //      headers: {
+//   //     //        'Content-Type': 'application/json',
+//   //     //      },
+//   //     //    });
+//   //     //  }
+
+//   //     navigate('/superadmin/viewAdmin');
+//   //   } catch (error) {
+//   //     console.error("Submission error:", error.response?.data || error.message);
+//   //     setSubmitError("Failed to submit admin data. Please try again.");
+//   //   } finally {
+//   //     setSubmitting(false);
+//   //   }
+//   // };
+//     const [clients, setclients] = useState([]);
+  
+//     useEffect(() => {
+//       // Replace with your real API endpoint
+//       axios.get(`${VITE_API}view/client`)
+//         .then((response) => {
+//           setclients(response.data.clientData || []);
+//           console.log(response.data.clientData )
+//         })
+//         .catch((error) => {
+//           console.error("Failed to fetch client:", error);
+//         });
+//     }, []);
+  
+//   if (loading) return <div className="text-center mt-10">Loading admin info...</div>;
+//   return (
+//     // <div className="max-w-4xl mx-auto p-4 sm:p-8">
+//     // <div className="flex items-center justify-center min-h-screen bg-white  p-4">
+//     <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+//        <div className="w-full max-w-4xl flex gap-2">
+//         {/* Add Admin */}
+//         <Link to="/superadmin">
+//           <BackButton text="Back">
+//           </BackButton>
+//         </Link>
+//       </div>
+//       <div className="w-full max-w-4xl bg-white p-6 sm:p-10 rounded-xl border-t border-t-gray-300 shadow-md">
+//         <h1 className="text-3xl font-bold mb-6 text-center realtive z-50">{id ? 'Edit' : 'Add'} Admin</h1>
+//         {/* <h1 className="text-2xl sm:text-3xl font-bold mb-6">{id ? 'Edit' : 'Add'} Admin</h1> */}
+//         {submitError && (
+//           <div className="text-red-500 bg-red-100 p-3 rounded mb-4 flex justify-between items-center">
+//             {submitError}
+//             <button onClick={() => setSubmitError(null)} className="text-lg">✕</button>
+//           </div>
+//         )}
+
+//         <Formik
+//           initialValues={initialValues}
+//           validationSchema={validationSchema}
+//           onSubmit={handleSubmit}
+//           enableReinitialize
+//         >
+//           {({ isSubmitting, values, setFieldValue }) => (
+//             <Form className="grid grid-cols-1 sm:grid-cols-2 gap-4" action="/formData" method="POST">
+//               <div className="relative">
+//                 <Field
+//                   type="text"
+//                   name="name"
+//                   placeholder="Enter Name"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaUser className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="name"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+
+
+//               {/* Email */}
+//               <div className="relative">
+//                 <Field
+//                   type="email"
+//                   name="email"
+//                   placeholder="Enter Email"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <MdEmail className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="email"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+
+//               <div className="relative">
+//                 <Field
+//                   type="text"
+//                   name="password"
+//                   placeholder="Enter Password"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaLock className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="password"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+//               <div className="relative">
+//                 <Field
+//                   type="text"
+//                   name="phoneNumber"
+//                   placeholder="Enter Contact Number"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaPhone className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="phoneNumber"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+//               <div className="relative">
+//                 <Field
+//                   type="text"
+//                   name="role"
+//                   placeholder="Enter Role"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaUser className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="role"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+//               <div className="relative">
+//                 <Field
+//                   as="select"
+//                   name="clientEmail"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 >
+//                   <option value="">Select Client Name</option>
+//                   {clients.map((client) => (
+//                     <option key={client._id} value={client.clientEmail}>
+//                       {client.clientEmail}
+//                     </option>
+//                   ))}
+//                 </Field>
+
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaUser className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="clientEmail"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+
+//               <div className="relative">
+//                 <Field
+//                   type="text"
+//                   name="password"
+//                   placeholder="Enter the Password"
+//                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
+//                 />
+//                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+//                   <FaUser className="text-gray-500" />
+//                 </div>
+//                 <ErrorMessage
+//                   name="password"
+//                   component="div"
+//                   className="text-red-500 text-xs mt-1"
+//                 />
+//               </div>
+
+//               <div className="col-span-full mt-4">
+//                 <label className="block font-medium mb-2 text-sm">Assign Permissions</label>
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                   {groupPermissions.map((group) => (
+//                     <div key={group.group} className="rounded-lg p-4 shadow-sm">
+//                       <div className="flex justify-between items-center mb-2">
+//                         <h3 className="font-semibold text-sm">{group.group}</h3>
+//                         <button
+//                           type="button"
+//                           onClick={() => {
+//                             const groupIds = group.items.map(item => item._id);
+//                             const allChecked = groupIds.every(pid => values.permissions.includes(pid));
+//                             if (allChecked) {
+//                               setFieldValue(
+//                                 "permissions",
+//                                 values.permissions.filter(pid => !groupIds.includes(pid))
+//                               );
+//                             } else {
+//                               setFieldValue(
+//                                 "permissions",
+//                                 Array.from(new Set([...values.permissions, ...groupIds]))
+//                               );
+//                             }
+//                           }}
+//                           className="text-blue-600 text-xs hover:underline"
+//                         >
+//                           {
+//                             group.items.every(pid => values.permissions.includes(pid._id))
+//                               ? "Unselect All"
+//                               : "Select All"
+//                           }
+//                         </button>
+//                       </div>
+//                       <div className="flex flex-wrap gap-2">
+//                         {group.items.map((perm) => (
+//                           <label
+//                             key={perm._id}
+//                             className={`
+//                 flex items-center gap-2 px-3 py-2 border rounded cursor-pointer
+//                 ${values.permissions.includes(perm._id)
+//                                 ? "bg-blue-50 border-blue-500"
+//                                 : "bg-white border-gray-300"
+//                               }
+//               `}
+//                           >
+//                             <Field
+//                               type="checkbox"
+//                               name="permissions"
+//                               value={perm._id}
+//                               className="accent-blue-600"
+//                             />
+//                             <span className="text-xs">{perm.label}</span>
+//                           </label>
+//                         ))}
+//                       </div>
+//                     </div>
+//                   ))}
+//                 </div>
+//                 <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//               </div>
+
+
+//               <div className="col-span-full flex justify-end gap-4 mt-6">
+//                 <button
+//                   type="button"
+//                   onClick={() => navigate('/superadmin/viewAdmin')}
+//                   className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
+//                 >
+//                   Cancel
+//                 </button>
+//                 <button
+//                   type="submit"
+//                   disabled={isSubmitting}
+//                   className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white px-4 py-2 rounded disabled:opacity-50"
+//                 >
+//                   {id ? 'Update' : 'Add'} Admin
+//                 </button>
+//               </div>
+//             </Form>
+//           )}
+//         </Formik>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 // -----------------------------------------------------Fetching Data from API ---------------------------------------------------------

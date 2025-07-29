@@ -1,93 +1,171 @@
-import React from 'react';
-import SidebarItem from './SidebarItem';
-import { FaUser, FaBook, FaCar, FaUserPlus, FaTable } from 'react-icons/fa';
-import { useAuth } from '../../context/AuthContext'; // if using Vite with default resolution
+import React from "react";
+import SidebarItem from "./SidebarItem";
+import { useAuth } from "../../context/AuthContext"; // Adjusted path
+import { iconMap } from "../../shared/icons"; // Import iconMap
 
 const sidebarItems = [
   {
-    icon: 'FaUser',
-    label: 'Manage Driver',
-    requiredPermissions: ['add_driver', 'view_driver'],
+    icon: "FaUser",
+    label: "Manage Driver",
+    requiredPermissions: ["add_driver", "view_driver"],
   },
   {
-    icon: 'FaBook',
-    label: 'Manage Customer',
-    requiredPermissions: ['add_customer', 'view_customer'],
+    icon: "FaBook",
+    label: "Manage Customer",
+    requiredPermissions: ["add_customer", "view_customer"],
   },
   {
-    icon: 'FaCar',
-    label: 'Manage Car',
-    requiredPermissions: ['add_car', 'view_car'],
+    icon: "FaCar",
+    label: "Manage Car",
+    requiredPermissions: ["add_car", "view_car"],
   },
   {
-    icon: 'FaCar',
-    label: 'Manage HR',
-    requiredPermissions: ['add_hr', 'view_hr'],
+    icon: "FaCar",
+    label: "Manage HR",
+    requiredPermissions: ["add_hr", "view_hr"],
   },
   {
-    icon: 'FaCar',
-    label:'Book Ride',
-    link: '/admin/bookRide',
-    requiredPermissions: ['book_ride','book_ride'],
-  }
-  // {
-  //   icon: 'FaUser',
-  //   label: 'Superadmin',
-  //   requiredRoles: ['superadmin'],
-  // },
-  // {
-  //   icon: 'FaUser',
-  //   label: 'Admin',
-  //   requiredRoles: ['admin'],
-  // },
-  // {
-  //   icon: 'FaUser',
-  //   label: 'User',
-  //   requiredRoles: ['user'],
-  // },
+    icon: "FaCar",
+    label: "Book Ride",
+    link: "/main-admin/bookRide",
+    requiredPermissions: ["bookRide"],
+  },
 ];
 
 const dropdownItem = [
   [
-    { icon: 'FaUserPlus', label: 'Add Driver', link: '/admin/addDriver', permission: 'add_driver' },
-    { icon: 'FaTable', label: 'View Drivers', link: '/admin/viewDriver', permission: 'view_driver' },
+    { icon: "FaUserPlus", label: "Add Driver", link: "/main-admin/addDriver", permission: "add_driver" },
+    { icon: "FaTable", label: "View Drivers", link: "/main-admin/viewDriver", permission: "view_driver" },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Add Customer', link: '/admin/addCustomer', permission: 'add_customer' },
-    { icon: 'FaTable', label: 'View Customer', link: '/admin/viewCustomer', permission: 'view_customer' },
+    { icon: "FaUserPlus", label: "Add Customer", link: "/main-admin/addCustomer", permission: "add_customer" },
+    { icon: "FaTable", label: "View Customer", link: "/main-admin/viewCustomer", permission: "view_customer" },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Add Car', link: '/admin/addCar', permission: 'add_car' },
-    { icon: 'FaTable', label: 'View Car', link: '/admin/viewCar', permission: 'view_car' },
+    { icon: "FaUserPlus", label: "Add Car", link: "/main-admin/addCar", permission: "add_car" },
+    { icon: "FaTable", label: "View Car", link: "/main-admin/viewCar", permission: "view_car" },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Create Admin', link: '/admin/addAdmin', permission: 'add_admin' },
-    { icon: 'FaTable', label: 'View Admin', link: '/admin/viewAdmin', permission: 'view_admin' },
+    { icon: "FaUserPlus", label: "Create Admin", link: "/main-admin/addAdmin", permission: "add_admin" },
+    { icon: "FaTable", label: "View Admin", link: "/main-admin/viewAdmin", permission: "view_admin" },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Create HR', link: '/admin/addHr', permission: 'add_hr' },
-    { icon: 'FaTable', label: 'View HR', link: '/admin/viewHr', permission: 'view_hr' },
+    { icon: "FaUserPlus", label: "Create HR", link: "/main-admin/addHr", permission: "add_hr" },
+    { icon: "FaTable", label: "View HR", link: "/main-admin/viewHr", permission: "view_hr" },
   ],
   [
-    { icon: 'FaUserPlus', label: 'Book Rides', link: '/admin/bookRide', permission: 'book_ride' },
-    { icon: 'FaUserPlus', label: 'Book Rides', link: '/admin/bookRide', permission: 'book_ride' },
+    { icon: "FaUserPlus", label: "Book Rides", link: "/main-admin/bookRide", permission: "bookRide" },
   ],
-  [], // Empty array for "User" to avoid undefined issues
+  [], // Empty array for "User" to avoid issues
 ];
 
-export default function Sidebar() {
-  const { user } = useAuth(); // user.permissions
-  console.log('Sidebar user:', user); // Debug log
+export default function Sidebar({ user: propUser }) {
+  const { user } = useAuth(); // Use context user
+  const finalUser = propUser || user; // Fallback to propUser if provided
 
-    if (!user) {
+  console.log("Sidebar user:", finalUser); // Debug log
+
+  if (!finalUser) {
     return <div className="p-4 text-gray-500">Loading sidebar...</div>;
   }
+
   return (
     <aside className="w-64 h-full bg-gray-100 shadow-lg overflow-y-auto">
-      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={user} />
+      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={finalUser} iconMap={iconMap} />
     </aside>
   );
 }
+//--------------------------Without User Auth--------------------------
+// import React from 'react';
+// import SidebarItem from './SidebarItem';
+// import { FaUser, FaBook, FaCar, FaUserPlus, FaTable } from 'react-icons/fa';
+// import { useAuth } from '../../context/AuthContext'; // if using Vite with default resolution
+
+// const sidebarItems = [
+//   {
+//     icon: 'FaUser',
+//     label: 'Manage Driver',
+//     requiredPermissions: ['add_driver', 'view_driver'],
+//   },
+//   {
+//     icon: 'FaBook',
+//     label: 'Manage Customer',
+//     requiredPermissions: ['add_customer', 'view_customer'],
+//   },
+//   {
+//     icon: 'FaCar',
+//     label: 'Manage Car',
+//     requiredPermissions: ['add_car', 'view_car'],
+//   },
+//   {
+//     icon: 'FaCar',
+//     label: 'Manage HR',
+//     requiredPermissions: ['add_hr', 'view_hr'],
+//   },
+//   {
+//     icon: 'FaCar',
+//     label:'Book Ride',
+//     link: '/main-admin/bookRide',
+//     requiredPermissions: ['book_ride','book_ride'],
+//   }
+//   // {
+//   //   icon: 'FaUser',
+//   //   label: 'Superadmin',
+//   //   requiredRoles: ['superadmin'],
+//   // },
+//   // {
+//   //   icon: 'FaUser',
+//   //   label: 'Admin',
+//   //   requiredRoles: ['admin'],
+//   // },
+//   // {
+//   //   icon: 'FaUser',
+//   //   label: 'User',
+//   //   requiredRoles: ['user'],
+//   // },
+// ];
+
+// const dropdownItem = [
+//   [
+//     { icon: 'FaUserPlus', label: 'Add Driver', link: '/main-admin/addDriver', permission: 'add_driver' },
+//     { icon: 'FaTable', label: 'View Drivers', link: '/main-admin/viewDriver', permission: 'view_driver' },
+//   ],
+//   [
+//     { icon: 'FaUserPlus', label: 'Add Customer', link: '/main-admin/addCustomer', permission: 'add_customer' },
+//     { icon: 'FaTable', label: 'View Customer', link: '/main-admin/viewCustomer', permission: 'view_customer' },
+//   ],
+//   [
+//     { icon: 'FaUserPlus', label: 'Add Car', link: '/main-admin/addCar', permission: 'add_car' },
+//     { icon: 'FaTable', label: 'View Car', link: '/main-admin/viewCar', permission: 'view_car' },
+//   ],
+//   [
+//     { icon: 'FaUserPlus', label: 'Create Admin', link: '/main-admin/addAdmin', permission: 'add_admin' },
+//     { icon: 'FaTable', label: 'View Admin', link: '/main-admin/viewAdmin', permission: 'view_admin' },
+//   ],
+//   [
+//     { icon: 'FaUserPlus', label: 'Create HR', link: '/main-admin/addHr', permission: 'add_hr' },
+//     { icon: 'FaTable', label: 'View HR', link: '/main-admin/viewHr', permission: 'view_hr' },
+//   ],
+//   [
+//     { icon: 'FaUserPlus', label: 'Book Rides', link: '/main-admin/bookRide', permission: 'book_ride' },
+//     { icon: 'FaUserPlus', label: 'Book Rides', link: '/main-admin/bookRide', permission: 'book_ride' },
+//   ],
+//   [], // Empty array for "User" to avoid undefined issues
+// ];
+
+// export default function Sidebar() {
+//   const { user } = useAuth(); // user.permissions
+//   console.log('Sidebar user:', user); // Debug log
+
+//     if (!user) {
+//     return <div className="p-4 text-gray-500">Loading sidebar...</div>;
+//   }
+//   return (
+//     <aside className="w-64 h-full bg-gray-100 shadow-lg overflow-y-auto">
+//       <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={user} />
+//     </aside>
+//   );
+// }
 
 // import React from 'react';
 // import SidebarItem from './SidebarItem';

@@ -15,11 +15,11 @@ import ClientInvoice from "./pages/ClientInvoice";
 import SuperadminDashboard from "./pages/superadmin/Dashboard";
 import AddDriver from "./pages/superadmin/AddDriver";
 import AddCar from "./pages/superadmin/AddCar";
-import AddCustomer from "./pages/hr/AddCustomer";
+import AddCustomer from "./pages/person/AddCustomer";
 import ViewAdmin from "./pages/superadmin/ViewAdmin";
-import ViewDriver from "./pages/hr/ViewDriver";
+import ViewDriver from "./pages/person/ViewDriver";
 import ViewCar from "./pages/superadmin/ViewCar";
-import ViewCustomer from "./pages/hr/ViewCustomer";
+import ViewCustomer from "./pages/person/ViewCustomer";
 import BookRide from "./pages/BookRide";
 import AddAdmin from "./pages/AddAdmin";
 import AddClient from "./pages/superadmin/AddClient";
@@ -31,13 +31,13 @@ import AssignCarToHub from "./pages/superadmin/AssignCarToHub";
 import ViewCarInHub from "./pages/superadmin/ViewCarInHub";
 import DriverHistory from "./pages/superadmin/DriverHistory";
 import ViewDriverHistory from "./pages/superadmin/ViewDriverHistory";
-import CustomerDetails from "./pages/superadmin/CustomerDetails";
+import ViewAdminTable from "./pages/superadmin/ViewAdminTable";
 //----------------------------------Admin--------------------------------------
-import CompanyAdminDashboard from "./pages/admin/Dashboard";
+import CompanyAdminDashboard from "./pages/main-admin/Dashboard";
 // import CompanyAdminDashboard from
-import AddHR from "./pages/admin/AddHR";
-import HRDashboard from "./pages/hr/Dashboard";
-import EmployeeDetails from "./pages/superadmin/CustomerDetails";
+import AddHR from "./pages/main-admin/AddHR";
+import HRDashboard from "./pages/person/Dashboard";
+import CustomerDetails from "./pages/superadmin/CustomerDetails";
 
 export default function App() {
   return (
@@ -53,10 +53,10 @@ export default function App() {
 }>
 
   <Route path="customerDetails/:customerId" element={<CustomerDetails />} />
-  <Route path="clientInvoice" element={<ClientInvoice />} />
   <Route path="driverId" element={<DriverId />} />
   <Route path="dashboard" element={<SuperadminDashboard />} />
   <Route path="addAdmin" element={<AddAdmin />} />
+  
   <Route path="viewAdmin" element={<ViewAdmin />} />
   <Route path="addClient" element={<AddClient />} />
   <Route path="viewClient" element={<ViewClient />} />
@@ -78,9 +78,11 @@ export default function App() {
 
   {/* Dynamic Client Routes */}
   {/* <Route path="client/:clientId/employeeDetails/:id" element={<EmployeeDetails />} /> */}
+  <Route path="client/:clientId/viewAdminTable" element={<ViewAdminTable />} />
+  <Route path="client/:clientId/clientInvoice" element={<ClientInvoice />} />
   <Route path="client/:clientId/clientDetails" element={<ClientDetails />} />
   <Route path="client/:clientId/addHr" element={<AddHR />} />
-  <Route path="client/:clientId/addAdmin" element={<AddAdmin />} />
+  <Route path="client/:clientId/main-admin" element={<AddAdmin />} />
   <Route path="client/:clientId/viewAdmin" element={<ViewAdmin />} />
   <Route path="client/:clientId/bookRide" element={<BookRide />} />
   <Route path="client/:clientId/addDriver" element={<AddDriver />} />
@@ -89,7 +91,6 @@ export default function App() {
   <Route path="client/:clientId/viewCustomer" element={<ViewCustomer />} />
   <Route path="client/:clientId/driver-history" element={<DriverHistory />} />
 </Route>
-
 
       {/* <Route
         path="/superAdmin/*"
@@ -125,30 +126,43 @@ export default function App() {
 
       {/* Company Admin */}
       <Route
-        path="/admin/*"
+        path="/main-admin/*"
         element={
-          <ProtectedRoute allowedRoles={["admin"]}>
+          // <ProtectedRoute allowedRoles={["main-admin"]}>
             <CompanyAdminLayout />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         }
       >
-        <Route path="dashboard" element={<CompanyAdminDashboard />} />
-        <Route path="client/:clientId/addHr" element={<AddHR />} />
+      <Route path="dashboard" element={<CompanyAdminDashboard />} />
         <Route path="addHr" element={<AddHR />} />
+        <Route path="client/:clientId/person" element={<AddHR />} />
+        {/* <Route path="addHr" element={<AddHR />} /> */}
         <Route path="addAdmin" element={<AddAdmin />} />
+        <Route path="addDriver" element={<AddDriver />} /> {/* Added */}
+        <Route path="addCustomer" element={<AddCustomer />} /> {/* Added */}
+        <Route path="viewDriver" element={<ViewDriver />} /> {/* Added */}
+        <Route path="viewCustomer" element={<ViewCustomer />} /> {/* Added */}
+        <Route path="viewCar" element={<ViewCar />} /> 
+        <Route path="bookRide" element={<BookRide />} />
+
       </Route>
 
       {/* HR */}
-      <Route
-        path="/hr/*"
-        element={
-          <ProtectedRoute allowedRoles={["hr"]}>
-            <HRLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<HRDashboard />} />
-      </Route>
+<Route
+  path="/hr/*"
+  element={
+    // <ProtectedRoute allowedRoles={["hr"]}>
+      <HRLayout />
+    // </ProtectedRoute>
+  }
+>
+  <Route path="dashboard" element={<HRDashboard />} />
+  <Route path="addDriver" element={<AddDriver />} />
+  <Route path="addCustomer" element={<AddCustomer />} />
+  <Route path="viewDriver" element={<ViewDriver />} />
+  <Route path="viewCustomer" element={<ViewCustomer />} />
+  <Route path="bookRide" element={<BookRide />} />
+</Route>
     </Routes>
   );
 }

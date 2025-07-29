@@ -242,7 +242,7 @@ import { useAuth } from "../../context/AuthContext";
 import BackButton from "../../components/BackButton";
 
 export default function AssignCarToHub() {
-  const {user} = useAuth();
+  const {user,token} = useAuth();
   const { hubId} = useParams();
   const navigate = useNavigate();
   const [hub, setHub] = useState({});
@@ -257,15 +257,25 @@ export default function AssignCarToHub() {
     if (!user || !user._id || !hubId) return; // guard clause
 
     const fetchHub = async () => {
-      const res = await axios.get(`${VITE_API}view/hub/${hubId}`);
-      setHub(res.data);
-      console.log(res.data);
+      const res = await axios.get(`${VITE_API}view/hub/${hubId}`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    setHub(res.data);
+    console.log("View Hub:",res.data);
     };
 
     const fetchCars = async () => {
-      const res = await axios.get(`${VITE_API}view/car/${user._id}/status=unAssign`,);
-      setCars(res.data);
-      console.log(res.data);
+      const res = await axios.get(`${VITE_API}view/car/status=unAssign`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    setCars(res.data);
+    console.log("Fetch Cars",res.data);
     };
 
     // const fetchAssignedCars = async () => {
@@ -293,7 +303,12 @@ export default function AssignCarToHub() {
     const payload = newlyAssigned.map((car) => ({ ...car, hubId: hub._id }));
 
     try {
-      await axios.post(`${VITE_API}assign/carHub`, { cars: payload });
+      await axios.post(`${VITE_API}assign/carHub`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    }, { cars: payload });
       setAssignedCars((prev) => [...prev, ...newlyAssigned]);
       setCars((prev) => prev.filter((car) => !selectedCars.includes(car._id)));
       setSelectedCars([]);

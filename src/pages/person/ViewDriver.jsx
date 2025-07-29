@@ -81,7 +81,12 @@ export default function ViewDriver() {
     setIsLoading(true);
     setError(null);
     axios
-      .get(`${VITE_API}view/driver/${user.id}`)
+      .get(`${VITE_API}view/driver`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then((res) => {
         setViewDriver(res.data.driverData);
         setIsLoading(false);

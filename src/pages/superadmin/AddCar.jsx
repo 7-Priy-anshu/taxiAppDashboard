@@ -16,7 +16,7 @@ const CarSchema = Yup.object().shape({
 
 export default function AddCar() {
   const { id } = useParams();
-  const {user} = useAuth();
+  const {user,token} = useAuth();
   const navigate = useNavigate();
 
   const [submitError, setSubmitError] = useState(null);
@@ -33,7 +33,12 @@ export default function AddCar() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`${VITE_API}add/car`)
+      axios.get(`${VITE_API}add/car`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         .then(res => {
           console.log("Fetched car data:", res.data);
           setInitialValues(res.data); // or res.data.car
@@ -50,12 +55,22 @@ export default function AddCar() {
 
   const handleSubmit = (values) => {
     if (id) {
-      axios.put(`${VITE_API}update/car/${id}`, values)
+      axios.put(`${VITE_API}update/car/${id}`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         .then(() => {
           navigate(`/superadmin/viewCar/${user._id}`);
         }).catch(err => console.error("Update failed:", err));
     } else {
-      axios.post(`${VITE_API}add/car/${user._id}`, values)
+      axios.post(`${VITE_API}add/car`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         .then(() => navigate("/superadmin/viewCar"))
         .catch(err => console.error("Add failed:", err));
     }

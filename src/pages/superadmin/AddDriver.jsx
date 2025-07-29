@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 export default function AddDriver() {
   const { id, clientId } = useParams();
   // const { clientId } = useParams(); 
-  const { user } = useAuth();
+  const { user,token } = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const [initialValues, setInitialValues] = useState({
@@ -59,12 +59,22 @@ export default function AddDriver() {
 const submitDriver = (values) => {
   if (id) {
     axios
-      .put(`${VITE_API}update/driver/${id}`, values)
+      .put(`${VITE_API}update/driver/${id}`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Update failed:", err));
   } else {
     axios
-      .post(`${VITE_API}add/driver/${clientId}`, values)
+      .post(`${VITE_API}add/driver/${clientId}`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then(() => navigate(`/superAdmin/client/${clientId}/viewDriver`))
       .catch((err) => console.error("Add failed:", err));
   }

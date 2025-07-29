@@ -3,9 +3,10 @@ import React from 'react'
 export default function Button(props){
   return (
         <button
+        // py-1.5 px-2.5 
       className="
         max-sm:text-[12px] 
-        py-1.5 px-2.5 
+        py-1 px-1
         mb-2 sm:mb-0 
         cursor-pointer
         sm:text-xs sm:px-6 sm:py-3 

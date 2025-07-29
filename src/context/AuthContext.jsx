@@ -3,36 +3,88 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);           // User object (id, name, etc.)
+  const [token, setToken] = useState(null);         // JWT or access token
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    // console.log("Stored user:", storedUser);
-    if (storedUser && storedUser !== "undefined") {
+    const storedToken = localStorage.getItem('userToken');
+
+    if (storedUser && storedToken && storedUser !== "undefined") {
       try {
-        const parsedUser = JSON.parse(storedUser);
-        // console.log("Parsed user:", parsedUser);
-        setUser(parsedUser);
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
       } catch (e) {
-        // console.error("Invalid user data in localStorage:", storedUser);
+        console.error("Invalid user data");
         localStorage.removeItem('user');
+        localStorage.removeItem('userToken');
         setUser(null);
+        setToken(null);
       }
-    } else {
-      setUser(null);
     }
     setAuthLoading(false);
   }, []);
 
+  const login = (userData, token) => {
+    setUser(userData);
+    setToken(token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('userToken', token);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('userToken');
+  };
+
   return (
-    <AuthContext.Provider value={{ user, authLoading, setUser }}>
+    <AuthContext.Provider value={{ user, token, setUser, setToken, login, logout, authLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+
+// import { createContext, useContext, useEffect, useState } from 'react';
+
+// const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [authLoading, setAuthLoading] = useState(true);
+
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem('user');
+//     // console.log("Stored user:", storedUser);
+//     if (storedUser && storedUser !== "undefined") {
+//       try {
+//         const parsedUser = JSON.parse(storedUser);
+//         // console.log("Parsed user:", parsedUser);
+//         setUser(parsedUser);
+//       } catch (e) {
+//         // console.error("Invalid user data in localStorage:", storedUser);
+//         localStorage.removeItem('user');
+//         setUser(null);
+//       }
+//     } else {
+//       setUser(null);
+//     }
+//     setAuthLoading(false);
+//   }, []);
+
+//   return (
+//     <AuthContext.Provider value={{ user, authLoading, setUser }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => useContext(AuthContext);
 
 // import { createContext, useContext, useEffect, useState } from 'react';
 

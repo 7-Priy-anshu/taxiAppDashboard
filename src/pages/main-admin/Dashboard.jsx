@@ -12,12 +12,12 @@ export default function CompanyAdminDashboard() {
     <div className="bg-white min-h-screen w-full overflow-x-hidden px-4 py-6 space-y-6">
       {/* Top-right Add Admin Button */}
       <div className="flex gap-2 justify-end">
-        <Link to="/admin/addAdmin">
+        <Link to="/main-admin/addCustomer">
           <AddButton text="Add Employee">
             <FaPlus className="ml-2" />
           </AddButton>
         </Link>
-        <Link to="/admin/addHr">
+        <Link to="/main-admin/addHr">
           <AddButton text="Add Hr">
             <FaPlus className="ml-2" />
           </AddButton>
@@ -28,13 +28,13 @@ export default function CompanyAdminDashboard() {
       <div className="flex flex-row lg:flex-row gap-6">
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 w-full lg:w-1/2">
-          <Link to="/admin/viewDriver">
+          <Link to="/main-admin/viewDriver">
             <Button text="All Drivers" />
           </Link>
-          <Link to="/admin/viewCustomer">
+          <Link to="/main-admin/viewCustomer">
             <Button text="All Customers" />
           </Link>
-          <Link to="/admin/viewCar">
+          <Link to="/main-admin/viewCar">
             <Button text="All Cars" />
           </Link>
         </div>
@@ -74,7 +74,7 @@ export default function CompanyAdminDashboard() {
 //   return (
 //     <div className="bg-white min-h-screen w-full overflow-x-hidden px-4 py-6 space-y-6">
       
-//       {/* Top-right Add Admin Button */}
+//       {/* Top-right Add main-admin Button */}
 //       <div className="flex gap-2 justify-end">
 //         {/* Add Admin */}
 //         <Link to="/superAdmin/addAdmin">

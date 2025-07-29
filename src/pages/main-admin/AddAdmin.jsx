@@ -49,13 +49,13 @@ export default function AddAdmin() {
         { _id: 'add_customer', label: 'Add Customer' }
       ],
     },
-    {
-      group: "Car",
-      items: [
-        { _id: 'view_car', label: 'View Cars' },
-        { _id: 'add_car', label: 'Add Car' }
-      ],
-    },
+    // {
+    //   group: "Car",
+    //   items: [
+    //     { _id: 'view_car', label: 'View Cars' },
+    //     { _id: 'add_car', label: 'Add Car' }
+    //   ],
+    // },
     {
       group: "HR",
       items: [
@@ -63,12 +63,12 @@ export default function AddAdmin() {
         { _id: 'add_hr', label: 'Create HR' }
       ],
     },
-    {
-      group: "Analytics",
-      items: [
-        { _id: "view_analytics", label: "View Analytics" },
-      ],
-    },
+      {
+    group: "Approve Rides",
+    items: [
+      { _id: "book_ride", label: "Book Rides" },
+    ],
+  },
   ];
 
   const [loading, setLoading] = useState(!!id);

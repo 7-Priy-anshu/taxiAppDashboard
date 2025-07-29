@@ -9,7 +9,7 @@ import BackButton from "../../components/BackButton";
 import globalTableStyles from "../../styles/globalTableStyles";
 
 export default function ViewClient() {
-  const {user} = useAuth();
+  const {user,token} = useAuth();
   const {role,id} = useParams();
   const navigate = useNavigate ();
   const VITE_API = import.meta.env.VITE_API;
@@ -63,7 +63,12 @@ export default function ViewClient() {
     setError(null);
     axios 
       // .get(`${VITE_API}view/client`)
-      .get(`${VITE_API}view/client`)
+      .get(`${VITE_API}view/client`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then((res) => {
         console.log("Fetched  client on view:", res.data);
         // adjust if response format is: { data: [...] }

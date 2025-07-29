@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function ClientInvoice() {
   const months = [
@@ -7,11 +10,17 @@ export default function ClientInvoice() {
     "July", "August", "September", "October", "November", "December"
   ];
 
+  const { clientId } = useParams(); // Ensure your route includes :clientId
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [rideData, setRideData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const taxPercent = 10;
+  const {user, token} = useAuth();
 
   const dummyInvoice = {
-    invoiceNumber: "INV-2025-07-001",
+    invoiceNumber: `INV-${selectedYear}-${String(selectedMonth).padStart(2, '0')}-001`,
     generatedDate: new Date().toLocaleDateString(),
     client: {
       name: "ABC Logistics Pvt Ltd",
@@ -21,33 +30,36 @@ export default function ClientInvoice() {
     }
   };
 
-  const rideData = [
-    { date: "2025-06-01", driverName: "Shree", rideAmount: 200, pickup: "Central Park", destination: "Airport" },
-    { date: "2025-06-02", driverName: "Smith", rideAmount: 180, pickup: "Railway Station", destination: "SMS Hospital" },
-    { date: "2025-07-01", driverName: "John Doe", rideAmount: 200, pickup: "Central Park", destination: "Airport" },
-    { date: "2025-07-02", driverName: "Jane Smith", rideAmount: 180, pickup: "Railway Station", destination: "SMS Hospital" },
-    { date: "2025-07-03", driverName: "Rahul Kumar", rideAmount: 240, pickup: "Ajmer Road", destination: "MI Road" },
-    { date: "2025-07-04", driverName: "Neha Sharma", rideAmount: 150, pickup: "Vaishali Nagar", destination: "Malviya Nagar" },
-    { date: "2025-07-05", driverName: "Amit Joshi", rideAmount: 220, pickup: "Mansarovar", destination: "C-Scheme" },
-    { date: "2025-07-06", driverName: "Priya Mehta", rideAmount: 175, pickup: "Bani Park", destination: "Tonk Road" },
-    { date: "2025-07-07", driverName: "Deepak Singh", rideAmount: 190, pickup: "Adarsh Nagar", destination: "Jawahar Circle" },
-    { date: "2025-07-08", driverName: "Sneha Verma", rideAmount: 210, pickup: "Civil Lines", destination: "Durgapura" },
-    { date: "2025-07-09", driverName: "Karan Kapoor", rideAmount: 260, pickup: "Shyam Nagar", destination: "Bapu Nagar" },
-    { date: "2025-07-10", driverName: "Ritu Malhotra", rideAmount: 230, pickup: "Gopalpura", destination: "Johari Bazaar" }
-  ];
+  const fetchInvoiceData = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const formattedMonth = String(selectedMonth).padStart(2, "0");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API}company/${clientId}/invoice/${selectedYear}-${formattedMonth}?tax=${taxPercent}%`
+      ,{
+        headers:{
+          "Content-type":"application/json",
+          Authorization:`Bearer ${token}`
+        }
+      });
 
-  // Filter rides by selected month and year
-  const filteredRides = rideData.filter((ride) => {
-    const rideDate = new Date(ride.date);
-    return (
-      rideDate.getMonth() + 1 === selectedMonth &&
-      rideDate.getFullYear() === selectedYear
-    );
-  });
+      // Expected format: array of ride objects
+      setRideData(response.data?.rides || []);
+    } catch (err) {
+      console.error("Failed to fetch invoice data", err);
+      setError("Could not load invoice data.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // Add GST and total
-  const rideDataWithGST = filteredRides.map((ride) => {
-    const gst = parseFloat((ride.rideAmount * 0.18).toFixed(2));
+  useEffect(() => {
+    if (clientId) fetchInvoiceData();
+  }, [selectedMonth, selectedYear, clientId, token]);
+
+  const rideDataWithGST = rideData.map((ride) => {
+    const gst = parseFloat((ride.rideAmount * taxPercent / 100).toFixed(2));
     return {
       ...ride,
       gst,
@@ -65,7 +77,7 @@ export default function ClientInvoice() {
       "Pickup": ride.pickup,
       "Destination": ride.destination,
       "Base Fare": ride.rideAmount,
-      "GST (18%)": ride.gst,
+      "GST": ride.gst,
       "Total (with GST)": ride.total
     }));
 
@@ -129,50 +141,236 @@ export default function ClientInvoice() {
 
       {/* Ride Table */}
       <div className="bg-white mt-6 rounded-xl shadow overflow-x-auto">
-        <table className="min-w-full table-auto text-sm">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="px-4 py-2">S.No</th>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Driver</th>
-              <th className="px-4 py-2">Pickup</th>
-              <th className="px-4 py-2">Destination</th>
-              <th className="px-4 py-2">Base Fare (₹)</th>
-              <th className="px-4 py-2">GST (₹)</th>
-              <th className="px-4 py-2">Total (₹)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rideDataWithGST.map((ride, i) => (
-              <tr key={i} className="border-b">
-                <td className="px-4 py-2">{i + 1}</td>
-                <td className="px-4 py-2">{ride.date}</td>
-                <td className="px-4 py-2">{ride.driverName}</td>
-                <td className="px-4 py-2">{ride.pickup}</td>
-                <td className="px-4 py-2">{ride.destination}</td>
-                <td className="px-4 py-2">₹{ride.rideAmount}</td>
-                <td className="px-4 py-2">₹{ride.gst}</td>
-                <td className="px-4 py-2 font-semibold">₹{ride.total}</td>
+        {isLoading ? (
+          <div className="text-center p-6">Loading invoice data...</div>
+        ) : error ? (
+          <div className="text-center p-6 text-red-600">{error}</div>
+        ) : (
+          <table className="min-w-full table-auto text-sm">
+            <thead>
+              <tr className="bg-gray-100 text-left">
+                <th className="px-4 py-2">S.No</th>
+                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Driver</th>
+                <th className="px-4 py-2">Pickup</th>
+                <th className="px-4 py-2">Destination</th>
+                <th className="px-4 py-2">Base Fare (₹)</th>
+                <th className="px-4 py-2">GST (₹)</th>
+                <th className="px-4 py-2">Total (₹)</th>
               </tr>
-            ))}
-            {rideDataWithGST.length > 0 ? (
-              <tr className="bg-gray-100 font-semibold">
-                <td colSpan="7" className="px-4 py-2 text-right">Total Amount</td>
-                <td className="px-4 py-2">₹{totalAmount.toFixed(2)}</td>
-              </tr>
-            ) : (
-              <tr>
-                <td colSpan="8" className="text-center py-6 text-gray-500">
-                  No rides found for {months[selectedMonth - 1]} {selectedYear}.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rideDataWithGST.map((ride, i) => (
+                <tr key={i} className="border-b">
+                  <td className="px-4 py-2">{i + 1}</td>
+                  <td className="px-4 py-2">{ride.date}</td>
+                  <td className="px-4 py-2">{ride.driverName}</td>
+                  <td className="px-4 py-2">{ride.pickup}</td>
+                  <td className="px-4 py-2">{ride.destination}</td>
+                  <td className="px-4 py-2">₹{ride.rideAmount}</td>
+                  <td className="px-4 py-2">₹{ride.gst}</td>
+                  <td className="px-4 py-2 font-semibold">₹{ride.total}</td>
+                </tr>
+              ))}
+              {rideDataWithGST.length > 0 && (
+                <tr className="bg-gray-100 font-semibold">
+                  <td colSpan="7" className="px-4 py-2 text-right">Total Amount</td>
+                  <td className="px-4 py-2">₹{totalAmount.toFixed(2)}</td>
+                </tr>
+              )}
+              {rideDataWithGST.length === 0 && (
+                <tr>
+                  <td colSpan="8" className="text-center py-6 text-gray-500">
+                    No rides found for {months[selectedMonth - 1]} {selectedYear}.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
 }
+
+
+//---------------------------Using The mock data---------------------------
+
+// import React, { useState } from "react";
+// import * as XLSX from "xlsx";
+
+// export default function ClientInvoice() {
+//   const months = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December"
+//   ];
+
+//   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+//   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+//   const dummyInvoice = {
+//     invoiceNumber: "INV-2025-07-001",
+//     generatedDate: new Date().toLocaleDateString(),
+//     client: {
+//       name: "ABC Logistics Pvt Ltd",
+//       address: "Plot 27, Transport Nagar, Jaipur, RJ - 302017",
+//       email: "billing@abclogistics.in",
+//       phone: "+91 98765 43210"
+//     }
+//   };
+
+//   const rideData = [
+//     { date: "2025-06-01", driverName: "Shree", rideAmount: 200, pickup: "Central Park", destination: "Airport" },
+//     { date: "2025-06-02", driverName: "Smith", rideAmount: 180, pickup: "Railway Station", destination: "SMS Hospital" },
+//     { date: "2025-07-01", driverName: "John Doe", rideAmount: 200, pickup: "Central Park", destination: "Airport" },
+//     { date: "2025-07-02", driverName: "Jane Smith", rideAmount: 180, pickup: "Railway Station", destination: "SMS Hospital" },
+//     { date: "2025-07-03", driverName: "Rahul Kumar", rideAmount: 240, pickup: "Ajmer Road", destination: "MI Road" },
+//     { date: "2025-07-04", driverName: "Neha Sharma", rideAmount: 150, pickup: "Vaishali Nagar", destination: "Malviya Nagar" },
+//     { date: "2025-07-05", driverName: "Amit Joshi", rideAmount: 220, pickup: "Mansarovar", destination: "C-Scheme" },
+//     { date: "2025-07-06", driverName: "Priya Mehta", rideAmount: 175, pickup: "Bani Park", destination: "Tonk Road" },
+//     { date: "2025-07-07", driverName: "Deepak Singh", rideAmount: 190, pickup: "Adarsh Nagar", destination: "Jawahar Circle" },
+//     { date: "2025-07-08", driverName: "Sneha Verma", rideAmount: 210, pickup: "Civil Lines", destination: "Durgapura" },
+//     { date: "2025-07-09", driverName: "Karan Kapoor", rideAmount: 260, pickup: "Shyam Nagar", destination: "Bapu Nagar" },
+//     { date: "2025-07-10", driverName: "Ritu Malhotra", rideAmount: 230, pickup: "Gopalpura", destination: "Johari Bazaar" }
+//   ];
+
+//   // Filter rides by selected month and year
+//   const filteredRides = rideData.filter((ride) => {
+//     const rideDate = new Date(ride.date);
+//     return (
+//       rideDate.getMonth() + 1 === selectedMonth &&
+//       rideDate.getFullYear() === selectedYear
+//     );
+//   });
+
+//   // Add GST and total
+//   const rideDataWithGST = filteredRides.map((ride) => {
+//     const gst = parseFloat((ride.rideAmount * 0.18).toFixed(2));
+//     return {
+//       ...ride,
+//       gst,
+//       total: parseFloat((ride.rideAmount + gst).toFixed(2))
+//     };
+//   });
+
+//   const totalAmount = rideDataWithGST.reduce((sum, ride) => sum + ride.total, 0);
+
+//   const handleDownload = () => {
+//     const exportData = rideDataWithGST.map((ride, index) => ({
+//       "S.No": index + 1,
+//       "Date": ride.date,
+//       "Driver Name": ride.driverName,
+//       "Pickup": ride.pickup,
+//       "Destination": ride.destination,
+//       "Base Fare": ride.rideAmount,
+//       "GST (18%)": ride.gst,
+//       "Total (with GST)": ride.total
+//     }));
+
+//     const worksheet = XLSX.utils.json_to_sheet(exportData);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Ride Invoice");
+//     XLSX.writeFile(workbook, `RideInvoice_${months[selectedMonth - 1]}_${selectedYear}.xlsx`);
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 p-6">
+//       {/* Header */}
+//       <div className="bg-white rounded-xl flex justify-between items-center shadow border border-gray-200 p-4">
+//         <div className="flex items-center gap-4">
+//           <img src="/images/taxiLogo.png" alt="Company Logo" className="h-12 w-auto" />
+//           <h2 className="text-3xl font-bold">Company Invoice</h2>
+//         </div>
+//         <div className="flex gap-2 items-center">
+//           <select
+//             className="border rounded px-3 py-1"
+//             value={selectedMonth}
+//             onChange={(e) => setSelectedMonth(Number(e.target.value))}
+//           >
+//             {months.map((m, i) => (
+//               <option key={i + 1} value={i + 1}>{m}</option>
+//             ))}
+//           </select>
+//           <select
+//             className="border rounded px-3 py-1"
+//             value={selectedYear}
+//             onChange={(e) => setSelectedYear(Number(e.target.value))}
+//           >
+//             {[2023, 2024, 2025, 2026].map((year) => (
+//               <option key={year} value={year}>{year}</option>
+//             ))}
+//           </select>
+//           <button
+//             onClick={handleDownload}
+//             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+//           >
+//             Download Excel
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Invoice Info */}
+//       <div className="bg-white rounded-xl shadow border border-gray-200 p-4 mt-6">
+//         <div className="border-b pb-4 mb-4">
+//           <p className="text-gray-600">Invoice No: {dummyInvoice.invoiceNumber}</p>
+//           <p className="text-gray-600">Billing Month: {months[selectedMonth - 1]} {selectedYear}</p>
+//           <p className="text-gray-600">Generated Date: {dummyInvoice.generatedDate}</p>
+//         </div>
+//         <div>
+//           <h3 className="text-lg font-semibold">Billed To:</h3>
+//           <p>{dummyInvoice.client.name}</p>
+//           <p>{dummyInvoice.client.address}</p>
+//           <p>Email: {dummyInvoice.client.email}</p>
+//           <p>Phone: {dummyInvoice.client.phone}</p>
+//         </div>
+//       </div>
+
+//       {/* Ride Table */}
+//       <div className="bg-white mt-6 rounded-xl shadow overflow-x-auto">
+//         <table className="min-w-full table-auto text-sm">
+//           <thead>
+//             <tr className="bg-gray-100 text-left">
+//               <th className="px-4 py-2">S.No</th>
+//               <th className="px-4 py-2">Date</th>
+//               <th className="px-4 py-2">Driver</th>
+//               <th className="px-4 py-2">Pickup</th>
+//               <th className="px-4 py-2">Destination</th>
+//               <th className="px-4 py-2">Base Fare (₹)</th>
+//               <th className="px-4 py-2">GST (₹)</th>
+//               <th className="px-4 py-2">Total (₹)</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {rideDataWithGST.map((ride, i) => (
+//               <tr key={i} className="border-b">
+//                 <td className="px-4 py-2">{i + 1}</td>
+//                 <td className="px-4 py-2">{ride.date}</td>
+//                 <td className="px-4 py-2">{ride.driverName}</td>
+//                 <td className="px-4 py-2">{ride.pickup}</td>
+//                 <td className="px-4 py-2">{ride.destination}</td>
+//                 <td className="px-4 py-2">₹{ride.rideAmount}</td>
+//                 <td className="px-4 py-2">₹{ride.gst}</td>
+//                 <td className="px-4 py-2 font-semibold">₹{ride.total}</td>
+//               </tr>
+//             ))}
+//             {rideDataWithGST.length > 0 ? (
+//               <tr className="bg-gray-100 font-semibold">
+//                 <td colSpan="7" className="px-4 py-2 text-right">Total Amount</td>
+//                 <td className="px-4 py-2">₹{totalAmount.toFixed(2)}</td>
+//               </tr>
+//             ) : (
+//               <tr>
+//                 <td colSpan="8" className="text-center py-6 text-gray-500">
+//                   No rides found for {months[selectedMonth - 1]} {selectedYear}.
+//                 </td>
+//               </tr>
+//             )}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 //--------------------------------------Before adding GST -----------------------------------

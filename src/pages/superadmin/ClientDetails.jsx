@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-
+import Button from "../../components/Button";
+import { useAuth } from "../../context/AuthContext";
 export default function ClientDetails() {
+  const {token} = useAuth();
   const { clientId } = useParams();
-  const VITE_API = import.meta.env.VITE_API || "http://localhost:5000/api/"; // Fallback for testing
+  const VITE_API = import.meta.env.VITE_API; // Fallback for testing
 
   const [client, setClient] = useState(null);
   const [drivers, setDrivers] = useState([]);
@@ -24,7 +26,12 @@ export default function ClientDetails() {
     async function fetchData() {
       try {
         const [clientRes] = await Promise.all([
-          axios.get(`${VITE_API}view/client/${clientId}`),
+          axios.get(`${VITE_API}view/client/${clientId}`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    }),
           // axios.get(`${VITE_API}view/driver/client/${clientId}`), // Uncomment and adjust
           // axios.get(`${VITE_API}view/customer/client/${clientId}`),
           // axios.get(`${VITE_API}view/car/client/${clientId}`),
@@ -62,7 +69,14 @@ export default function ClientDetails() {
 
       {/* Basic Info */}
       <div className="bg-white p-6 rounded shadow mb-6">
-        <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">Basic Information</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-semibold mb-4 border-b pb-2 text-gray-700">Basic Information</h2>
+        </div>
+        <div className="flex gap-2 items-center">
+          <Link to="/superAdmin/client/:clientId/clientInvoice">
+            <Button text="View Invoice"/>
+          </Link>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600">
           <div><strong className="text-gray-900">ID:</strong> {clientId}</div>
           <div><strong className="text-gray-900">Registered:</strong> {client?.createdAt?.split("T")[0] || "N/A"}</div>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function ViewCarsInHub() {
+  const {token} = useAuth();
   const { hubId } = useParams();
   const [hub, setHub] = useState(null);
   const [assignedCars, setAssignedCars] = useState([]);
