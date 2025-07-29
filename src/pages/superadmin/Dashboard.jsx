@@ -24,7 +24,7 @@ export default function SuperAdminDashboard() {
     <div className="bg-white min-h-screen w-full overflow-x-hidden px-4 py-6 space-y-2">
       {/* Top-right Add Admin Button */}
       <div className="flex gap-2 justify-end">
-        <Link to="/superAdmin/client">
+        <Link to="/superAdmin/addClient">
           <AddButton text="Add Client">
             <FaPlus className="ml-2" />
           </AddButton>

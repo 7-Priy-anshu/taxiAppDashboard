@@ -7,7 +7,7 @@ import { FaUser, FaPlus, FaPhone, FaIdCard, FaRegCreditCard, FaMapMarkerAlt } fr
 import BackButton from "../../components/BackButton"
 import { Link } from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
-
+import { useAuth } from '../../context/AuthContext';
 export default function AddClient() {
 
   const ClientSchema = Yup.object().shape({
@@ -16,6 +16,7 @@ export default function AddClient() {
     clientPhone: Yup.string().required("Client Phone is required")
   })
   const { id } = useParams();
+const { token } = useAuth();
   const [submitError, setSubmitError] = useState(null);
   const navigation = useNavigate();
   const [loading, setLoading] = useState(!!id);
@@ -28,35 +29,59 @@ export default function AddClient() {
     clientPhone: ''
   });
 
-  useEffect(() => {
-    if (id) {
-      axios.get(`${VITE_API}add/client/${id}`)
-      // axios.get(`${VITE_API}view/client/${id}`)
-        .then(res => {
-          // console.log("Fetched car data:", res.data);
-          setInitialValues(res.data); // or res.data.car
-          // console.log(setInitialValues(res.data));
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error("Error fetching car:", err.response?.data || err.message);
-          setSubmitError("Failed to load car details.");
-          setLoading(false);
-        });
-    }
-  }, [id]);
-
-  const handleSubmit = (values) => {
-    if (!id) {
-      axios.post(`${VITE_API}add/client`, values).then(() => {
-        navigation('/superAdmin/viewClient');
-      }).catch(err => console.error());
-    } else {
-      axios.put(`${VITE_API}update/client`, values).then(() => {
-        navigation('/superAdmin/viewClient');
-      }).catch(err => console.error());
-    }
+useEffect(() => {
+  console.log("Token",token)
+  if (id) {
+    axios.get(`${VITE_API}add/client/${id}`, {
+     headers: {
+    Authorization: `Bearer ${token}`,
+  },
+    })
+    .then(res => {
+      setInitialValues(res.data);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error("Error fetching client:", err.response?.data || err.message);
+      setSubmitError("Failed to load client details.");
+      setLoading(false);
+    });
   }
+}, [id]);
+
+
+const handleSubmit = (values) => {
+
+  const config = {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  if (!id) {
+    // Add new client (POST)
+    axios.post(`${VITE_API}add/client`, values, config)
+      .then(() => {
+        navigation('/superAdmin/viewClient');
+      })
+      .catch(err => {
+        console.error(err);
+        setSubmitError("Failed to add client.");
+      });
+  } else {
+    // Update existing client (PUT)
+    axios.put(`${VITE_API}update/client`, values, config)
+      .then(() => {
+        navigation('/superAdmin/viewClient');
+      })
+      .catch(err => {
+        console.error(err);
+        setSubmitError("Failed to update client.");
+      });
+  }
+};
+
   return (
     <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">

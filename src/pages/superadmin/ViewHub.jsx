@@ -11,7 +11,7 @@ import globalTableStyles from "../../styles/globalTableStyles";
 
 export default function ViewHub() {
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const { role, id } = useParams();
   const navigate = useNavigate();
   const VITE_API = import.meta.env.VITE_API
@@ -70,7 +70,12 @@ export default function ViewHub() {
   const getAllItems = () => {
     setIsLoading(true);
     setError(null);
-    axios.get(`${VITE_API}view/hub`)
+    axios.get(`${VITE_API}view/hub`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
       .then((res) => {
         // console.log("Fetched Hub:", res.data);
         setViewHub(res.data);

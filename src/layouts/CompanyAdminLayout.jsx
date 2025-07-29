@@ -1,17 +1,22 @@
-import { useAuth } from '../context/AuthContext';
-import NavbarHR from '../components/Navbar/NavbarHR'; // Adjusted path
-import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/Sidebar/Sidebar';
+import { useAuth } from "../context/AuthContext";
+import NavbarHR from "../components/Navbar/NavbarHR"; // Adjust path if needed
+import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar/Sidebar";
+import { useEffect } from "react";
 
 export default function CompanyAdminLayout() {
   const { user } = useAuth();
+
+  useEffect(() => {
+    console.log("CompanyAdminLayout rendered for user:", user); // Debug render
+  }, [user]);
+
   return (
     <div className="flex w-full h-screen flex-col">
       <NavbarHR />
       <div className="flex flex-1 overflow-hidden">
         <aside className="w-64 bg-gray-100">
           <Sidebar user={user} />
-          {/* <Sidebar role={user.role} permissions={user.permissions}  /> */}
         </aside>
         <main className="flex-1 bg-white overflow-y-auto">
           <Outlet />

@@ -20,7 +20,7 @@ const validationSchema = Yup.object({
 
 export default function AddHub() {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user,token } = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState(null);
   const [initialValues, setInitialValues] = useState({
@@ -53,12 +53,22 @@ export default function AddHub() {
   const submitHub = (values) => {
     if (id) {
       axios
-        .put(`${VITE_API}update/hub/${id}`, values)
+        .put(`${VITE_API}update/hub/${id}`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         .then(() => navigate(`/superAdmin/viewHub`))
         .catch((err) => console.error("Update failed:", err));
     } else {
       axios
-        .post(`${VITE_API}add/hub`, values)
+        .post(`${VITE_API}add/hub`, values,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    })
         .then(() => navigate(`/superAdmin/viewHub`))
         .catch((err) => console.error("Add failed:", err));
     }

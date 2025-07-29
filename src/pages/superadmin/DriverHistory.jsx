@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 export default function DriverHistory() {
-  const { user, authLoading } = useAuth(); // get the logged-in user
+  const { user, token ,authLoading } = useAuth(); // get the logged-in user
   const [drivers, setDrivers] = useState([]);
   const [selectedDriverId, setSelectedDriverId] = useState(null);
   const [history, setHistory] = useState([]);
@@ -22,7 +22,12 @@ export default function DriverHistory() {
 
   const fetchDrivers = async () => {
     try {
-      const res = await axios.get(`${VITE_API}view/driver/${user._id}`);
+      const res = await axios.get(`${VITE_API}view/driver`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    });
       console.log("Driver list response:", res.data);
 
       // Adjust according to actual API response
@@ -43,7 +48,12 @@ export default function DriverHistory() {
     setSelectedDriverId(driverId);
     setLoading(true);
     try {
-      const res = await axios.get(`${VITE_API}driverRideHistory/${user._id}?driverId=${driverId}`);
+      const res = await axios.get(`${VITE_API}driverRideHistory/driverId=${driverId}`,{
+      headers:{
+        "Content-Type":"json/application",
+        Authorization: `Bearer ${token}`,
+      }
+    });
       console.log("Ride history response:", res.data);
       const rideList = Array.isArray(res.data) ? res.data : res.data.rideHistory || [];
       setHistory(rideList);

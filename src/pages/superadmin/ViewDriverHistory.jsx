@@ -312,6 +312,7 @@
 //   );
 // };
 
+//---------------------------------MOck Data Displayed----------------------------------------
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -538,7 +539,7 @@ useEffect(() => {
 
 // export default function ViewDriverHistory() {
 //   const { driverId } = useParams();
-//   const { user } = useAuth();
+//   const { user, token } = useAuth();
 //   const [driver, setDriver] = useState(null);
 //   const [expandedDate, setExpandedDate] = useState(null);
 //   const [loading, setLoading] = useState(true);
@@ -556,11 +557,16 @@ useEffect(() => {
 //       setLoading(true);
 //       try {
 //         const res = await axios.get(
-//           `${VITE_API}driverRideHistory/${user._id}?driverId=${driverId}`
-//         );
-//         console.log("Driver history response:", res.data);
-//         const driverData = res.data.driver || res.data; // Adjust based on API response
-//         setDriver(driverData);
+//           `${VITE_API}driverRideHistory/?driverId=${driverId}`,{
+//       headers:{
+//         "Content-Type":"json/application",
+//         Authorization: `Bearer ${token}`,
+//       }
+//     }
+// );
+// const driverData = res.data.driver || res.data; // Adjust based on API response
+// setDriver(driverData);
+// console.log("Driver history response:", driverData);
 //       } catch (err) {
 //         console.error("Error fetching driver history:", err);
 //         setError("Failed to load driver history");
