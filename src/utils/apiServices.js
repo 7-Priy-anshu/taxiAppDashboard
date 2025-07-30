@@ -49,7 +49,7 @@ export const postApiFormData = async (url, formData, config = {}) => {
 // Use for token based Post request(for sending Images)
 export const postApiAuthFormData = async (url, formData, config = {}) => {
   const token = JSON.parse(localStorage.getItem("user") || "{}")?.token;
-
+  
   const res = await axios.post(`${BASE_URL}${url}`, formData, {
     ...config,
     headers: {
@@ -61,3 +61,16 @@ export const postApiAuthFormData = async (url, formData, config = {}) => {
   return res;
 };
 
+// Use for Token Based Put request  
+export const putApiAuth = async (url, payload, config = {}) => {
+  const token = JSON.parse(localStorage.getItem("user") || "{}")?.token;
+
+  const res = await axios.put(`${BASE_URL}${url}`, payload, {
+    ...config,
+    headers: {
+      ...(config.headers || {}),
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res;
+};
