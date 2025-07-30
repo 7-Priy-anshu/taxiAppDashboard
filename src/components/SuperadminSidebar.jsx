@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
 import DriverHistory from '../pages/superadmin/DriverHistory';
 
-export default function SuperadminSidebar() {
+export default function SuperadminSidebar({isOpen}) {
   const { user, token } = useAuth();
   const { clientId } = useParams();
   const [expandedMenuStatic, setExpandedMenuStatic] = useState({});
@@ -117,7 +117,11 @@ export default function SuperadminSidebar() {
   };
 
   return (
-    <div className="w-64 bg-blue-50 h-screen p-4 overflow-auto">
+    <div className={`duration-300 h-screen bg-blue-50 p-5 overflow-auto shadow-lg
+     md:translate-x-0  w-56 lg:w-64
+    max-md:fixed  max-md:top-16 max-md:left-0 max-sm:w-44 max-md:z-50
+    ${isOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full"}
+  `}>
       {/* Driver History */}
       <div className="mb-2">
         <div className="flex justify-between items-center cursor-pointer p-2 rounded hover:bg-blue-200">

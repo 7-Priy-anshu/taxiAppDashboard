@@ -143,6 +143,7 @@ export default function AddAdmin() {
 
   if (loading) return <div className="text-center mt-10">Loading HR info...</div>;
   return (
+<div className='grid min-h-full'>
     <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
         <Link to="/person">
@@ -179,7 +180,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -196,7 +197,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="email"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -213,7 +214,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="password"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -230,7 +231,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="phoneNumber"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -249,7 +250,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="role"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -272,7 +273,7 @@ export default function AddAdmin() {
                 <ErrorMessage
                   name="clientEmail"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -335,7 +336,7 @@ export default function AddAdmin() {
                     </div>
                   ))}
                 </div>
-                <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="permissions" component="div"    className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
               </div>
 
               <div className="col-span-full flex justify-end gap-4 mt-6">
@@ -359,6 +360,7 @@ export default function AddAdmin() {
         </Formik>
       </div>
     </div>
+</div>
   );
 }
 // //----------------------------------Add Admin in---------------------------------------------
@@ -596,7 +598,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="name"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 
@@ -615,7 +617,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="email"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 
@@ -632,7 +634,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="password"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 //               <div className="relative">
@@ -648,7 +650,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="phoneNumber"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 //               <div className="relative">
@@ -664,7 +666,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="role"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 //               <div className="relative">
@@ -687,7 +689,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="clientEmail"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 
@@ -704,7 +706,7 @@ export default function AddAdmin() {
 //                 <ErrorMessage
 //                   name="password"
 //                   component="div"
-//                   className="text-red-500 text-xs mt-1"
+//                      className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //                 />
 //               </div>
 
@@ -766,7 +768,7 @@ export default function AddAdmin() {
 //                     </div>
 //                   ))}
 //                 </div>
-//                 <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//                 <ErrorMessage name="permissions" component="div"    className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
 //               </div>
 
 
@@ -970,7 +972,7 @@ export default function AddAdmin() {
 //                   </label>
 //                 ))}
 //               </div>
-//               <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//               <ErrorMessage name="permissions" component="div"    className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
 //             </div> */}
 
 //             {/* <div className="col-span-full mt-4">
@@ -995,7 +997,7 @@ export default function AddAdmin() {
 //                   </div>
 //                 ))}
 //               </div>
-//               <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//               <ErrorMessage name="permissions" component="div"    className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
 //             </div> */}
 
 //           <div className="col-span-full mt-4">
@@ -1047,7 +1049,7 @@ export default function AddAdmin() {
 //       );
 //     })}
 //   </div>
-//   <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//   <ErrorMessage name="permissions" component="div"    className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1" />
 // </div>
 
 

@@ -94,6 +94,11 @@ export default function App() {
   <Route path="client/:clientId/driver-history" element={<DriverHistory />} />
 </Route>
 
+
+
+
+{/* end superadmin */}
+
       {/* <Route
         path="/superAdmin/*"
         element={

@@ -129,7 +129,8 @@ export default function AddHR() {
   if (loading) return <div>Loading HR info...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+     <div className='grid min-h-full' > 
+    <div className="flex flex-col items-center justify-center gap-2 lg:gap-4 min-h-screen bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
         <Link to="/main-admin">
           <BackButton text="Back" />
@@ -164,7 +165,7 @@ export default function AddHR() {
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaUser className="text-gray-500" />
                 </div>
-                <ErrorMessage name="name" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="name" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="relative">
@@ -177,7 +178,7 @@ export default function AddHR() {
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <MdEmail className="text-gray-500" />
                 </div>
-                <ErrorMessage name="email" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="email" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="relative">
@@ -190,7 +191,7 @@ export default function AddHR() {
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaLock className="text-gray-500" />
                 </div>
-                <ErrorMessage name="password" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="password" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="relative">
@@ -203,7 +204,7 @@ export default function AddHR() {
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaPhone className="text-gray-500" />
                 </div>
-                <ErrorMessage name="phoneNumber" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="phoneNumber" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="relative">
@@ -216,7 +217,7 @@ export default function AddHR() {
                 <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaUser className="text-gray-500" />
                 </div>
-                <ErrorMessage name="role" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="role" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="col-span-full mt-4">
@@ -275,7 +276,7 @@ export default function AddHR() {
                     </div>
                   ))}
                 </div>
-                <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+                <ErrorMessage name="permissions" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
               </div>
 
               <div className="col-span-full flex justify-end gap-4 mt-6">
@@ -298,7 +299,7 @@ export default function AddHR() {
           )}
         </Formik>
       </div>
-    </div>
+    </div>  </div>
   );
 }
 // import { useParams, useNavigate } from 'react-router-dom';
@@ -607,7 +608,7 @@ export default function AddHR() {
 //                     </div>
 //                   ))}
 //                 </div>
-//                 <ErrorMessage name="permissions" component="div" className="text-red-500 text-xs mt-1" />
+//                 <ErrorMessage name="permissions" component="div"     className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"/>
 //               </div>
 
 

@@ -93,7 +93,8 @@ const submitDriver = async (values) => {
 
   return (
   // <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
-  <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+    <div className="grid min-h-full">
+  <div className="flex flex-col items-center justify-center gap-2  bg-white p-4">
   <div className="w-full max-w-4xl flex gap-2">
         {/* Add Admin */}
         <Link to="/superadmin">
@@ -142,7 +143,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="name"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -160,7 +161,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="email"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -178,7 +179,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="contact"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -196,7 +197,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="licenceNo"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -214,7 +215,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="aadhar"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -233,7 +234,7 @@ const submitDriver = async (values) => {
               <ErrorMessage
                 name="address"
                 component="div"
-                className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
               />
             </div>
 
@@ -251,7 +252,7 @@ const submitDriver = async (values) => {
         )}
       </Formik>
     </div>
-  </div>
+  </div> </div>
 );
 
 

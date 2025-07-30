@@ -82,7 +82,8 @@ export default function AddCustomer() {
   if (loading) return <div>Loading customer info...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+    <div className='grid min-h-full' >
+         <div className="flex flex-col items-center justify-center gap-2  bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
         {/* Add Admin */}
         <Link to="/superadmin">
@@ -127,7 +128,7 @@ export default function AddCustomer() {
                 <ErrorMessage
                   name="customerName"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -145,7 +146,7 @@ export default function AddCustomer() {
                 <ErrorMessage
                   name="customerEmail"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -157,13 +158,13 @@ export default function AddCustomer() {
                   placeholder="Enter Contact Number"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+                  <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaPhone className="text-gray-500" />
                 </div>
                 <ErrorMessage
                   name="customerMobile"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
               {/* Aadhar */}
@@ -180,7 +181,7 @@ export default function AddCustomer() {
                 <ErrorMessage
                   name="aadhar"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                   className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
      {/* Submit Button */}
@@ -198,6 +199,8 @@ export default function AddCustomer() {
         </Formik>
       </div>
     </div>
+    </div>
+ 
   );
 }
 

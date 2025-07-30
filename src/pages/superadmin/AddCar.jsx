@@ -34,28 +34,45 @@ export default function AddCar() {
 
   const VITE_API = import.meta.env.VITE_API;
 
-  useEffect(() => {
-    if (id) {
-    //   axios.get(`${VITE_API}add/car`,{
-    //   headers:{
-    //     "Content-Type":"application/json",
-    //     Authorization: `Bearer ${token}`,
-    //   }
-    // })
-      const resposne =  getApiAuth(`add/car/${id}`);
-        then(res => {
-          console.log("Fetched car data:", res.data);
-          setInitialValues(res.data); // or res.data.car
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error("Error fetching car:", err.response?.data || err.message);
-          setSubmitError("Failed to load car details.");
-          setLoading(false);
-        });
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //   //   axios.get(`${VITE_API}add/car`,{
+  //   //   headers:{
+  //   //     "Content-Type":"application/json",
+  //   //     Authorization: `Bearer ${token}`,
+  //   //   }
+  //   // })
+  //     const resposne =  getApiAuth(`add/car/${id}`);
+  //       then(res => {
+  //         console.log("Fetched car data:", res.data);
+  //         setInitialValues(res.data); // or res.data.car
+  //         setLoading(false);
+  //       })
+  //       .catch(err => {
+  //         console.error("Error fetching car:", err.response?.data || err.message);
+  //         setSubmitError("Failed to load car details.");
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, [id]);
 
+    useEffect(() => {
+  const fetchCarDetails = async () => {
+    try {
+      const response = await postApiAuth(`add/car/${id}`, {}); 
+      setInitialValues(response.data); 
+    } catch (err) {
+      console.error("Error fetching car:", err.response?.data || err.message);
+      setSubmitError("Failed to load car details.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (id) {
+    fetchCarDetails();
+  }
+}, [id]);
 
   const handleSubmit = async (values,{ setSubmitting }) => {
     if (id) {
@@ -87,7 +104,8 @@ export default function AddCar() {
   if (loading) return <div>Loading car info...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+    <div className='min-h-full grid'>
+    <div className="flex flex-col items-center justify-center gap-2  bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
         {/* Add Admin */}
         <Link to="/superadmin">
@@ -130,7 +148,7 @@ export default function AddCar() {
                 <ErrorMessage
                   name="carName"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
 
@@ -148,7 +166,7 @@ export default function AddCar() {
                 <ErrorMessage
                   name="carModel"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
 
@@ -160,13 +178,13 @@ export default function AddCar() {
                   placeholder="Enter Car Number"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+               <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaPhone className="text-gray-500" />
                 </div>
                 <ErrorMessage
                   name="carNumber"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
               {/* Sitting Capacity */}
@@ -177,13 +195,13 @@ export default function AddCar() {
                   placeholder="Enter Car Number"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+               <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaPhone className="text-gray-500" />
                 </div>
                 <ErrorMessage
                   name="sittingCapacity"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
               {/* Car Brand */}
@@ -194,13 +212,13 @@ export default function AddCar() {
                   placeholder="Enter Car Brand"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+               <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaPhone className="text-gray-500" />
                 </div>
                 <ErrorMessage
                   name="carBrand"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
               {/* Fuel Type */}
@@ -211,13 +229,13 @@ export default function AddCar() {
                   placeholder="Enter Fuel Type"
                   className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90">
+               <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                   <FaTruckField className="text-gray-500" />
                 </div>
                 <ErrorMessage
                   name="fuelType"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"  
                 />
               </div>
               {/* Submit Button */}
@@ -234,6 +252,7 @@ export default function AddCar() {
           )}
         </Formik>
       </div>
+    </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ProfileDropdown from "../ProfileDropdown"
 
-export default function Navbar({ onMenuClick }){
+export default function Navbar({ onMenuClick }) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const toggleDropdown = () => setIsDropdownVisible((prev) => !prev);
 

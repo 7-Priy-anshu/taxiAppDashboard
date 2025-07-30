@@ -80,7 +80,8 @@ export default function AddHub() {
   if (loading) return <div>Loading Hub info...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
+    <div className="grid min-h-full">
+    <div className="flex flex-col items-center justify-center gap-2 bg-white p-4">
       <div className="w-full max-w-4xl flex gap-2">
         <Link to="/superadmin">
           <BackButton text="Back"></BackButton>
@@ -116,7 +117,7 @@ export default function AddHub() {
                 <ErrorMessage
                   name="hubName"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -134,7 +135,7 @@ export default function AddHub() {
                 <ErrorMessage
                   name="hubLocation"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -152,7 +153,7 @@ export default function AddHub() {
                 <ErrorMessage
                   name="hubCarCapacity"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -170,7 +171,7 @@ export default function AddHub() {
                 <ErrorMessage
                   name="latitude"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -188,7 +189,7 @@ export default function AddHub() {
                 <ErrorMessage
                   name="longitude"
                   component="div"
-                  className="text-red-500 text-xs mt-1"
+                  className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
                 />
               </div>
 
@@ -206,7 +207,7 @@ export default function AddHub() {
           )}
         </Formik>
       </div>
-    </div>
+    </div> </div>
   );
 }
 
@@ -328,7 +329,7 @@ export default function AddHub() {
 //               <ErrorMessage
 //                 name="hubName"
 //                 component="div"
-//                 className="text-red-500 text-xs mt-1"
+//                 className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //               />
 //             </div>
 
@@ -344,7 +345,7 @@ export default function AddHub() {
 //               <ErrorMessage
 //                 name="hubLoation"
 //                 component="div"
-//                 className="text-red-500 text-xs mt-1"
+//                 className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //               />
 //             </div>
 
@@ -361,7 +362,7 @@ export default function AddHub() {
 //               <ErrorMessage
 //                 name="hubCarCapacity"
 //                 component="div"
-//                 className="text-red-500 text-xs mt-1"
+//                 className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //               />
 //             </div>
 
@@ -377,7 +378,7 @@ export default function AddHub() {
 //               <ErrorMessage
 //                 name="latitude"
 //                 component="div"
-//                 className="text-red-500 text-xs mt-1"
+//                 className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //               />
 //             </div>
 
@@ -393,7 +394,7 @@ export default function AddHub() {
 //               <ErrorMessage
 //                 name="longitude"
 //                 component="div"
-//                 className="text-red-500 text-xs mt-1"
+//                 className="text-red-500 absolute left-0 -bottom-4 text-xs mt-1"
 //               />
 //             </div>
 
