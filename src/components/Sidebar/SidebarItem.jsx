@@ -42,7 +42,7 @@ export default function SidebarItem({ items, dropitem, user, iconMap }) {
   }
 
   return (
-    <ul className="space-y-2 p-4">
+    <ul className="space-y-1 p-1  mt-6 md:mt-8  md:text-sm">
       {items.map((item, index) => {
         if (!hasAccess(item)) return null;
 
@@ -51,27 +51,27 @@ export default function SidebarItem({ items, dropitem, user, iconMap }) {
         const relevantDropdownItems = filterDropdown(dropitem[index] || [], item);
 
         return (
-          <li key={index} className="group relative">
+          <li key={index} className="group  -space-y-1   relative">
             {item.link ? (
               <Link to={item.link}>
-                <div className="flex items-center w-full text-gray-700 px-4 py-2 text-left rounded-lg hover:bg-blue-200 transition-colors">
-                  {IconComponent && <IconComponent className="text-blue-500 mr-3 text-lg" />}
-                  <span className="font-medium flex-1">{item.label}</span>
+                <div className="flex items-center   w-full text-gray-700  px-2 max-sm:px-1 py-2 text-left rounded-lg hover:bg-blue-200 transition-colors">
+                  {IconComponent && <IconComponent className="text-blue-500 mr-2    text-sm md:text-lg" />}
+                  <span className="font-medium   text-xs sm:text-sm">{item.label}</span>
                 </div>
               </Link>
             ) : (
               <>
                 <button
                   onClick={() => toggleDropdown(index)}
-                  className="flex items-center w-full text-gray-700 px-4 py-2 text-left rounded-lg hover:bg-blue-200 transition-colors"
+                  className="flex items-center w-full  text-gray-700 px-2 max-sm:px-1 py-2 text-left rounded-lg hover:bg-blue-200 transition-colors"
                 >
-                  {IconComponent && <IconComponent className="text-blue-500 mr-3 text-lg" />}
-                  <span className="font-medium flex-1">{item.label}</span>
+                  {IconComponent && <IconComponent className="text-blue-500 mr-2 text-sm md:text-lg" />}
+                  <span className="font-medium     flex-1 max-sm:text-[11px]">{item.label}</span>
                   {relevantDropdownItems.length > 0 &&
                     (isDropdownOpen ? (
-                      <iconMap.FaChevronUp className="text-blue-500 text-sm" />
+                      <iconMap.FaChevronUp className="text-blue-500 text-xs" />
                     ) : (
-                      <iconMap.FaChevronDown className="text-blue-500 text-sm" />
+                      <iconMap.FaChevronDown className="text-blue-500 text-xs" />
                     ))}
                 </button>
 

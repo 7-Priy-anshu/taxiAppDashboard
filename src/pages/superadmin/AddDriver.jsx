@@ -93,8 +93,8 @@ const submitDriver = async (values) => {
 
   return (
   // <div className="flex flex-col items-center justify-center gap-2 min-h-screen bg-white p-4">
-    <div className="grid min-h-full">
-  <div className="flex flex-col items-center justify-center gap-2  bg-white p-4">
+    <div className="min-h-full grid ">
+  <div className="flex flex-col items-center justify-center gap-2   bg-white p-4">
   <div className="w-full max-w-4xl flex gap-2">
         {/* Add Admin */}
         <Link to="/superadmin">
@@ -155,7 +155,7 @@ const submitDriver = async (values) => {
                 placeholder="Enter Email"
                 className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
               />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
+           <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                 <MdEmail className="text-gray-500" />
               </div>
               <ErrorMessage
@@ -173,7 +173,7 @@ const submitDriver = async (values) => {
                 placeholder="Enter Contact Number"
                 className="peer py-2.5 px-4 ps-11 block w-full bg-gray-100 rounded-lg sm:text-sm focus:ring-2 focus:ring-blue-500"
               />
-              <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none rotate-90 justify-center">
+             <div className="absolute inset-y-0 left-0 flex items-center ps-4 pointer-events-none">
                 <FaPhone className="text-gray-500" />
               </div>
               <ErrorMessage

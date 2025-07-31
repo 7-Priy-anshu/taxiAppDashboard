@@ -24,7 +24,7 @@ useEffect(() => {
 
 
   return (
-    <header className="w-full h-16 bg-gray-100 flex items-center justify-between px-8 shadow-md">
+    <header className="w-full h-16 bg-gray-100 flex items-center justify-between px-4 shadow-md">
       <div className="flex items-center gap-4">
         <button className="md:hidden text-2xl text-gray-600" onClick={onMenuClick}>
           <FaBars />
@@ -34,7 +34,7 @@ useEffect(() => {
           alt="Logo"
           className="rounded-full w-10 h-10 object-cover "
         />
-        <div className="text-2xl font-bold text-gray-700">Taxi App</div>
+        <div className="text-lg  lg:text-xl font-bold text-gray-700">Taxi App</div>
       </div>
 
       <div className="flex items-center justify-center gap-4">

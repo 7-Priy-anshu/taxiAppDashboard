@@ -3,9 +3,9 @@ import { FaBell } from "react-icons/fa";
 
 export default function Badges({ count = 0 }) {
   return (
-    <div className="flex items-center gap-2 bg-blue-600 px-3 py-2 rounded-full text-white shadow hover:bg-blue-700 transition">
-      <FaBell className="text-white text-xl" />
-      <span className="text-sm font-semibold">Pending</span>
+    <div className="flex items-center  gap-1 md:gap-2  bg-blue-600 px-3 max-sm:p-2 py-2 rounded-full text-white shadow hover:bg-blue-700 transition">
+      <FaBell className="text-white    max-sm:text-sm  md:text-xl " />
+      <span className="   max-sm:text-xs  text-sm   font-semibold">Pending</span>
       {count > 0 && (
         <span className="ml-1 bg-white text-blue-500 font-bold rounded-full w-5 h-5 flex items-center justify-center text-xs !animate-pulse">
           {count}

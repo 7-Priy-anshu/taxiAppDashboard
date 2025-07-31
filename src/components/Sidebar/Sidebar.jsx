@@ -59,7 +59,7 @@ const dropdownItem = [
   [], // Empty array for "User" to avoid issues
 ];
 
-export default function Sidebar({ user: propUser }) {
+export default function Sidebar({ user: propUser, isOpen }) {
   const { user } = useAuth(); // Use context user
   const finalUser = propUser || user; // Fallback to propUser if provided
 
@@ -70,11 +70,19 @@ export default function Sidebar({ user: propUser }) {
   }
 
   return (
-    <aside className="w-64 h-full bg-gray-100 shadow-lg overflow-y-auto">
-      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={finalUser} iconMap={iconMap} />
+    <aside className={`duration-300 h-screen bg-blue-50 p-3 overflow-auto shadow-lg
+     md:translate-x-0  w-56 lg:w-64
+    max-md:fixed  max-md:top-16 max-md:left-0 max-sm:w-44 max-md:z-50
+    ${isOpen ? "max-md:translate-x-0" : "max-md:-translate-x-full   "}
+  `}>
+      <SidebarItem items={sidebarItems} dropitem={dropdownItem} user={finalUser} iconMap={iconMap}  
+       
+      />
+
     </aside>
   );
 }
+
 //--------------------------Without User Auth--------------------------
 // import React from 'react';
 // import SidebarItem from './SidebarItem';

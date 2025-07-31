@@ -3,8 +3,11 @@ import NavbarHR from "../components/Navbar/NavbarHR"; // Adjust path if needed
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { useEffect } from "react";
+import { useState } from "react";
 
 export default function CompanyAdminLayout() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   const { user } = useAuth();
 
   useEffect(() => {
@@ -13,10 +16,10 @@ export default function CompanyAdminLayout() {
 
   return (
     <div className="flex w-full h-screen flex-col">
-      <NavbarHR />
+      <NavbarHR onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 bg-gray-100">
-          <Sidebar user={user} />
+        <aside   className="bg-white">
+          <Sidebar user={user} isOpen={isSidebarOpen} />
         </aside>
         <main className="flex-1 bg-white overflow-y-auto">
           <Outlet />
